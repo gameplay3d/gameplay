@@ -17,8 +17,8 @@ Windows 10 - Build with Qt Creator (Option A)
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 MSVC2015 64bit"
 - Uncheck Profile and change long build paths for Debug and Release to:
 ```
-Debug = "Debug"
-Release = "Release"
+Debug = "../build/%{CurrentProject:Name}/Debug"
+Release = "../build/%{CurrentProject:Name}/Release"
 ```
 - Build and Run
 
@@ -64,8 +64,8 @@ Ubuntu 16.04 - Build with Qt Creator
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 GCC 64bit"
 - Uncheck Profile and change long build paths for Debug and Release to:
 ```
-Debug   = "Debug"
-Release = "Release"
+Debug   = "../build/%{CurrentProject:Name}/Debug"
+Release = "../build/%{CurrentProject:Name}/Release"
 ```
 - Build and Run
 
@@ -93,7 +93,7 @@ MacOS High Sierra - Build with Qt Creator
 - Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 clang 64bit"
 - Uncheck Profile and change long build paths for Debug and Release to:
 ```
-Debug   = "Debug"
-Release = "Release"
+Debug   = "../build/%{CurrentProject:Name}/Debug"
+Release = "../build/%{CurrentProject:Name}/Release"
 ```
 - Build and Run

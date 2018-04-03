@@ -246,7 +246,7 @@ public:
          *
          * @return The mapping name.
          */
-        const std::string& getName() const;
+        std::string getName() const;
 
         /**
          * Sets the name of the mapping.
@@ -260,7 +260,7 @@ public:
          *
          * @return The (non-localized) mapping descrption.
          */
-        const std::string& getDescription() const;
+        std::string getDescription() const;
 
         /**
          * Sets the description of the mapping.
@@ -448,7 +448,7 @@ public:
         std::string _description;
         MouseAxis _mouseAxis;
         GamepadAxis _gamepadAxis;
-        uint32_t _axisGamepadIndex;
+        uint32_t _gamepadAxisIndex;
         ActionProfileMap _keyActions;
         ActionProfileMap _mouseButtonActions;
     };
@@ -763,7 +763,7 @@ private:
     float getMouseAxisValue(MouseAxis mouseAxis) const;
     float getGamepadAxisValue(GamepadAxis gamepadAxis, uint32_t gamepadIndex) const;
     void getActionState(const Mapping& mapping, MappingState& state) const;
-    void getActionState(Mapping::Action action, const Mapping& mapping, bool& isActionUp, bool& isActionDown, bool& isActionHeld) const;
+    void getActionState(Mapping::Action action, const Mapping& mapping, bool& up, bool& down, bool& held) const;
     MappingState getMappingState(const std::string& name) const;
 
     std::shared_ptr<Mappings> _mappings;

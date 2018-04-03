@@ -95,42 +95,42 @@ static std::string __keyNames[] =
     "NumPad7",
     "NumPad8",
     "NumPad9",
-    "Key0",
-    "Key1",
-    "Key2",
-    "Key3",
-    "Key4",
-    "Key5",
-    "Key6",
-    "Key7",
-    "Key8",
-    "Key9",
-    "KeyA",
-    "KeyB",
-    "KeyC",
-    "KeyD",
-    "KeyE",
-    "KeyF",
-    "KeyG",
-    "KeyH",
-    "KeyI",
-    "KeyJ",
-    "KeyK",
-    "KeyL",
-    "KeyM",
-    "KeyN",
-    "KeyO",
-    "KeyP",
-    "KeyQ",
-    "KeyR",
-    "KeyS",
-    "KeyT",
-    "KeyU",
-    "KeyV",
-    "KeyW",
-    "KeyX",
-    "KeyY",
-    "KeyZ",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
     "GamepadA",
     "GamepadB",
     "GamepadX",
@@ -208,24 +208,22 @@ bool isValidIndex(int index, size_t size)
     return index >= 0 && index < size;
 }
 
-char Input::getKeyCode(Input::Key key, Input::KeyModifiers keyModifiers)
+char Input::getKeyCode(Input::Key key, Input::KeyModifiers modifiers)
 {
     const bool isAscii = (Key::e0 <= key && key <= Key::eZ) || (Key::eEsc  <= key && key <= Key::eMinus);
     if (!isAscii)
     {
         return '\0';
     }
-
     const bool isNumber = (Key::e0 <= key && key <= Key::e9);
     if (isNumber)
     {
         return '0' + char(static_cast<uint32_t>(key) - static_cast<uint32_t>(Key::e0));
     }
-
     const bool isChar = (Key::eA <= key && key <= Key::eZ);
     if (isChar)
     {
-        bool shift = bool(keyModifiers & Input::KeyModifiers::eLeftShift | KeyModifiers::eRightShift);
+        bool shift = bool(modifiers & Input::KeyModifiers::eLeftShift | KeyModifiers::eRightShift);
         return (shift ? 'A' : 'a') + char(static_cast<uint32_t>(key) - static_cast<uint32_t>(Key::eA));
     }
 
@@ -236,7 +234,7 @@ char Input::getKeyCode(Input::Key key, Input::KeyModifiers keyModifiers)
     case Key::eReturn:
         return '\n';
     case Key::eTab:
-        return '    ';
+        return '\t';
     case Key::eSpace:
         return ' ';
     case Key::eBackspace:
@@ -251,19 +249,19 @@ char Input::getKeyCode(Input::Key key, Input::KeyModifiers keyModifiers)
     return '\0';
 }
 
-bool Input::isKeyHeld(Key key, KeyModifiers modifiers, uint32_t controllerIndex)
+bool Input::isKeyHeld(Key key, KeyModifiers modifiers, uint32_t gamepadIndex)
 {
-    return getInput()->isKey(key, modifiers, controllerIndex, false, false, true);
+    return getInput()->isKey(key, modifiers, gamepadIndex, false, false, true);
 }
 
-bool Input::isKeyDown(Key key, KeyModifiers modifiers, uint32_t controllerIndex)
+bool Input::isKeyDown(Key key, KeyModifiers modifiers, uint32_t gamepadIndex)
 {
-    return getInput()->isKey(key, modifiers, controllerIndex, false, true, false);
+    return getInput()->isKey(key, modifiers, gamepadIndex, false, true, false);
 }
 
-bool Input::isKeyUp(Key key, KeyModifiers modifiers, uint32_t controllerIndex)
+bool Input::isKeyUp(Key key, KeyModifiers modifiers, uint32_t gamepadIndex)
 {
-    return getInput()->isKey(key, modifiers, controllerIndex, true, false, false);
+    return getInput()->isKey(key, modifiers, gamepadIndex, true, false, false);
 }
 
 bool Input::isActionHeld(const std::string& mappingName)
@@ -351,9 +349,9 @@ bool Input::removeMappings(const std::string& name)
     return getInput()->_mappings->remove(name);
 }
 
-Input::Input()
-    : _mouseLocked(false)
-    , _mouseScroll(0)
+Input::Input() :
+    _mouseLocked(false),
+    _mouseScroll(0)
 {
 }
 
@@ -498,16 +496,16 @@ bool Input::isKey(Key key, KeyModifiers modifiers, uint32_t gamepadIndex, bool u
     return false;
 }
 
-void Input::getActionState(Mapping::Action action, const Mapping& mapping, bool& isActionUp, bool& isActionDown, bool& isActionHeld) const
+void Input::getActionState(Mapping::Action action, const Mapping& mapping, bool& up, bool& down, bool& held) const
 {
-    isActionUp = false;
-    isActionDown = false;
-    isActionHeld = false;
+    up = false;
+    down = false;
+    held = false;
     const uint32_t actionIndex = static_cast<uint32_t>(action);
     for (uint32_t profileIndex = 0; profileIndex < static_cast<uint32_t>(Mapping::ActionProfile::eCount); ++profileIndex)
     {
-        const bool isMouse = mapping.getType() == Mapping::Type::eMouseButton;
-        const Mapping::ActionProfileMap& map = isMouse ? mapping.getMouseButtonActions() : mapping.getKeyActions();
+        const bool mouse = mapping.getType() == Mapping::Type::eMouseButton;
+        const Mapping::ActionProfileMap& map = mouse ? mapping.getMouseButtonActions() : mapping.getKeyActions();
         const Mapping::ActionData& data = map[profileIndex][actionIndex];
         if (data.slotIndex == 0 && data.modifiers == KeyModifiers::eNone)
         {
@@ -515,7 +513,7 @@ void Input::getActionState(Mapping::Action action, const Mapping& mapping, bool&
         }
         const ActionState* deviceState = nullptr;
         const Key key = static_cast<Key>(data.slotIndex);
-        if (isMouse)
+        if (mouse)
         {
             deviceState = &_mouseButtons;
         }
@@ -548,9 +546,9 @@ void Input::getActionState(Mapping::Action action, const Mapping& mapping, bool&
         }
         if (deviceState->isActive(data.slotIndex, data.modifiers))
         {
-            isActionUp = deviceState->isUp(data.slotIndex, data.modifiers);
-            isActionDown = deviceState->isDown(data.slotIndex, data.modifiers);
-            isActionHeld = deviceState->isHeld(data.slotIndex, data.modifiers);
+            up = deviceState->isUp(data.slotIndex, data.modifiers);
+            down = deviceState->isDown(data.slotIndex, data.modifiers);
+            held = deviceState->isHeld(data.slotIndex, data.modifiers);
             break;
         }
     }
@@ -558,21 +556,21 @@ void Input::getActionState(Mapping::Action action, const Mapping& mapping, bool&
 
 void Input::getActionState(const Mapping& mapping, MappingState& state) const
 {
-    bool isPositiveUp = false;
-    bool isPositiveDown = false;
-    bool isPositiveHeld = false;
-    getActionState(Mapping::Action::ePositive, mapping, isPositiveUp, isPositiveDown, isPositiveHeld);
-    bool isNegativeUp = false;
-    bool isNegativeDown = false;
-    bool isNegativeHeld = false;
-    getActionState(Mapping::Action::eNegative, mapping, isNegativeUp, isNegativeDown, isNegativeHeld);
-    const bool isNeutral = isPositiveHeld && isNegativeHeld;
-    state.held = isPositiveHeld || isNegativeHeld;
-    state.up = !state.held && (isPositiveUp || isNegativeUp);
-    state.down = !isNeutral && (isPositiveDown || isNegativeDown);
-    if (!isNeutral && state.held)
+    bool positiveUp = false;
+    bool positiveDown = false;
+    bool positiveHeld = false;
+    getActionState(Mapping::Action::ePositive, mapping, positiveUp, positiveDown, positiveHeld);
+    bool negativeUp = false;
+    bool negativeDown = false;
+    bool negativeHeld = false;
+    getActionState(Mapping::Action::eNegative, mapping, negativeUp, negativeDown, negativeHeld);
+    const bool neutral = positiveHeld && negativeHeld;
+    state.held = positiveHeld || negativeHeld;
+    state.up = !state.held && (positiveUp || negativeUp);
+    state.down = !neutral && (positiveDown || negativeDown);
+    if (!neutral && state.held)
     {
-        state.axis = isPositiveHeld ? 1.0f : -1.0f;
+        state.axis = positiveHeld ? 1.0f : -1.0f;
     }
 }
 
@@ -657,7 +655,6 @@ void Input::postKeyPressEvent(Key key, KeyModifiers modifiers, bool down, uint32
     if(isKeyboard(key))
     {
         _keys.postEvent(slot, down, modifiers);
-        isActionDown("Example0");
     }
     else if(gamepadIndex < kGamepadsMax)
     {
@@ -665,13 +662,13 @@ void Input::postKeyPressEvent(Key key, KeyModifiers modifiers, bool down, uint32
     }
 }
 
-Input::GamepadState::GamepadState()
-    : connected(false)
+Input::GamepadState::GamepadState() :
+    connected(false)
 {
 }
 
-Input::ActionState::ActionState()
-    : dirty(false)
+Input::ActionState::ActionState() :
+    dirty(false)
 {
 }
 
@@ -828,7 +825,7 @@ bool Input::Mappings::remove(const std::shared_ptr<Mapping>& mapping)
 
 Input::Mapping::Mapping()
     : _inverted(false)
-    , _axisGamepadIndex(kGamepadsAnyIndex)
+    , _gamepadAxisIndex(kGamepadsAnyIndex)
 {
 }
 
@@ -870,7 +867,7 @@ void Input::Mapping::onSerialize(Serializer* serializer)
     serializer->writeString("description", _description.c_str(), "");
     serializer->writeEnum("mouseAxis", "gameplay::Input::MouseAxis", static_cast<int>(_mouseAxis), 0);
     serializer->writeEnum("gamepadAxis", "gameplay::Input::GamepadAxis", static_cast<int>(_gamepadAxis), 0);
-    serializer->writeInt("axisGamepadIndex", _axisGamepadIndex, 0);
+    serializer->writeInt("gamepadAxisIndex", _gamepadAxisIndex, 0);
     serialize(serializer, _keyActions);
     serialize(serializer,_mouseButtonActions);
 }
@@ -883,12 +880,12 @@ void Input::Mapping::onDeserialize(Serializer* serializer)
     serializer->readString("description", _description, "");
     _mouseAxis = static_cast<MouseAxis>(serializer->readEnum("mouseAxis", "gameplay::Input::MouseAxis", 0));
     _gamepadAxis = static_cast<GamepadAxis>(serializer->readEnum("gamepadAxis", "gameplay::Input::GamepadAxis", 0));
-    _axisGamepadIndex = serializer->readInt("axisGamepadIndex", 0);
+    _gamepadAxisIndex = serializer->readInt("gamepadAxisIndex", 0);
     deserialize(serializer, _keyActions);
     deserialize(serializer,_mouseButtonActions);
 }
 
-const std::string& Input::Mapping::getName() const
+std::string Input::Mapping::getName() const
 {
     return _name;
 }
@@ -898,7 +895,7 @@ void Input::Mapping::setName(const std::string& name)
     _name = name;
 }
 
-const std::string& Input::Mapping::getDescription() const
+std::string Input::Mapping::getDescription() const
 {
     return _description;
 }
@@ -991,12 +988,12 @@ void Input::Mapping::setKeyActionGamepadIndex(ActionProfile profile, Action acti
 
 uint32_t Input::Mapping::getAxisGamepadIndex() const
 {
-    return _axisGamepadIndex;
+    return _gamepadAxisIndex;
 }
 
 void Input::Mapping::setAxisGamepadIndex(uint32_t index)
 {
-    _axisGamepadIndex = index;
+    _gamepadAxisIndex = index;
 }
 
 const Input::Mapping::ActionProfileMap& Input::Mapping::getKeyActions() const
@@ -1009,10 +1006,10 @@ const Input::Mapping::ActionProfileMap& Input::Mapping::getMouseButtonActions() 
     return _mouseButtonActions;
 }
 
-Input::Mapping::ActionData::ActionData()
-    : slotIndex(0)
-    , gamepadIndex(0)
-    , modifiers(KeyModifiers::eNone)
+Input::Mapping::ActionData::ActionData() :
+    slotIndex(0),
+    gamepadIndex(0),
+    modifiers(KeyModifiers::eNone)
 {
 }
 
