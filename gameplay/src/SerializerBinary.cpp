@@ -45,7 +45,7 @@ Serializer* SerializerBinary::create(const std::string& path, Stream* stream)
         GP_WARN("Failed to read version from binary file: %s", path.c_str());
         return nullptr;
     }
-    Serializer* serializer = new SerializerBinary(Type::TYPE_READER, path, stream, version[0], version[1]);
+    Serializer* serializer = new SerializerBinary(Type::eReader, path, stream, version[0], version[1]);
     return serializer;
 }
 
@@ -63,7 +63,7 @@ Serializer* SerializerBinary::createWriter(const std::string& path)
     if (stream->write(version, sizeof(unsigned char), 2) != 2)
         GP_WARN("Unable to write binary file version.");
 
-    Serializer* serializer = new SerializerBinary(Serializer::TYPE_WRITER, path, stream, version[0], version[1]);
+    Serializer* serializer = new SerializerBinary(Type::eWriter, path, stream, version[0], version[1]);
 
     return serializer;
 }
@@ -90,7 +90,7 @@ void SerializerBinary::writeEnum(const char* propertyName, const char* enumName,
 void SerializerBinary::writeBool(const char* propertyName, bool value, bool defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     _stream->write(&value, sizeof(bool), 1);
 }
@@ -98,7 +98,7 @@ void SerializerBinary::writeBool(const char* propertyName, bool value, bool defa
 void SerializerBinary::writeInt(const char* propertyName, int value, int defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -114,7 +114,7 @@ void SerializerBinary::writeInt(const char* propertyName, int value, int default
 void SerializerBinary::writeFloat(const char* propertyName, float value, float defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -130,7 +130,7 @@ void SerializerBinary::writeFloat(const char* propertyName, float value, float d
 void SerializerBinary::writeVector(const char* propertyName, const Vector2& value, const Vector2& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -147,7 +147,7 @@ void SerializerBinary::writeVector(const char* propertyName, const Vector2& valu
 void SerializerBinary::writeVector(const char* propertyName, const Vector3& value, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -165,7 +165,7 @@ void SerializerBinary::writeVector(const char* propertyName, const Vector3& valu
 void SerializerBinary::writeVector(const char* propertyName, const Vector4& value, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -184,7 +184,7 @@ void SerializerBinary::writeVector(const char* propertyName, const Vector4& valu
 void SerializerBinary::writeColor(const char* propertyName, const Vector3& value, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -201,7 +201,7 @@ void SerializerBinary::writeColor(const char* propertyName, const Vector3& value
 void SerializerBinary::writeColor(const char* propertyName, const Vector4& value, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -218,7 +218,7 @@ void SerializerBinary::writeColor(const char* propertyName, const Vector4& value
 void SerializerBinary::writeMatrix(const char* propertyName, const Matrix& value, const Matrix& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
     {
@@ -234,7 +234,7 @@ void SerializerBinary::writeMatrix(const char* propertyName, const Matrix& value
 void SerializerBinary::writeString(const char* propertyName, const char* value, const char* defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
 
     if ((value == defaultValue) || (value && defaultValue && strcmp(value, defaultValue) == 0))
     {
@@ -250,14 +250,14 @@ void SerializerBinary::writeString(const char* propertyName, const char* value, 
 void SerializerBinary::writeStringList(const char* propertyName, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
 
     _stream->write(&count, sizeof(size_t), 1);
 }
     
 void SerializerBinary::writeObject(const char* propertyName, std::shared_ptr<Serializable> value)
 {
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == nullptr)
     {
@@ -303,7 +303,7 @@ void SerializerBinary::writeObject(const char* propertyName, std::shared_ptr<Ser
 void SerializerBinary::writeObjectList(const char* propertyName, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     _stream->write(&count, sizeof(size_t), 1);
 }
@@ -311,7 +311,7 @@ void SerializerBinary::writeObjectList(const char* propertyName, size_t count)
 void SerializerBinary::writeIntArray(const char* propertyName, const int* data, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     _stream->write(&count, sizeof(size_t), 1);
     if (count > 0 && data )
@@ -323,7 +323,7 @@ void SerializerBinary::writeIntArray(const char* propertyName, const int* data, 
 void SerializerBinary::writeFloatArray(const char* propertyName, const float* data, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     _stream->write(&count, sizeof(size_t), 1);
     if (count > 0 && data )
@@ -335,7 +335,7 @@ void SerializerBinary::writeFloatArray(const char* propertyName, const float* da
 void SerializerBinary::writeByteArray(const char* propertyName, const unsigned char* data, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     _stream->write(&count, sizeof(size_t), 1);
     if (count > 0 && data )
@@ -354,7 +354,7 @@ int SerializerBinary::readEnum(const char* propertyName, const char* enumName, i
 bool SerializerBinary::readBool(const char* propertyName, bool defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     bool value;
     _stream->read(&value, sizeof(bool), 1);
@@ -364,7 +364,7 @@ bool SerializerBinary::readBool(const char* propertyName, bool defaultValue)
 int SerializerBinary::readInt(const char* propertyName, int defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -383,7 +383,7 @@ int SerializerBinary::readInt(const char* propertyName, int defaultValue)
 float SerializerBinary::readFloat(const char* propertyName, float defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -402,7 +402,7 @@ float SerializerBinary::readFloat(const char* propertyName, float defaultValue)
 Vector2 SerializerBinary::readVector(const char* propertyName, const Vector2& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -422,7 +422,7 @@ Vector2 SerializerBinary::readVector(const char* propertyName, const Vector2& de
 Vector3 SerializerBinary::readVector(const char* propertyName, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -443,7 +443,7 @@ Vector3 SerializerBinary::readVector(const char* propertyName, const Vector3& de
 Vector4 SerializerBinary::readVector(const char* propertyName, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -465,7 +465,7 @@ Vector4 SerializerBinary::readVector(const char* propertyName, const Vector4& de
 Vector3 SerializerBinary::readColor(const char* propertyName, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -484,7 +484,7 @@ Vector3 SerializerBinary::readColor(const char* propertyName, const Vector3& def
 Vector4 SerializerBinary::readColor(const char* propertyName, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -503,7 +503,7 @@ Vector4 SerializerBinary::readColor(const char* propertyName, const Vector4& def
 Matrix SerializerBinary::readMatrix(const char* propertyName, const Matrix& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -522,7 +522,7 @@ Matrix SerializerBinary::readMatrix(const char* propertyName, const Matrix& defa
 void SerializerBinary::readString(const char* propertyName, std::string& value,  const char* defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -539,7 +539,7 @@ void SerializerBinary::readString(const char* propertyName, std::string& value, 
 size_t SerializerBinary::readStringList(const char* propertyName)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     size_t count;
     _stream->read(&count, sizeof(size_t), 1);
@@ -548,7 +548,7 @@ size_t SerializerBinary::readStringList(const char* propertyName)
 
 std::shared_ptr<Serializable> SerializerBinary::readObject(const char* propertyName)
 {
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned char bit;
     _stream->read(&bit, sizeof(unsigned char), 1);
@@ -593,7 +593,7 @@ std::shared_ptr<Serializable> SerializerBinary::readObject(const char* propertyN
 size_t SerializerBinary::readObjectList(const char* propertyName)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     size_t count;
     _stream->read(&count, sizeof(size_t), 1);
@@ -603,7 +603,7 @@ size_t SerializerBinary::readObjectList(const char* propertyName)
 size_t SerializerBinary::readIntArray(const char* propertyName, int** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     size_t count = 0;
     _stream->read(&count, sizeof(size_t), 1);
@@ -628,7 +628,7 @@ size_t SerializerBinary::readIntArray(const char* propertyName, int** data)
 size_t SerializerBinary::readFloatArray(const char* propertyName, float** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     size_t count = 0;
     _stream->read(&count, sizeof(size_t), 1);
@@ -653,7 +653,7 @@ size_t SerializerBinary::readFloatArray(const char* propertyName, float** data)
 size_t SerializerBinary::readByteArray(const char* propertyName, unsigned char** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     size_t count = 0;
     _stream->read(&count, sizeof(size_t), 1);

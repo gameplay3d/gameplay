@@ -443,10 +443,10 @@ public:
     
 protected:
 
-    enum Type
+    enum class Type
     {
-        TYPE_READER,
-        TYPE_WRITER
+        eReader,
+        eWriter
     };
 
     Serializer(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor);

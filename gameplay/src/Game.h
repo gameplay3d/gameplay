@@ -20,7 +20,7 @@ public:
     /**
      * The game states.
      */
-    enum State
+    enum class State
     {
         eUninitialized,
         eSplash,
