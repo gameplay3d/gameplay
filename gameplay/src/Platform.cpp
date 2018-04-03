@@ -700,7 +700,7 @@ extern void print(const char* format, ...)
         GP_SAFE_DELETE_ARRAY(buf);
     }
     va_end(argptr);
-#elif GP_PLATOFRM_LINUX || GP_PLATFORM_MACOS
+#elif GP_PLATFORM_LINUX || GP_PLATFORM_MACOS
     GP_ASSERT(format);
     va_list argptr;
     va_start(argptr, format);
