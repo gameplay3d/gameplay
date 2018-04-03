@@ -588,7 +588,7 @@ Input::MappingState Input::getMappingState(const std::string& name) const
             switch (mapping->getType())
             {
             case Mapping::Type::eGamepadAxis:
-                state.axis = getGamepadAxisValue(mapping->getGamepadAxis(), mapping->getAxisGamepadIndex());
+                state.axis = getGamepadAxisValue(mapping->getGamepadAxis(), mapping->getGamepadAxisIndex());
                 break;
             case Mapping::Type::eMouseAxis:
                 state.axis = getMouseAxisValue(mapping->getMouseAxis());
@@ -976,22 +976,22 @@ void Input::Mapping::setGamepadAxis(GamepadAxis axis)
     _gamepadAxis = axis;
 }
 
-uint32_t Input::Mapping::getKeyActionGamepadIndex(ActionProfile profile, Action action) const
+uint32_t Input::Mapping::getKeyActionIndex(ActionProfile profile, Action action) const
 {
     return _keyActions[static_cast<uint32_t>(profile)][static_cast<uint32_t>(action)].gamepadIndex;
 }
 
-void Input::Mapping::setKeyActionGamepadIndex(ActionProfile profile, Action action, uint32_t gamepadIndex)
+void Input::Mapping::setKeyActionIndex(ActionProfile profile, Action action, uint32_t gamepadIndex)
 {
     _keyActions[static_cast<uint32_t>(profile)][static_cast<uint32_t>(action)].gamepadIndex = gamepadIndex;
 }
 
-uint32_t Input::Mapping::getAxisGamepadIndex() const
+uint32_t Input::Mapping::getGamepadAxisIndex() const
 {
     return _gamepadIndex;
 }
 
-void Input::Mapping::setAxisGamepadIndex(uint32_t gamepadIndex)
+void Input::Mapping::setGamepadAxisIndex(uint32_t gamepadIndex)
 {
     _gamepadIndex = gamepadIndex;
 }
