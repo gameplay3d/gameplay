@@ -12,7 +12,7 @@ GameView::GameView(QWidget* parent) : QWidget(parent),
     setAttribute(Qt::WA_OpaquePaintEvent, true);
 
     // Initiaize
-
+    Input::getInput()->initialize();
     this->connect(&_timer, SIGNAL(timeout()), SLOT(onTimer()));
     _timer.start(0);
 }
@@ -43,6 +43,7 @@ void GameView::onFinalize()
 void GameView::onUpdate(float elapsedTime)
 {
     //_graphics->onUpdate(elapsedTime);
+    Input::getInput()->update();
 }
 
 void GameView::onTimer()
@@ -69,13 +70,12 @@ void GameView::resizeEvent(QResizeEvent* evt)
    // Make sure mouse button state is 'up' after resize.
    Input::getInput()->postMousePressEvent(_mousePosition.x(),
                                           _mousePosition.y(),
-                                          _mouseScroll,
                                           Input::MouseButton::eLeft,
                                           false);
    Input::getInput()->postMousePressEvent(_mousePosition.x(),
                                           _mousePosition.y(),
-                                          _mouseScroll, Input::MouseButton::eRight, false);
- }
+                                          Input::MouseButton::eRight, false);
+}
 
 void GameView::mousePressEvent(QMouseEvent* evt)
 {
@@ -83,7 +83,6 @@ void GameView::mousePressEvent(QMouseEvent* evt)
     _mousePosition = QPoint(evt->x(), evt->y());
     Input::getInput()->postMousePressEvent((int32_t) evt->x(),
                                            (int32_t) evt->y(),
-                                           (int32_t) _mouseScroll,
                                            translateMouseButton(evt->buttons()),
                                            down);
     }
@@ -94,7 +93,6 @@ void GameView::mouseReleaseEvent(QMouseEvent* evt)
     _mousePosition = QPoint(evt->x(), evt->y());
     Input::getInput()->postMousePressEvent((int32_t) evt->x(),
                                            (int32_t) evt->y(),
-                                           (int32_t) _mouseScroll,
                                            translateMouseButton(evt->button()),
                                            down);
 }
@@ -103,8 +101,7 @@ void GameView::mouseMoveEvent(QMouseEvent* evt)
 {
       _mousePosition = QPoint(evt->x(), evt->y());
       Input::getInput()->postMouseMotionEvent((int32_t) evt->x(),
-                                              (int32_t) evt->y(),
-                                               _mouseScroll);
+                                              (int32_t) evt->y());
 }
 
 void GameView::mouseWheelEvent(QWheelEvent* evt)
@@ -112,9 +109,7 @@ void GameView::mouseWheelEvent(QWheelEvent* evt)
     const float step = evt->delta() / 240.0;
     _mousePosition = QPoint(evt->x(), evt->y());
     _mouseScroll += step;
-    Input::getInput()->postMouseMotionEvent((int32_t) evt->x(),
-                                           (int32_t) evt->y(),
-                                           (int32_t) _mouseScroll);
+    Input::getInput()->postMouseWheelEvent((int32_t)_mouseScroll);
 }
 
 void GameView::keyPressEvent(QKeyEvent* evt)

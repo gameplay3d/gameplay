@@ -210,6 +210,7 @@ operator^=(E& lhs,E rhs){
 #define GP_ENGINE_VERSION_MINOR         0
 #define GP_ENGINE_HOME_PATH             "./"
 #define GP_ENGINE_CONFIG                "game.config"
+#define GP_ENGINE_INPUT                 "game.input"
 #define GP_ENGINE_MAGIC_NUMBER          { '\xAB', 'G', 'P', 'B', '\xBB', '\r', '\n', '\x1A', '\n' }
 
 // Math
