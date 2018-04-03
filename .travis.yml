@@ -83,23 +83,23 @@ before_script:
   - mkdir build/gameplay/$CONFIG
   - cd build/gameplay/$CONFIG
   - qmake CONFIG+=$CONFIG_LOWER ../../../gameplay/gameplay.pro
-  - cd ../..
+  - cd ../../..
   - mkdir build/gameplay-app/$CONFIG
   - cd build/gameplay-app/$CONFIG
   - qmake CONFIG+=$CONFIG_LOWER ../../../gameplay-app/gameplay-app.pro
-  - cd ../..
+  - cd ../../..
   - mkdir build/gameplay-editor/$CONFIG
-  - cd gameplay-editor/$CONFIG
-  - qmake CONFIG+=$CONFIG_LOWER ../gameplay-editor.pro
-  - cd ../..
+  - cd build/gameplay-editor/$CONFIG
+  - qmake CONFIG+=$CONFIG_LOWER ../../../gameplay-editor/gameplay-editor.pro
+  - cd ../../..
   - mkdir build
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=$CONFIG ..
 script:
   - make -j2
-  - cd ../build/gameplay/$CONFIG
+  - cd gameplay/$CONFIG
   - make -j2
-  - cd ../../build/gameplay-app/$CONFIG
+  - cd ../gameplay-app/$CONFIG
   - make -j2
-  - cd ../../build/gameplay-editor/$CONFIG
+  - cd ../gameplay-editor/$CONFIG
   - make -j2

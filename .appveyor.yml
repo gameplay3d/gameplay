@@ -28,23 +28,23 @@ install:
   - mkdir build\gameplay\%CONFIG%
   - cd build\gameplay\%CONFIG%
   - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay/gameplay.pro
-  - cd ..\..
+  - cd ..\..\..
   - mkdir build\gameplay-app\%CONFIG%
   - cd build\gameplay-app\%CONFIG%
-  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay-app/gameplay-app.pro
-  - cd ..\..
+  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay-app/.pro
+  - cd ..\..\..
   - mkdir gameplay-editor\%CONFIG%
-  - cd build\gameplay-editor\%CONFIG%
-  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay-editor/gameplay-editor.pro
-  - cd ..\..
+  - cd gameplay-editor\%CONFIG%
+  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay-editor.pro
+  - cd ..\..\..
   - mkdir build
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=%CONFIG% -G "Visual Studio 14 2015 Win64" ..
 build_script:
   - msbuild GamePlay.sln /property:Configuration=%CONFIG%
-  - cd ..\build\gameplay\%CONFIG%
+  - cd gameplay\%CONFIG%
   - nmake
-  - cd ..\..\build\gameplay-app\%CONFIG%
+  - cd ..\gameplay-app\%CONFIG%
   - nmake
-  - cd ..\..\build\gameplay-editor\%CONFIG%
+  - cd ..\gameplay-editor\%CONFIG%
   - nmake
