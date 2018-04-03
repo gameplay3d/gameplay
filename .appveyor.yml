@@ -25,24 +25,23 @@ install:
   - if not exist external-deps install.bat
   - ps: "If (!(Test-Path $env:VK_INSTALLER)) {([Net.ServicePointManager]::SecurityProtocol=\"tls12, tls11, tls\") -AND ($ProgressPreference = 'SilentlyContinue') -AND(Invoke-WebRequest \"https://sdk.lunarg.com/sdk/download/$env:VK_VERSION/windows/VulkanSDK-$env:VK_VERSION-Installer.exe?Human=true;u=\" -OutFile $env:VK_INSTALLER)}"
   - start %VK_INSTALLER% /S
-  - mkdir gameplay\%CONFIG%
-  - cd gameplay\%CONFIG%
-  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../gameplay.pro
-  - cd ..\..
-  - mkdir gameplay-app\%CONFIG%
-  - cd gameplay-app\%CONFIG%
-  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../gameplay-app.pro
-  - cd ..\..
-  - mkdir gameplay-editor\%CONFIG%
-  - cd gameplay-editor\%CONFIG%
-  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../gameplay-editor.pro
-  - cd ..\..
-  - mkdir build
+  - mkdir build\gameplay\%CONFIG%
+  - cd build\gameplay\%CONFIG%
+  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ..\..\..\gameplay\gameplay.pro
+  - cd ..\..\..
+  - mkdir build\gameplay-app\%CONFIG%
+  - cd build\gameplay-app\%CONFIG%
+  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ..\..\..\gameplay-app\gameplay-app.pro
+  - cd ..\..\..
+  - mkdir build\gameplay-editor\%CONFIG%
+  - cd build\gameplay-editor\%CONFIG%
+  - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ..\..\..\gameplay-editor\gameplay-editor.pro
+  - cd ..\..\..
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=%CONFIG% -G "Visual Studio 14 2015 Win64" ..
 build_script:
   - msbuild GamePlay.sln /property:Configuration=%CONFIG%
-  - cd ..\gameplay\%CONFIG%
+  - cd gameplay\%CONFIG%
   - nmake
   - cd ..\..\gameplay-app\%CONFIG%
   - nmake
