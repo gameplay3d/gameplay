@@ -57,7 +57,7 @@ Serializer* SerializerJson::create(const std::string& path, Stream* stream)
             std::string minor = version.substr(2, 1);
             versionMinor = std::stoi(minor);
         }
-        serializer = new SerializerJson(Type::TYPE_READER, path, stream, versionMajor, versionMinor, root);
+        serializer = new SerializerJson(Type::eReader, path, stream, versionMajor, versionMinor, root);
     }
     GP_SAFE_DELETE_ARRAY(buffer);
     return serializer;
@@ -76,7 +76,7 @@ Serializer* SerializerJson::createWriter(const std::string& path)
     version.append(std::to_string(GP_ENGINE_VERSION_MINOR));
     json_push_back(root, json_new_a("version", version.c_str()));
 
-    Serializer* serializer = new SerializerJson(Serializer::TYPE_WRITER, path, stream, GP_ENGINE_VERSION_MAJOR, GP_ENGINE_VERSION_MINOR, root);
+    Serializer* serializer = new SerializerJson(Type::eWriter, path, stream, GP_ENGINE_VERSION_MAJOR, GP_ENGINE_VERSION_MINOR, root);
   
     return serializer;
 }
@@ -85,7 +85,7 @@ void SerializerJson::close()
 {
     if (_stream)
     {
-        if (_type == Serializer::TYPE_WRITER)
+        if (_type == Type::eWriter)
         {
             json_char* buffer = json_write_formatted(_root);
             std::string str = buffer;
@@ -118,7 +118,7 @@ void SerializerJson::writeEnum(const char* propertyName, const char* enumName, i
 void SerializerJson::writeBool(const char* propertyName, bool value, bool defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
         return;
@@ -130,7 +130,7 @@ void SerializerJson::writeBool(const char* propertyName, bool value, bool defaul
 void SerializerJson::writeInt(const char* propertyName, int value, int defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
         return;
@@ -142,7 +142,7 @@ void SerializerJson::writeInt(const char* propertyName, int value, int defaultVa
 void SerializerJson::writeFloat(const char* propertyName, float value, float defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
         return;
@@ -154,7 +154,7 @@ void SerializerJson::writeFloat(const char* propertyName, float value, float def
 void SerializerJson::writeVector(const char* propertyName, const Vector2& value, const Vector2& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
         return;
@@ -171,7 +171,7 @@ void SerializerJson::writeVector(const char* propertyName, const Vector2& value,
 void SerializerJson::writeVector(const char* propertyName, const Vector3& value, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
 
     if (value == defaultValue)
         return;
@@ -189,7 +189,7 @@ void SerializerJson::writeVector(const char* propertyName, const Vector3& value,
 void SerializerJson::writeVector(const char* propertyName, const Vector4& value, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
         return;
@@ -208,7 +208,7 @@ void SerializerJson::writeVector(const char* propertyName, const Vector4& value,
 void SerializerJson::writeColor(const char* propertyName, const Vector3& value, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     
     if (value == defaultValue)
         return;
@@ -225,7 +225,7 @@ void SerializerJson::writeColor(const char* propertyName, const Vector3& value, 
 void SerializerJson::writeColor(const char* propertyName, const Vector4& value, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
 
     if (value == defaultValue)
         return;
@@ -240,7 +240,7 @@ void SerializerJson::writeColor(const char* propertyName, const Vector4& value, 
 void SerializerJson::writeMatrix(const char* propertyName, const Matrix& value, const Matrix& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
 
     if (value == defaultValue)
         return;
@@ -292,7 +292,7 @@ JSONNODE* SerializerJson::createNode(JSONNODE* parent, const char* propertyName,
 void SerializerJson::writeString(const char* propertyName, const char* value, const char* defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
 
     if ((value == defaultValue) || (value && defaultValue && strcmp (value, defaultValue) == 0))
         return;
@@ -304,7 +304,7 @@ void SerializerJson::writeString(const char* propertyName, const char* value, co
 void SerializerJson::writeStringList(const char* propertyName, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     if (count == 0)
         return;
 
@@ -319,7 +319,7 @@ void SerializerJson::writeStringList(const char* propertyName, size_t count)
 
 void SerializerJson::writeObject(const char* propertyName, std::shared_ptr<Serializable> value)
 {
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     if (value == nullptr)
         return;
 
@@ -374,7 +374,7 @@ void SerializerJson::writeObject(const char* propertyName, std::shared_ptr<Seria
 void SerializerJson::writeObjectList(const char* propertyName, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     if (count == 0)
         return;
     
@@ -390,7 +390,7 @@ void SerializerJson::writeObjectList(const char* propertyName, size_t count)
 void SerializerJson::writeIntArray(const char* propertyName, const int* data, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     if (!data || count == 0)
         return;
 
@@ -408,7 +408,7 @@ void SerializerJson::writeIntArray(const char* propertyName, const int* data, si
 void SerializerJson::writeFloatArray(const char* propertyName, const float* data, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     if (!data || count == 0)
         return;
     
@@ -426,7 +426,7 @@ void SerializerJson::writeFloatArray(const char* propertyName, const float* data
 void SerializerJson::writeByteArray(const char* propertyName, const unsigned char* data, size_t count)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_WRITER);
+    GP_ASSERT(_type == Type::eWriter);
     if (!data || count == 0)
         return;
     
@@ -448,7 +448,7 @@ int SerializerJson::readEnum(const char* propertyName, const char* enumName, int
 bool SerializerJson::readBool(const char* propertyName, bool defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -464,7 +464,7 @@ bool SerializerJson::readBool(const char* propertyName, bool defaultValue)
 int SerializerJson::readInt(const char* propertyName, int defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -481,7 +481,7 @@ int SerializerJson::readInt(const char* propertyName, int defaultValue)
 float SerializerJson::readFloat(const char* propertyName, float defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -498,7 +498,7 @@ float SerializerJson::readFloat(const char* propertyName, float defaultValue)
 Vector2 SerializerJson::readVector(const char* propertyName, const Vector2& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -520,7 +520,7 @@ Vector2 SerializerJson::readVector(const char* propertyName, const Vector2& defa
 Vector3 SerializerJson::readVector(const char* propertyName, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -544,7 +544,7 @@ Vector3 SerializerJson::readVector(const char* propertyName, const Vector3& defa
 Vector4 SerializerJson::readVector(const char* propertyName, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -570,7 +570,7 @@ Vector4 SerializerJson::readVector(const char* propertyName, const Vector4& defa
 Vector3 SerializerJson::readColor(const char* propertyName, const Vector3& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -589,7 +589,7 @@ Vector3 SerializerJson::readColor(const char* propertyName, const Vector3& defau
 Vector4 SerializerJson::readColor(const char* propertyName, const Vector4& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -608,7 +608,7 @@ Vector4 SerializerJson::readColor(const char* propertyName, const Vector4& defau
 Matrix SerializerJson::readMatrix(const char* propertyName, const Matrix& defaultValue)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* property = json_get(node, propertyName);
@@ -658,7 +658,7 @@ Matrix SerializerJson::readMatrix(const char* propertyName, const Matrix& defaul
 
 void SerializerJson::readString(const char* propertyName, std::string& value, const char* defaultValue)
 {
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* property = nullptr;
@@ -706,7 +706,7 @@ void SerializerJson::readString(const char* propertyName, std::string& value, co
 
 std::shared_ptr<Serializable> SerializerJson::readObject(const char* propertyName)
 {
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* parentNode = _nodes.top();
     JSONNODE* readNode = nullptr;
@@ -810,7 +810,7 @@ void SerializerJson::finishNode(JSONNODE* parent)
 size_t SerializerJson::readStringList(const char* propertyName)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
 
     JSONNODE* node = _nodes.top();
     JSONNODE* list = json_get(node, propertyName);
@@ -826,7 +826,7 @@ size_t SerializerJson::readStringList(const char* propertyName)
 size_t SerializerJson::readObjectList(const char* propertyName)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     JSONNODE* list = json_get(node, propertyName);
@@ -842,7 +842,7 @@ size_t SerializerJson::readObjectList(const char* propertyName)
 size_t SerializerJson::readIntArray(const char* propertyName, int** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     size_t count = 0;
@@ -876,7 +876,7 @@ size_t SerializerJson::readIntArray(const char* propertyName, int** data)
 size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     JSONNODE* node = _nodes.top();
     size_t count = 0;
@@ -910,7 +910,7 @@ size_t SerializerJson::readFloatArray(const char* propertyName, float** data)
 size_t SerializerJson::readByteArray(const char* propertyName, unsigned char** data)
 {
     GP_ASSERT(propertyName);
-    GP_ASSERT(_type == Serializer::TYPE_READER);
+    GP_ASSERT(_type == Type::eReader);
     
     unsigned long size = 0L;
     JSONNODE* node = _nodes.top();

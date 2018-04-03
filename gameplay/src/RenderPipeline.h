@@ -23,7 +23,7 @@ public:
     /**
      * Defines the primitive topology.
      */
-    enum PrimitiveTopology
+    enum class PrimitiveTopology
     {
         ePointList,
         eLineList,

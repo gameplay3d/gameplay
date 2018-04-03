@@ -23,7 +23,7 @@ public:
     /**
      * Defines the type of joint.
      */
-    enum Type
+    enum class Type
     {
         eFixed,
         eHinge,

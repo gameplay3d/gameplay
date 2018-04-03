@@ -12,7 +12,7 @@ public:
     /**
      * Defines combine modes.
      */
-    enum CombineMode
+    enum class CombineMode
     {
         eAverage,
         eMin,
