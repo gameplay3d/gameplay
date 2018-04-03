@@ -230,7 +230,11 @@ void Game::onGamepadAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int 
 {
 }
 
-void Game::onMouseMotion(int mx, int my, int mz)
+void Game::onMouseMotion(int mx, int my)
+{
+}
+
+void Game::onMouseWheel(int value)
 {
 }
 
