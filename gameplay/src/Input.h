@@ -386,7 +386,7 @@ public:
          * @param action The action.
          * @return The gamepad index.
          */
-        uint32_t getKeyActionGamepadIndex(ActionProfile profile, Action action) const;
+        uint32_t getKeyActionIndex(ActionProfile profile, Action action) const;
 
         /**
          * Set the gamepad index for the given action.
@@ -395,21 +395,21 @@ public:
          * @param action The action.
          * @param gamepadIndex The gamepad index.
          */
-        void setKeyActionGamepadIndex(ActionProfile profile, Action action, uint32_t gamepadIndex);
+        void setKeyActionIndex(ActionProfile profile, Action action, uint32_t gamepadIndex);
 
         /**
          * Gets the gamepad index of the gamepad axis.
          *
          * @return The gamepad index.
          */
-        uint32_t getAxisGamepadIndex() const;
+        uint32_t getGamepadAxisIndex() const;
 
         /**
          * Sets the gamepad index of the gamepad axis.
          *
          * @param gamepadIndex The gamepad index.
          */
-        void setAxisGamepadIndex(uint32_t gamepadIndex);
+        void setGamepadAxisIndex(uint32_t gamepadIndex);
 
     protected:
 
