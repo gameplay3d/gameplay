@@ -98,7 +98,7 @@ script:
   - make -j2
   - cd gameplay/$CONFIG
   - make -j2
-  - cd ../gameplay-app/$CONFIG
+  - cd ../../gameplay-app/$CONFIG
   - make -j2
-  - cd ../gameplay-editor/$CONFIG
+  - cd ../../gameplay-editor/$CONFIG
   - make -j2

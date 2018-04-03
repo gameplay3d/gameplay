@@ -33,8 +33,8 @@ install:
   - cd build\gameplay-app\%CONFIG%
   - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay-app/gameplay-app.pro
   - cd ..\..\..
-  - mkdir gameplay-editor\%CONFIG%
-  - cd gameplay-editor\%CONFIG%
+  - mkdir build\gameplay-editor\%CONFIG%
+  - cd build\gameplay-editor\%CONFIG%
   - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ../../../gameplay-editor.pro
   - cd ..\..\..
   - cd build
@@ -43,7 +43,7 @@ build_script:
   - msbuild GamePlay.sln /property:Configuration=%CONFIG%
   - cd gameplay\%CONFIG%
   - nmake
-  - cd ..\gameplay-app\%CONFIG%
+  - cd ..\..\gameplay-app\%CONFIG%
   - nmake
-  - cd ..\gameplay-editor\%CONFIG%
+  - cd ..\..\gameplay-editor\%CONFIG%
   - nmake
