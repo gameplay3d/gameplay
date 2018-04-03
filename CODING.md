@@ -103,7 +103,7 @@ GP_ENABLE_BITWISE_OPERATORS(gameplay::ColorBlendState::WriteMask);
 ```
 
 ## Smart Pointers vs Pointers
-- Use **std::unique_pt<Foo>** whenever possible especially for public api pointers.
+- Use **std::unique_ptr<Foo>** for pointers whenever possible especially for public api pointers.
 - Any code still using normal pointers should be slowly be migrated to **std::unique_ptr**.
 - Any **delete** function call appearing in the code is a red flag and needs a good reason.
 - Use **std::shared_ptr<Foo>** only when sharing is required.
