@@ -64,6 +64,8 @@ set(GAMEPLAY_SRC
     src/Matrix.h
     src/Mesh.cpp
     src/Mesh.h
+    src/MeshInstance.cpp
+    src/MeshInstance.h
     src/Path.cpp
     src/Path.h
     src/Physics.cpp
@@ -113,6 +115,8 @@ set(GAMEPLAY_SRC
     src/Sampler.h
     src/Scene.cpp
     src/Scene.h
+    src/SceneLoader.cpp
+    src/SceneLoader.h
     src/SceneObject.cpp
     src/SceneObject.h
     src/Script.cpp

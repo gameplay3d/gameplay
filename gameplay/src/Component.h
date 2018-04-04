@@ -17,41 +17,6 @@ class Component : public Serializable, public std::enable_shared_from_this<Compo
 public:
 
     /**
-     * Defines the component class type.
-     */
-    enum class ClassType
-    {
-        eCamera,
-        eLight,
-        eScript,
-        eAnimation,
-        eAudioSource,
-        eMesh,
-        eSprite,
-        eText,
-        eTileset,
-        ePath,
-        eParticleEmitter,
-        eTerrain,
-        eWater,
-        eTree,
-        eDecal,
-        eVideo,
-        eUI,
-        ePhysicsCollider,
-        ePhysicsRigidBody,
-        ePhysicsCharacter,
-        ePhysicsVehicle,
-        ePhysicsCloth,
-        ePhysicsJointFixed,
-        ePhysicsJointGeneric,
-        ePhysicsJointHinge,
-        ePhysicsJointSocket,
-        ePhysicsJointSpring,
-        eUser
-    };
-
-    /**
      * Constructor
      */
     Component();
@@ -74,13 +39,6 @@ public:
      * @param enabled true if the component is active, false if not active.
      */
     void setEnabled(bool enabled);
-
-    /**
-     * This gets the class type for a component.
-     *
-     * @return the class type for a component.
-     */
-    virtual Component::ClassType getClassType() = 0;
 
     /**
      * @see Serializable::getClassName
@@ -114,14 +72,14 @@ protected:
     virtual void setObject(std::shared_ptr<SceneObject> object);
 
     /**
-     * Event occurs when the component is attached to a scene object;
+     * Event occurs when the component is added to a scene object;
      */
-    virtual void onAttached();
+    virtual void onAdded();
 
     /**
-     * Event occurs when the component is detach from a scene object;
+     * Event occurs when the component is removed from a scene object;
      */
-    virtual void onDetached();
+    virtual void onRemoved();
 
     std::weak_ptr<SceneObject> _object;
     bool _enabled;

@@ -17,11 +17,6 @@ std::shared_ptr<Serializable> Tileset::createObject()
     return std::shared_ptr<Tileset>();
 }
 
-Component::ClassType Tileset::getClassType()
-{
-    return ClassType::eTileset;
-}
-
 std::string Tileset::getClassName()
 {
     return "gameplay::Tileset";

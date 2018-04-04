@@ -17,11 +17,6 @@ std::shared_ptr<Serializable> Text::createObject()
     return std::shared_ptr<Text>();
 }
 
-Component::ClassType Text::getClassType()
-{
-    return ClassType::eText;
-}
-
 std::string Text::getClassName()
 {
     return "gameplay::Text";

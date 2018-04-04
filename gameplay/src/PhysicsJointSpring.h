@@ -112,17 +112,12 @@ public:
      */
     float getDampening() const;
 
+protected:
+
     /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
-
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
-
-protected:
 
     /**
      * @see Serializable::getClassName

@@ -267,6 +267,22 @@ const Matrix& SceneObject::getLocalMatrix()
     return _localMatrix;
 }
 
+void SceneObject::onInitialize()
+{
+}
+
+void SceneObject::onFinalize()
+{
+}
+
+void SceneObject::onUpdate(float elapsedTime)
+{
+}
+
+void SceneObject::onRender(float elapsedTime)
+{
+}
+
 const Matrix& SceneObject::getWorldMatrix()
 {
     if (_dirtyBits & (SCENEOBJECT_DIRTY_MATRIX_WORLD | SCENEOBJECT_DIRTY_MATRIX_LOCAL))
@@ -386,7 +402,6 @@ std::shared_ptr<SceneObject> SceneObject::findObject(const std::string& name, bo
 size_t SceneObject::findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject>>& objects, bool recursive, bool exactMatch)
 {
     size_t count = 0;
-    
     for (auto child : _children)
     {
         if ((exactMatch && child->_name == name) || (!exactMatch && child->_name.find(name) == 0))
@@ -406,16 +421,27 @@ size_t SceneObject::findObjects(const std::string& name, std::vector<std::shared
 }
 
 
-void SceneObject::attachComponent(std::shared_ptr<Component> component)
+void SceneObject::addComponent(std::shared_ptr<Component> component)
 {
-    std::shared_ptr<Component> existing = getComponent(component->getClassType());
+    // TODO: Support certain components to allow multiple components added but not others...
+    // Ex. Scripts, PhysicsColliders, PhysicsJoints, etc.
+    bool existing = false;
+    for (const auto& c : _components)
+    {
+        if (component->getClassName().compare(c->getClassName()) == 0)
+        {
+            existing = true;
+            break;
+        }
+    }
     if (!existing)
     {
         _components.push_back(component);
+        component->setObject(shared_from_this());
     }
 }
 
-void SceneObject::detachComponent(std::shared_ptr<Component> component)
+void SceneObject::removeComponent(std::shared_ptr<Component> component)
 {
     auto itr = std::find(_components.begin(), _components.end(), component);
     if (itr != _components.end())
@@ -424,35 +450,34 @@ void SceneObject::detachComponent(std::shared_ptr<Component> component)
     }
 }
 
-std::shared_ptr<Component> SceneObject::getComponent(Component::ClassType classType)
+template<class T>
+std::shared_ptr<T> SceneObject::getComponent() const 
 {
-    for (auto component : _components)
+    for (const auto& component : _components)
     {
-        if (component->getClassType() == classType)
+        if (dynamic_cast<T*>(component.get()) != nullptr) 
         {
-            return component;
+            return std::dynamic_pointer_cast<T>(component);
         }
     }
     return nullptr;
 }
 
-void SceneObject::getComponents(Component::ClassType classType, std::vector<std::shared_ptr<Component>>& components)
+template<class T>
+void SceneObject::findComponents(std::vector<std::shared_ptr<T>>& components) const
 {
-    for (auto component : _components)
+    for (const auto& component : _components)
     {
-        if (component->getClassType() == classType)
+        if (dynamic_cast<T*>(component.get()) != nullptr) 
         {
-            components.push_back(component);
+            components.push_back(std::dynamic_pointer_cast<T>(component));
         }
     }
 }
 
-void SceneObject::getComponents(std::vector<std::shared_ptr<Component>>& components)
+const std::vector<std::shared_ptr<Component>>& SceneObject::getComponents() const
 {
-    for (auto component : _components)
-    {
-        components.push_back(component);
-    }
+    return _components;
 }
 
 std::shared_ptr<Serializable> SceneObject::createObject()
@@ -473,13 +498,13 @@ void SceneObject::onSerialize(Serializer* serializer)
     serializer->writeVector("position", getLocalPosition(), SCENEOBJECT_POSITION);
     serializer->writeVector("eulerAngles", getLocalEulerAngles(), SCENEOBJECT_EULER_ANGLES);
     serializer->writeVector("scale", getLocalScale(), SCENEOBJECT_SCALE);
-     if (_children.size() > 0)
-     {
-         serializer->writeObjectList("children", _children.size());
-         for (auto child : _children)
-         {
-             serializer->writeObject(nullptr, std::static_pointer_cast<Serializable>(child));
-         }
+    if (_children.size() > 0)
+    {
+        serializer->writeObjectList("children", _children.size());
+        for (auto child : _children)
+        {
+            serializer->writeObject(nullptr, std::static_pointer_cast<Serializable>(child));
+        }
     }
     if (_components.size() > 0)
     {

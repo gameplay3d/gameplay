@@ -103,11 +103,6 @@ std::shared_ptr<Serializable> PhysicsJointSocket::createObject()
     return std::shared_ptr<PhysicsJointSocket>();
 }
 
-Component::ClassType PhysicsJointSocket::getClassType()
-{
-    return ClassType::ePhysicsJointSocket;
-}
-
 std::string PhysicsJointSocket::getClassName()
 {
     return "gameplay::PhysicsJointSocket";

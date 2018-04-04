@@ -66,14 +66,14 @@ std::shared_ptr<Project> Project::create(const QString& path, const QString& nam
     camera->setMode(gameplay::Camera::Mode::ePerspective);
     auto cameraObject = std::make_shared<gameplay::SceneObject>();
     cameraObject->setName(PROJECT_CAMERA_NAME);
-    cameraObject->attachComponent(camera);
+    cameraObject->addComponent(camera);
     scene->addChild(cameraObject);
 
     // Add an object with a directional light component
     auto light = std::make_shared<gameplay::Light>();
     auto lightObject = std::make_shared<gameplay::SceneObject>();
     lightObject->setName(PROJECT_LIGHT_NAME);
-    lightObject->attachComponent(light);
+    lightObject->addComponent(light);
     lightObject->setPosition(gameplay::Vector3(0.0f, 0.0f, 10.0f));
     scene->addChild(lightObject);
 

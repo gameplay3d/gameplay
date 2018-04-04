@@ -149,11 +149,6 @@ std::shared_ptr<Serializable> PhysicsJointHinge::createObject()
     return std::shared_ptr<PhysicsJointHinge>();
 }
 
-Component::ClassType PhysicsJointHinge::getClassType()
-{
-    return ClassType::ePhysicsJointHinge;
-}
-
 std::string PhysicsJointHinge::getClassName()
 {
     return "gameplay::PhysicsJointHinge";

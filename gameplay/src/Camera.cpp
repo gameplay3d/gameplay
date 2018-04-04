@@ -266,9 +266,38 @@ void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst) cons
     dst->set(nearPoint, direction);
 }
 
-Component::ClassType Camera::getClassType()
+std::shared_ptr<Serializable> Camera::createObject()
 {
-    return ClassType::eCamera;
+    return std::static_pointer_cast<Serializable>(std::make_shared<Camera>());
+}
+
+std::string Camera::enumToString(const std::string& enumName, int value)
+{
+    if (enumName.compare("gameplay::Camera::Mode") == 0)
+    {
+        switch (value)
+        {
+            case static_cast<int>(Mode::ePerspective):
+                return "ePerspective";
+            case static_cast<int>(Mode::eOrthograhic):
+                return "eOrthograhic";
+            default:
+                break;
+        }
+    }
+    return "";
+}
+
+int Camera::enumParse(const std::string& enumName, const std::string& str)
+{
+    if (enumName.compare("gameplay::Camera::Mode") == 0)
+    {
+        if (str.compare("ePerspective") == 0)
+            return static_cast<int>(Mode::ePerspective);
+        else if (str.compare("eOrthograhic") == 0)
+            return static_cast<int>(Mode::eOrthograhic);
+    }
+    return static_cast<int>(Mode::ePerspective);
 }
 
 std::string Camera::getClassName()
@@ -306,40 +335,6 @@ void Camera::onDeserialize(Serializer* serializer)
     }
     _clipPlaneNear = serializer->readFloat("clipPlaneNear", CAMERA_CLIP_PLANE_NEAR);
     _clipPlaneFar = serializer->readFloat("clipPlaneFar", CAMERA_CLIP_PLANE_FAR);
-}
-
-std::shared_ptr<Serializable> Camera::createObject()
-{
-    return std::static_pointer_cast<Serializable>(std::make_shared<Camera>());
-}
-
-std::string Camera::enumToString(const std::string& enumName, int value)
-{
-    if (enumName.compare("gameplay::Camera::Mode") == 0)
-    {
-        switch (value)
-        {
-            case static_cast<int>(Mode::ePerspective):
-                return "ePerspective";
-            case static_cast<int>(Mode::eOrthograhic):
-                return "eOrthograhic";
-            default:
-                break;
-        }
-    }
-    return "";
-}
-
-int Camera::enumParse(const std::string& enumName, const std::string& str)
-{
-    if (enumName.compare("gameplay::Camera::Mode") == 0)
-    {
-        if (str.compare("ePerspective") == 0)
-            return static_cast<int>(Mode::ePerspective);
-        else if (str.compare("eOrthograhic") == 0)
-            return static_cast<int>(Mode::eOrthograhic);
-    }
-    return static_cast<int>(Mode::ePerspective);
 }
 
 void Camera::setObject(std::shared_ptr<SceneObject> object)

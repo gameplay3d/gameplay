@@ -77,11 +77,6 @@ std::shared_ptr<Serializable> AudioSource::createObject()
     return std::shared_ptr<AudioSource>();
 }
 
-Component::ClassType AudioSource::getClassType()
-{
-    return ClassType::eAudioSource;
-}
-
 std::string AudioSource::getClassName()
 {
     return "gameplay::AudioSource";

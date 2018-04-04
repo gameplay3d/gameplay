@@ -31,9 +31,9 @@ bool PhysicsCollider::isTrigger() const
     return false;
 }
 
-Component::ClassType PhysicsCollider::getClassType()
+std::shared_ptr<Serializable> PhysicsCollider::createObject()
 {
-    return ClassType::ePhysicsCollider;
+    return std::shared_ptr<PhysicsCollider>();
 }
 
 std::string PhysicsCollider::getClassName()
@@ -47,11 +47,6 @@ void PhysicsCollider::onSerialize(Serializer * serializer)
 
 void PhysicsCollider::onDeserialize(Serializer * serializer)
 {
-}
-
-std::shared_ptr<Serializable> PhysicsCollider::createObject()
-{
-    return std::shared_ptr<PhysicsCollider>();
 }
 
 }

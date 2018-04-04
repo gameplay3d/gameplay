@@ -28,7 +28,7 @@ public:
      * @param fileExt The file extension Ex. "png", "fbx", "ttf"
      * @param loader The asset loader to use for the fileExt.
      */
-    void setLoader(std::string fileExt, std::shared_ptr<AssetLoader> loader);
+    void setLoader(std::string fileExt, AssetLoader* loader);
 
     /**
      * Loads an asset asynchronously.

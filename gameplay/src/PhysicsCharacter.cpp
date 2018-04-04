@@ -17,11 +17,6 @@ std::shared_ptr<Serializable> PhysicsCharacter::createObject()
     return std::shared_ptr<PhysicsCharacter>();
 }
 
-Component::ClassType PhysicsCharacter::getClassType()
-{
-    return ClassType::ePhysicsCharacter;
-}
-
 std::string PhysicsCharacter::getClassName()
 {
     return "gameplay::PhysicsCharacter";

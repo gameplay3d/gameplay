@@ -339,47 +339,48 @@ public:
     size_t findObjects(const std::string& name, std::vector<std::shared_ptr<SceneObject>>& objects, bool recursive = true, bool exactMatch = true);
 
     /**
-     * Attaches a component to the object.
+     * Adds a component to the object.
      *
-     * @param component The component being attached to the object.
+     * @param component The component being added to the object.
      */
-    void attachComponent(std::shared_ptr<Component> component);
+    void addComponent(std::shared_ptr<Component> component);
 
     /**
-     * Detaches a component from the object.
+     * Removes a component from the object.
      *
-     * @param component The component being attached to the object.
+     * @param component The component being removed to the object.
      */
-    void detachComponent(std::shared_ptr<Component> component);
+    void removeComponent(std::shared_ptr<Component> component);
 
     /**
-     * Gets a componenent from the object for the class type.
+     * Gets a componenent from the object for the class.
      *
      * @return The component.
      */
-    std::shared_ptr<Component> getComponent(Component::ClassType classType);
+    template<class T>
+    std::shared_ptr<T> getComponent() const;
 
     /**
-     * Gets a componenent from the object for the class type.
+     * Gets components of the specified type.
      *
-     * @param classType The type of class of the components to be searched for.
-     * @param components The vector of components retrived.
+     * @param components The vector of components retrieved.
      */
-    void getComponents(Component::ClassType classType, std::vector<std::shared_ptr<Component>>& components);
+    template<class T>
+    void findComponents(std::vector<std::shared_ptr<T>>& components) const;
 
     /**
-     * Gets all the componenents from the object.
+     * Gets all the components.
      *
-     * @param components The vector of components retrieived.
+     * @return components The vector of components retrieved.
      */
-    void getComponents(std::vector<std::shared_ptr<Component>>& components);
+    const std::vector<std::shared_ptr<Component>>& getComponents() const;
+
+protected:
 
     /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
-
-protected:
 
     /**
      * @see Serializable::getClassName

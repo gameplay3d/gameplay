@@ -233,6 +233,8 @@ public:
      */
     void pickRay(const Rectangle& viewport, float x, float y, Ray* dst) const;
 
+protected:
+
     /**
      * @see Activator::createObject
      */
@@ -247,13 +249,6 @@ public:
      * @see Activator::enumParse
      */
     static int enumParse(const std::string& enumName, const std::string& str);
-
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
-
-protected:
 
     /**
      * @see Serializable::getClassName

@@ -7,6 +7,10 @@ class Material
 {
 public:
 
+    class Parameter
+    {
+    };
+
     Material();
     
     ~Material();

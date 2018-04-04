@@ -240,20 +240,17 @@ public:
      */
     float getDriveGearRatio() const;
 
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
-
-    /**
-     * @see Serializable::getClassName
-     */
-    std::string getClassName();
+protected:
 
     /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
+
+    /**
+     * @see Serializable::getClassName
+     */
+    std::string getClassName();
     
     /**
      * @see Serializable::onSerialize
