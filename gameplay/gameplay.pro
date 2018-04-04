@@ -20,7 +20,7 @@ SOURCES += \
     src/BoundingSphere.cpp \
     src/Buffer.cpp \
     src/Camera.cpp \
-    src/CommandBuffer.cpp m\
+    src/CommandBuffer.cpp \
     src/Component.cpp \
     src/Curve.cpp \
     src/DescriptorSet.cpp \
