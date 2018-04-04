@@ -380,10 +380,7 @@ public:
      */
     float getDriveForce(MotionAxis axis);
 
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
+protected:
 
     /**
      * @see Serializable::getClassName

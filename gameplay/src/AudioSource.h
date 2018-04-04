@@ -129,17 +129,12 @@ public:
      */
     virtual void onVelocityChanged(const Vector3& velocity) = 0;
 
+protected:
+
     /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
-
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
-
-protected:
 
     /**
      * @see Serializable::getClassName

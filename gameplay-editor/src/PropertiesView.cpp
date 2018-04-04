@@ -58,10 +58,9 @@ void PropertiesView::onSelectionChanged()
         // Clear all the existing component property editors
         clearPropertyEditors();
 
-        // Get the attached components
-        std::vector<std::shared_ptr<gameplay::Component>> components;
-        selectedObject->getComponents(components);
-        for (auto component : components)
+        // Get the components
+        std::vector<std::shared_ptr<gameplay::Component>> components = selectedObject->getComponents();
+        for (std::shared_ptr<gameplay::Component> component : components)
         {
             // Create a property editor for each type of component
             PropertiesComponentEditor* editor = new PropertiesComponentEditor(this);

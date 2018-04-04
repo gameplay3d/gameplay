@@ -38,6 +38,3 @@ gameplay-editor/GeneratedFiles
 gameplay-editor/x64
 gameplay-editor/*.vcxproj*
 gameplay-editor/.qmake.stash
-gameplay-luagen/Debug
-gameplay-luagen/Release
-

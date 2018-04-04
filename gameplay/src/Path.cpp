@@ -17,11 +17,6 @@ std::shared_ptr<Serializable> Path::createObject()
     return std::shared_ptr<Path>();
 }
 
-Component::ClassType Path::getClassType()
-{
-    return ClassType::ePath;
-}
-
 std::string Path::getClassName()
 {
     return "gameplay::Path";

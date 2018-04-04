@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Base.h"
 #include "Serializable.h"
 #include "Vector2.h"
 

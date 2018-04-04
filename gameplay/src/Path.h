@@ -26,17 +26,12 @@ public:
      */
     ~Path();
 
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
+protected:
 
     /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
-
-protected:
 
     /**
      * @see Serializable::getClassName

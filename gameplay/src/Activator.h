@@ -10,7 +10,8 @@ namespace gameplay
  */
 class Activator
 {
-    
+    friend class Game;
+
 public:
 
     /**
@@ -102,7 +103,7 @@ public:
 private:
     
     Activator();
-    
+    void registerSystemTypes();
     std::map<std::string, CreateObjectCallback> _classes;
     std::map<std::string, std::pair<EnumToStringCallback, EnumParseCallback>> _enums;
 };

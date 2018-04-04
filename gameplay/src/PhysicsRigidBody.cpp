@@ -110,11 +110,6 @@ std::shared_ptr<Serializable> PhysicsRigidBody::createObject()
     return std::shared_ptr<PhysicsRigidBody>();
 }
 
-Component::ClassType PhysicsRigidBody::getClassType()
-{
-    return ClassType::ePhysicsRigidBody;
-}
-
 std::string PhysicsRigidBody::getClassName()
 {
     return "gameplay::PhysicsRigidBody";

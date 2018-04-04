@@ -6,9 +6,9 @@ namespace gameplay
 {
 
 /**
- * Defines a text renderer.
+ * Defines a model instance.
  */
-class Text : public Renderer
+class MeshInstance : public Renderer
 {
     friend class Graphics;
     friend class Activator;
@@ -19,12 +19,12 @@ public:
     /**
      * Constructor.
      */
-    Text();
+    MeshInstance();
     
     /**
      * Destructor.
      */
-    ~Text();
+    ~MeshInstance();
 
 protected:
 
@@ -47,6 +47,7 @@ protected:
      * @see Serializable::onDeserialize
      */
     void onDeserialize(Serializer* serializer);
+
 };
 
 }

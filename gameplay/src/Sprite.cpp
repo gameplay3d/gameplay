@@ -17,11 +17,6 @@ std::shared_ptr<Serializable> Sprite::createObject()
     return std::shared_ptr<Sprite>();
 }
 
-Component::ClassType Sprite::getClassType()
-{
-    return ClassType::eSprite;
-}
-
 std::string Sprite::getClassName()
 {
     return "gameplay::Sprite";

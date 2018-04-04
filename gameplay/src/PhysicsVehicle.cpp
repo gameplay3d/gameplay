@@ -17,11 +17,6 @@ std::shared_ptr<Serializable> PhysicsVehicle::createObject()
     return std::shared_ptr<PhysicsVehicle>();
 }
 
-Component::ClassType PhysicsVehicle::getClassType()
-{
-    return ClassType::ePhysicsVehicle;
-}
-
 std::string PhysicsVehicle::getClassName()
 {
     return "gameplay::PhysicsVehicle";

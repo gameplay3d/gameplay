@@ -127,72 +127,6 @@ void Light::reset(Light::Type type)
     }
 }
 
-Component::ClassType Light::getClassType()
-{
-    return ClassType::eLight;
-}
-
-std::string Light::getClassName()
-{
-    return "gameplay::Light";
-}
-
-void Light::onSerialize(Serializer* serializer)
-{
-    serializer->writeEnum("type", "gameplay::Light::Type", static_cast<int>(_type), -1);
-    serializer->writeColor("color", _color, LIGHT_COLOR);
-    serializer->writeFloat("intensity", _intensity, LIGHT_INTENSITY);
-    switch (_type)
-    {
-        case Type::ePoint:
-        {
-            serializer->writeFloat("range", _range, LIGHT_RANGE);
-            break;
-        }
-
-        case Type::eSpot:
-        {
-            serializer->writeFloat("range", _range, LIGHT_RANGE);
-            serializer->writeFloat("angle", _angle, LIGHT_ANGLE);\
-            break;
-        }
-
-        default:
-            break;
-    }
-
-    serializer->writeEnum("lighting", "gameplay::Light::Lighting", static_cast<int>(_lighting), static_cast<int>(Lighting::eRealtime));
-    serializer->writeEnum("shadows", "gameplay::Light::Shadows", static_cast<int>(_shadows), static_cast<int>(Shadows::eNone));
-}
-
-void Light::onDeserialize(Serializer* serializer)
-{
-    _type = static_cast<Light::Type>(serializer->readEnum("type", "gameplay::Light::Type", -1));
-    _color = serializer->readColor("color", LIGHT_COLOR);
-    _intensity = serializer->readFloat("intensity", LIGHT_INTENSITY);
-    switch(_type)
-    {
-        case Type::ePoint:
-        {
-            _range = serializer->readFloat("range", LIGHT_RANGE);
-            break;
-        }
-
-        case Type::eSpot:
-        {
-            _range = serializer->readFloat("range", LIGHT_RANGE);
-            _angle = serializer->readFloat("angle", LIGHT_ANGLE);
-            _angleCos = cos(_angle);
-            break;
-        }
-
-        default:
-            break;
-    }
-    _lighting = static_cast<Light::Lighting>(serializer->readEnum("lighting", "gameplay::Light::Lighting", static_cast<int>(Lighting::eRealtime)));
-    _shadows = static_cast<Light::Shadows>(serializer->readEnum("shadows", "gameplay::Light::Shadows", static_cast<int>(Shadows::eNone)));
-}
-
 std::shared_ptr<Serializable> Light::createObject()
 {
     return std::static_pointer_cast<Serializable>(std::make_shared<Light>());
@@ -271,6 +205,67 @@ int Light::enumParse(const std::string& enumName, const std::string& str)
             return static_cast<int>(Shadows::eSoft);
     }
     return static_cast<int>(Shadows::eNone);
+}
+
+std::string Light::getClassName()
+{
+    return "gameplay::Light";
+}
+
+void Light::onSerialize(Serializer* serializer)
+{
+    serializer->writeEnum("type", "gameplay::Light::Type", static_cast<int>(_type), -1);
+    serializer->writeColor("color", _color, LIGHT_COLOR);
+    serializer->writeFloat("intensity", _intensity, LIGHT_INTENSITY);
+    switch (_type)
+    {
+        case Type::ePoint:
+        {
+            serializer->writeFloat("range", _range, LIGHT_RANGE);
+            break;
+        }
+
+        case Type::eSpot:
+        {
+            serializer->writeFloat("range", _range, LIGHT_RANGE);
+            serializer->writeFloat("angle", _angle, LIGHT_ANGLE);\
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    serializer->writeEnum("lighting", "gameplay::Light::Lighting", static_cast<int>(_lighting), static_cast<int>(Lighting::eRealtime));
+    serializer->writeEnum("shadows", "gameplay::Light::Shadows", static_cast<int>(_shadows), static_cast<int>(Shadows::eNone));
+}
+
+void Light::onDeserialize(Serializer* serializer)
+{
+    _type = static_cast<Light::Type>(serializer->readEnum("type", "gameplay::Light::Type", -1));
+    _color = serializer->readColor("color", LIGHT_COLOR);
+    _intensity = serializer->readFloat("intensity", LIGHT_INTENSITY);
+    switch(_type)
+    {
+        case Type::ePoint:
+        {
+            _range = serializer->readFloat("range", LIGHT_RANGE);
+            break;
+        }
+
+        case Type::eSpot:
+        {
+            _range = serializer->readFloat("range", LIGHT_RANGE);
+            _angle = serializer->readFloat("angle", LIGHT_ANGLE);
+            _angleCos = cos(_angle);
+            break;
+        }
+
+        default:
+            break;
+    }
+    _lighting = static_cast<Light::Lighting>(serializer->readEnum("lighting", "gameplay::Light::Lighting", static_cast<int>(Lighting::eRealtime)));
+    _shadows = static_cast<Light::Shadows>(serializer->readEnum("shadows", "gameplay::Light::Shadows", static_cast<int>(Shadows::eNone)));
 }
 
 }

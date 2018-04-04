@@ -72,11 +72,6 @@ std::shared_ptr<Serializable> PhysicsJointSpring::createObject()
     return std::shared_ptr<PhysicsJointSpring>();
 }
 
-Component::ClassType PhysicsJointSpring::getClassType()
-{
-    return ClassType::ePhysicsJointSpring;
-}
-
 std::string PhysicsJointSpring::getClassName()
 {
     return "gameplay::PhysicsJointSpring";

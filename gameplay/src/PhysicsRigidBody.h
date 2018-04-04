@@ -11,6 +11,7 @@ namespace gameplay
  */
 class PhysicsRigidBody : public Component
 {
+    friend class Physics;
     friend class Activator;
     friend class SceneObject;
 
@@ -204,22 +205,17 @@ public:
      */
     void clearTorque(PhysicsRigidBody::ForceMode mode);
 
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
-
 protected:
-
-    /**
-     * @see Serializable::getClassName
-     */
-    std::string getClassName();
 
     /**
      * @see Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
+
+    /**
+     * @see Serializable::getClassName
+     */
+    std::string getClassName();
     
     /**
      * @see Serializable::onSerialize

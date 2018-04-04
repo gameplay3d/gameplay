@@ -226,11 +226,6 @@ std::shared_ptr<Serializable> PhysicsJointGeneric::createObject()
     return std::shared_ptr<PhysicsJointGeneric>();
 }
 
-Component::ClassType PhysicsJointGeneric::getClassType()
-{
-    return ClassType::ePhysicsJointGeneric;
-}
-
 std::string PhysicsJointGeneric::getClassName()
 {
     return "gameplay::PhysicsJointGeneric";

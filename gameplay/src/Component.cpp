@@ -33,11 +33,11 @@ void Component::setObject(std::shared_ptr<SceneObject> object)
     _object = object;
 }
 
-void Component::onAttached()
+void Component::onAdded()
 {
 }
 
-void Component::onDetached()
+void Component::onRemoved()
 {
 }
 

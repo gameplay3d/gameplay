@@ -17,8 +17,8 @@ namespace gameplay
 class PhysicsJointFixed : public PhysicsJoint
 {
     friend class Physics;
-    friend class SceneObject;
     friend class Activator;
+    friend class SceneObject;
 
 public:
   
@@ -37,17 +37,12 @@ public:
      */
     PhysicsJoint::Type getType() const;
 
+protected:
+
     /**
      * @see Serializer::Activator::createObject
      */
     static std::shared_ptr<Serializable> createObject();
-
-    /**
-     * @see Component::getClassType
-     */
-    Component::ClassType getClassType();
-
-protected:
 
     /**
      * @see Serializable::getClassName

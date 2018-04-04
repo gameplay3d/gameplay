@@ -12,19 +12,14 @@ PhysicsJointFixed::~PhysicsJointFixed()
 {
 }
 
-std::shared_ptr<Serializable> PhysicsJointFixed::createObject()
-{
-    return std::shared_ptr<PhysicsJointFixed>();
-}
-
 PhysicsJoint::Type PhysicsJointFixed::getType() const
 {
     return Type::eFixed;
 }
 
-Component::ClassType PhysicsJointFixed::getClassType()
+std::shared_ptr<Serializable> PhysicsJointFixed::createObject()
 {
-    return ClassType::ePhysicsJointFixed;
+    return std::shared_ptr<PhysicsJointFixed>();
 }
 
 std::string PhysicsJointFixed::getClassName()

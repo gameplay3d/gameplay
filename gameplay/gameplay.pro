@@ -20,7 +20,7 @@ SOURCES += \
     src/BoundingSphere.cpp \
     src/Buffer.cpp \
     src/Camera.cpp \
-    src/CommandBuffer.cpp \
+    src/CommandBuffer.cpp m\
     src/Component.cpp \
     src/Curve.cpp \
     src/DescriptorSet.cpp \
@@ -36,6 +36,7 @@ SOURCES += \
     src/MathUtil.cpp \
     src/Matrix.cpp \
     src/Mesh.cpp \
+    src/MeshInstance.cpp \
     src/Path.cpp \
     src/Physics.cpp \
     src/PhysicsCharacter.cpp \
@@ -59,6 +60,7 @@ SOURCES += \
     src/RenderPipeline.cpp \
     src/Sampler.cpp \
     src/Scene.cpp \
+    src/SceneLoader.cpp \
     src/SceneObject.cpp \
     src/Script.cpp \
     src/Semaphore.cpp \
@@ -110,6 +112,7 @@ HEADERS += \
     src/MathUtil.h \
     src/Matrix.h \
     src/Mesh.h \
+    src/MeshInstance.h \
     src/Path.h \
     src/Physics.h \
     src/PhysicsCharacter.h \
@@ -134,6 +137,7 @@ HEADERS += \
     src/RenderPipeline.h \
     src/Sampler.h \
     src/Scene.h \
+    src/SceneLoader.h \
     src/SceneObject.h \
     src/Script.h \
     src/Semaphore.h \

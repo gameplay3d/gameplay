@@ -1,5 +1,10 @@
 #include "Base.h"
 #include "Activator.h"
+#include "Game.h"
+#include "Scene.h"
+#include "SceneObject.h"
+#include "Camera.h"
+#include "Light.h"
 
 namespace gameplay
 {
@@ -87,6 +92,22 @@ void Activator::registerEnum(const std::string& enumName, EnumToStringCallback t
     {
         GP_ERROR("enumName already registered:%s", enumName.c_str());
     }
+}
+
+void Activator::registerSystemTypes()
+{
+        // Register engine types with
+    Activator::getActivator()->registerType("gameplay::Game::Config", Game::Config::createObject);
+    Activator::getActivator()->registerType("gameplay::Scene", Scene::createObject);
+    Activator::getActivator()->registerType("gameplay::SceneObject", SceneObject::createObject);
+    Activator::getActivator()->registerType("gameplay::Camera", Camera::createObject);
+    Activator::getActivator()->registerType("gameplay::Light", Light::createObject);
+
+    // Register engine enums
+    Activator::getActivator()->registerEnum("gameplay::Camera::Mode", Camera::enumToString, Camera::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Light::Type", Light::enumToString, Light::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Light::Mode", Light::enumToString, Light::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Light::Shadows", Light::enumToString, Light::enumParse);
 }
 
 }

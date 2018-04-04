@@ -1,12 +1,23 @@
 #include "Base.h"
 #include "AssetManager.h"
 #include "FileSystem.h"
+#include "TextureLoader.h"
+#include "SceneLoader.h"
 
 namespace gameplay
 {
 
 AssetManager::AssetManager() 
 {
+    setLoader("png", TextureLoader::getTextureLoader());
+    setLoader("dds", TextureLoader::getTextureLoader());
+    setLoader("ktx", TextureLoader::getTextureLoader());
+    setLoader("fbx", SceneLoader::getSceneLoader());
+    setLoader("dae", SceneLoader::getSceneLoader());
+    setLoader("gltf", SceneLoader::getSceneLoader());
+    setLoader("glb", SceneLoader::getSceneLoader());
+    setLoader("obj", SceneLoader::getSceneLoader());
+
     _thread = new std::thread(&AssetManager::process, this);
 }
 
@@ -14,9 +25,11 @@ AssetManager::~AssetManager()
 {
 }
 
-void AssetManager::setLoader(std::string fileExt, std::shared_ptr<AssetLoader> loader)
+void AssetManager::setLoader(std::string fileExt, AssetLoader* loader)
 {
-    // todo
+    GP_ASSERT(loader);
+
+    _assetLoaders[fileExt] = loader;
 }
 
 std::shared_ptr<Asset> AssetManager::load(const std::string & url)

@@ -285,7 +285,6 @@ private:
 
     Game(const Game& copy);
 
-    void initializeActivationObjects();
     void initializeSplash();
     void initializeLoading();
     void onSplash(float elapsedTime);
