@@ -9,8 +9,9 @@ Ex.
 class **Terrain** = **Terrain**.h + **Terrain**.cpp
 
 ## Naming
-| Classes, Structs, Enum Classes and Typedefs | PascalCase |
+| Behaviour | Convention |
 | --- | --- |
+| Classes, Structs, Enum Classes and Typedefs | PascalCase |
 | Functions | camelCase |
 | Private + Protected member variables | _camelCase |
 | Public member variables | camelCase |
@@ -67,6 +68,7 @@ namespace gameplay
 class Camera
 {
 public:
+
     Camera();
  
     ~Camera();
@@ -81,7 +83,7 @@ public:
 ```
 
 ## Enums (bitwise operators)
-- To enable an **enum** to support bitwise operators for bitwise operation usage (flags, masks, contraints, etc.)
+- To enable an **enum class** to support bitwise operators for bitwise operation usage (flags, masks, contraints, etc.)
 ```cpp
 namespace gameplay
 {
@@ -89,6 +91,7 @@ namespace gameplay
 class ColorBlendState
 {
 public:
+
     enum class WriteMask : uint32_t
     {
         eRed    = 0x00000001,
@@ -96,6 +99,8 @@ public:
         eBlue   = 0x00000004,
         eAlpha  = 0x00000008
     };
+    
+    ...
 };
 
 }
@@ -110,7 +115,7 @@ GP_ENABLE_BITWISE_OPERATORS(gameplay::ColorBlendState::WriteMask);
 - Use **std::vector** if you need an array and use **std::vector::data()** to get a raw pointer to the beginning of a vector.
 
 ## Auto
-- Use **auto** sparingly and when needed to abstract and complex type.
+- Use **auto** sparingly and when needed to abstract a complex type.
 - Great for use on **std::** stl containers and smart pointers.
 - Be careful about accidental _copy-by-value_ when you meant _copy-by-reference_.
 - Understand the difference between **auto** and **auto&**.
@@ -125,15 +130,17 @@ GP_ENABLE_BITWISE_OPERATORS(gameplay::ColorBlendState::WriteMask);
 - They don't have to be combined with **auto**.
 - They are often more readable to not use auto for simple types:
 ```cpp
-for (int dev : devices)  // More obvious that the iterator is a device index.
+// More obvious that the iterator is a device index.
+for (int dev : devices)
 ```
 **vs.**
 ```cpp
-for (const auto& dev : devices)  // Suggests dev might be of type Device.
+// Suggests dev might be of type Device.
+for (const auto& dev : devices) 
 ```
 
 ## Friend
-- Avoid using friend unless needed to restrict access to inter-class interop only.
+- Avoid using **friend** unless it is needed to restrict access to inter-class interop only.
 - It easily leads to _difficult-to-untangle_ interdependencies that are hard to maintain.
 - We will continue to remove where possible in existing code.
 
@@ -168,7 +175,7 @@ GP_ERROR("Invalid json base64 string for propertyName: %s", propertyName);
 - Use **GP_INFO** for one time logging events such as initialization or unexpected singularities.
 - Avoid excessive logging which can impact game engine performance, such as logging every frame.
 
-## GP_ Macros and Global Constants
+## GP_ Macros and Global Definitions
 - Use existing **GP_XXX** for various compile time change functionality.
 - Use **GP_XXX** as a prefix for all gameplay scoped macros and global constants.
 
@@ -273,7 +280,7 @@ Game::Game() :
   - No space just inside brackets.
   - One space after each comma separating parameters.
 ```cpp
-serializer->writeFloat("range", _range, LIGHT_RANGE);
+serializer->writeFloat("range", _range, kLightRange);
 ```
 - Conditional statement spacing:
   - One space after conditional keywords.
@@ -288,7 +295,7 @@ serializer->writeFloat("range", _range, LIGHT_RANGE);
                 return "eDirectional";
             ...
 ```
-- **Do not** align blocks of variables to match spacing causing unnecessary line changes when new variables are introduced.
+- **Do not** align blocks of member variables to match spacing causing unnecessary line changes when new variables are introduced.
 ```cpp
 private:
     int          foo;
@@ -329,8 +336,9 @@ return sqrt((point.x - sphere.center.x) * (point.x - sphere.center.x) +
 
 ## Indentation
 - Indent next line after all braces { }.
+- Braces should
 - Move code after braces { } to the next line.
-- Always ident the next line of any condition statement line.
+- Always indent the next line of any condition statement line.
 
 **Example**
 ```cpp
