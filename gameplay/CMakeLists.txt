@@ -38,8 +38,6 @@ set(GAMEPLAY_SRC
     src/DepthStencilState.h
     src/DescriptorSet.cpp
     src/DescriptorSet.h
-    src/FileSystem.cpp
-    src/FileSystem.h
     src/Format.h
     src/Frustum.cpp
     src/Frustum.h

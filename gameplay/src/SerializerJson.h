@@ -213,8 +213,8 @@ public:
     
 protected:
     
-    SerializerJson(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor, JSONNODE* root);
-    static Serializer* create(const std::string& path, Stream* stream);
+    SerializerJson(Type type, const std::string& path, std::unique_ptr<std::fstream> stream, uint32_t versionMajor, uint32_t versionMinor, JSONNODE* root);
+    static Serializer* create(const std::string& path);
     
 private:
     
@@ -226,6 +226,7 @@ private:
     std::stack<size_t> _nodesListCounts;
     std::map<unsigned long, JSONNODE*> _xrefsWrite;
     std::map<unsigned long, std::shared_ptr<Serializable>> _xrefsRead;
+    std::unique_ptr<std::fstream> _stream;
 };
 
 }

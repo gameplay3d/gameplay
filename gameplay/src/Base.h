@@ -31,11 +31,14 @@
 #include <functional>
 #include <typeinfo>
 #include <typeindex>
-#include<type_traits>
+#include <type_traits>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
+#include <fstream>
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 // Platform
 #ifdef __ANDROID__

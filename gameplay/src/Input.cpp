@@ -367,9 +367,9 @@ Input* Input::getInput()
 
 void Input::initialize()
 {
-    if (Serializer* reader = Serializer::createReader(GP_ENGINE_INPUT))
+    if (auto reader = Serializer::createReader(GP_ENGINE_INPUT))
     {
-        std::shared_ptr<Serializable> mappings = reader->readObject(nullptr);
+        auto mappings = reader->readObject(nullptr);
         if (mappings)
         {
             _mappings = std::static_pointer_cast<Mappings>(mappings);
@@ -384,7 +384,7 @@ void Input::initialize()
     else
     {
         _mappings = std::make_shared<Mappings>();
-        Serializer* writer = SerializerJson::createWriter(GP_ENGINE_INPUT);
+        auto writer = SerializerJson::createWriter(GP_ENGINE_INPUT);
         writer->writeObject(nullptr, _mappings);
         writer->close();
         GP_SAFE_DELETE(writer);

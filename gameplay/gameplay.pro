@@ -24,7 +24,6 @@ SOURCES += \
     src/Component.cpp \
     src/Curve.cpp \
     src/DescriptorSet.cpp \
-    src/FileSystem.cpp \
     src/Frustum.cpp \
     src/Game.cpp \
     src/Graphics.cpp \
@@ -99,7 +98,6 @@ HEADERS += \
     src/Curve.h \
     src/DepthStencilState.h \
     src/DescriptorSet.h \
-    src/FileSystem.h \
     src/Format.h \
     src/Frustum.h \
     src/Game.h \
@@ -147,7 +145,6 @@ HEADERS += \
     src/SerializerJson.h \
     src/Shader.h \
     src/Sprite.h \
-    src/Stream.h \
     src/Text.h \
     src/Texture.h \
     src/TextureLoader.h \
