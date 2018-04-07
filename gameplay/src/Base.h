@@ -134,7 +134,6 @@ namespace fs = std::experimental::filesystem;
    }
 #endif
 
-
 template<typename E>
 struct enable_bitwise_operators
 {
@@ -279,7 +278,7 @@ extern void print(const char* format, ...);
 }
 
 // Compiler warnings
-#if defined(_WINDOWS)
+#if GP_PLATFORM_WINDOWS
 #pragma warning( disable : 4005 )
 #pragma warning( disable : 4172 )
 #pragma warning( disable : 4244 )
