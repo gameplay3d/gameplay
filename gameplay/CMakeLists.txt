@@ -38,8 +38,6 @@ set(GAMEPLAY_SRC
     src/DepthStencilState.h
     src/DescriptorSet.cpp
     src/DescriptorSet.h
-    src/FileSystem.cpp
-    src/FileSystem.h
     src/Format.h
     src/Frustum.cpp
     src/Frustum.h
@@ -177,7 +175,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang|AppleClang")
-    set(CMAKE_CXX_FLAGS "-std=c++11")
+    set(CMAKE_CXX_FLAGS "-std=c++14")
 endif()
 
 add_library(gameplay STATIC

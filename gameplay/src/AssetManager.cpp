@@ -1,6 +1,5 @@
 #include "Base.h"
 #include "AssetManager.h"
-#include "FileSystem.h"
 #include "TextureLoader.h"
 #include "SceneLoader.h"
 
@@ -34,7 +33,7 @@ void AssetManager::setLoader(std::string fileExt, AssetLoader* loader)
 
 std::shared_ptr<Asset> AssetManager::load(const std::string & url)
 {
-    if (!FileSystem::fileExists(url))
+    if (!fs::exists(url))
     {
         GP_WARN("Invalid asset url: %s", url.c_str());
         return nullptr;

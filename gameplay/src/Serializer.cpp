@@ -2,7 +2,6 @@
 #include "Serializer.h"
 #include "SerializerBinary.h"
 #include "SerializerJson.h"
-#include "FileSystem.h"
 #include "Game.h"
 #include "Scene.h"
 #include "SceneObject.h"
@@ -12,32 +11,33 @@
 namespace gameplay
 {
 
-Serializer::Serializer(Type type, const std::string& path, Stream* stream, uint32_t versionMajor, uint32_t versionMinor) : 
+Serializer::Serializer(Type type, const std::string& path, std::unique_ptr<std::fstream> stream, uint32_t versionMajor, uint32_t versionMinor) : 
     _type(type),
-    _path(path),
-    _stream(stream)
+    _path(path)
 {
+    _stream = std::move(stream);
     _version[0] = versionMajor;
     _version[1] = versionMinor;
 }
 
 Serializer::~Serializer()
 {
-    _stream->close();
-    GP_SAFE_DELETE(_stream);
+    if (_stream)
+    {
+        _stream->close();
+    }
+    _stream.release();
 }
 
 Serializer* Serializer::createReader(const std::string& path)
 {
-    Stream* stream = FileSystem::open(path);
-    if (!stream)
+    if (!fs::exists(path))
         return nullptr;
 
-    Serializer* serializer = SerializerBinary::create(path, stream);
+    Serializer* serializer = SerializerBinary::create(path);
     if (!serializer)
     {
-        stream->rewind();
-        serializer = SerializerJson::create(path, stream);
+        serializer = SerializerJson::create(path);
     }
     return serializer;
 }
