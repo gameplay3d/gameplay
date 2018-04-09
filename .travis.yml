@@ -68,7 +68,7 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export VULKAN_SDK=~/VulkanSDK/$VK_VERSION/x86_64; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export PATH=$VULKAN_SDK/bin:$PATH; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask uninstall oclint && brew install gcc@6 && CC=gcc-6 && CXX=g++-6
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask uninstall oclint && brew install gcc@6 && CC=gcc-6 && CXX=g++-6; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then VK_FILE=vulkansdk-macos-$VK_VERSION.tar.gz?Human=true;u=; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl -LO "https://sdk.lunarg.com/sdk/download/$VK_VERSION/mac/$VK_FILE"; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -xvzf $VK_FILE; fi
@@ -100,11 +100,11 @@ before_script:
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=$CONFIG ..
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ln -s /usr/bin/gcc-6 /usr/local/bin/gcc
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ln -s /usr/bin/g++-6 /usr/local/bin/g++
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=/usr/bin/gcc-6
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=/usr/bin/g++-
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gcc -v && g++ -v && cmake --version
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ln -s /usr/bin/gcc-6 /usr/local/bin/gcc; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ln -s /usr/bin/g++-6 /usr/local/bin/g++; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=/usr/bin/gcc-6; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=/usr/bin/g++-; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gcc -v && g++ -v && cmake --version; fi
   - make -j2
   - cd gameplay/$CONFIG
   - make -j2
