@@ -41,22 +41,37 @@ public:
         deadzone[static_cast<uint32_t>(Input::GamepadAxis::eRightZ)] = 30;
     }
 
-    void create(const SDL_JoyDeviceEvent& evt)
+    void create(const SDL_JoyDeviceEvent& evt, Game* game)
     {
+        if (jid == INT32_MAX)
+        {
+            Input::getInput()->postGamepadConnectionEvent(evt.which, true);
+            game->onGamepadConnection(evt.which, true);
+        }
         this->joystick = SDL_JoystickOpen(evt.which);
         SDL_Joystick* joystick = this->joystick;
         jid = SDL_JoystickInstanceID(joystick);
     }
 
-    void create(const SDL_ControllerDeviceEvent& evt)
+    void create(const SDL_ControllerDeviceEvent& evt, Game* game)
     {
+        if (jid == INT32_MAX)
+        {
+            Input::getInput()->postGamepadConnectionEvent(evt.which, true);
+            game->onGamepadConnection(evt.which, true);
+        }
         controller = SDL_GameControllerOpen(evt.which);
         SDL_Joystick* joystick = SDL_GameControllerGetJoystick(controller);
         jid = SDL_JoystickInstanceID(joystick);
     }
 
-    void destroy()
+    void destroy(Game* game, uint32_t controllerIndex)
     {
+        if (controller || joystick)
+        {
+            Input::getInput()->postGamepadConnectionEvent(controllerIndex, false);
+            game->onGamepadConnection(controllerIndex, false);
+        }
         if (controller != nullptr)
         {
             SDL_GameControllerClose(controller);
@@ -70,7 +85,7 @@ public:
         jid = INT32_MAX;
     }
 
-    bool filter(Input::GamepadAxis axis, int* value)
+    bool ignore(Input::GamepadAxis axis, int* value)
     {
         const int32_t oldValue = this->value[static_cast<uint32_t>(axis)];
         const int32_t deadzone = this->deadzone[static_cast<uint32_t>(axis)];
@@ -81,10 +96,19 @@ public:
         return oldValue != newValue;
     }
 
-    void update(uint32_t controllerIndex, Input::GamepadAxis axis, int32_t value)
+    bool ignore(bool isJoystick) const
     {
+        return isJoystick && joystick && controller;
+    }
+
+    void updateAxis(uint32_t controllerIndex, Input::GamepadAxis axis, int32_t value, bool isJoystick)
+    {
+        if (ignore(isJoystick))
+        {
+            return;
+        }
         Input* input = Input::getInput();
-        if (filter(axis, &value))
+        if (ignore(axis, &value))
         {
             input->postGamepadAxisEvent(controllerIndex, axis, value);
 
@@ -103,6 +127,16 @@ public:
                 }
             }
         }
+    }
+
+    void updateButton(Game* game, bool isDown, bool isJoystick, Input::Key key, uint32_t controllerIndex)
+    {
+        if (key == Input::Key::eCount || ignore(isJoystick))
+        {
+            return;
+        }
+        Input::getInput()->postKeyPressEvent(key, Input::KeyModifiers::eNone, isDown, controllerIndex);
+        game->onKeyPress(key, Input::KeyModifiers::eNone, isDown);
     }
 
     SDL_Joystick* joystick;
@@ -411,27 +445,21 @@ int Platform::run()
                     case SDL_JOYDEVICEADDED:
                         {
                             const SDL_JoyDeviceEvent& joystickEvent = evt.jdevice;
-                            gamepads[joystickEvent.which].create(joystickEvent);
-                            input->postGamepadConnectionEvent(joystickEvent.which, true);
-                            game->onGamepadConnection(joystickEvent.which, true);
+                            gamepads[joystickEvent.which].create(joystickEvent, game);
                         }
                         break;
 
                     case SDL_JOYDEVICEREMOVED:
                         {
                             const SDL_JoyDeviceEvent& joystickEvent = evt.jdevice;
-                            gamepads[joystickEvent.which].destroy();
-                            input->postGamepadConnectionEvent(joystickEvent.which, false);
-                            game->onGamepadConnection(joystickEvent.which, false);
+                            gamepads[joystickEvent.which].destroy(game, joystickEvent.which);
                         }
                         break;
 
                     case SDL_CONTROLLERDEVICEADDED:
                         {
                             const SDL_ControllerDeviceEvent& controllerEvent = evt.cdevice;
-                            gamepads[controllerEvent.which].create(controllerEvent);
-                            input->postGamepadConnectionEvent(controllerEvent.which, true);
-                            game->onGamepadConnection(controllerEvent.which, true);
+                            gamepads[controllerEvent.which].create(controllerEvent, game);
                         }
                         break;
 
@@ -441,25 +469,23 @@ int Platform::run()
                     case SDL_CONTROLLERDEVICEREMOVED:
                         {
                             const SDL_ControllerDeviceEvent& controllerEvent = evt.cdevice;
-                            gamepads[controllerEvent.which].destroy();
-                            input->postGamepadConnectionEvent(controllerEvent.which, false);
-                            game->onGamepadConnection(controllerEvent.which, false);
+                            gamepads[controllerEvent.which].destroy(game, controllerEvent.which);
                         }
                         break;
 
                     case SDL_JOYAXISMOTION:
                         {
                             const SDL_JoyAxisEvent& joystickEvent = evt.jaxis;
-                            Input::GamepadAxis axis = translateGamepadAxis(joystickEvent.axis);
-                            gamepads[joystickEvent.which].update(joystickEvent.which, axis, joystickEvent.value);
+                            const Input::GamepadAxis axis = translateGamepadAxis(joystickEvent.axis);
+                            gamepads[joystickEvent.which].updateAxis(joystickEvent.which, axis, joystickEvent.value, true);
                         }
                         break;
 
                     case SDL_CONTROLLERAXISMOTION:
                         {
                             const SDL_ControllerAxisEvent& controllerEvent = evt.caxis;
-                            Input::GamepadAxis axis = translateGamepadAxis(controllerEvent.axis);
-                            gamepads[controllerEvent.which].update(controllerEvent.which, axis, controllerEvent.value);
+                            const Input::GamepadAxis axis = translateGamepadAxis(controllerEvent.axis);
+                            gamepads[controllerEvent.which].updateAxis(controllerEvent.which, axis, controllerEvent.value, false);
                         }
                         break;
 
@@ -467,12 +493,7 @@ int Platform::run()
                     case SDL_JOYBUTTONUP:
                         {
                             const SDL_JoyButtonEvent& buttonEvent = evt.jbutton;
-                            Input::Key key = translateGamepad(buttonEvent.button);
-                            if (key != Input::Key::eCount)
-                            {
-                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN, buttonEvent.which);
-                                game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_JOYBUTTONDOWN);
-                            }
+                            gamepads[buttonEvent.which].updateButton(game, evt.type == SDL_JOYBUTTONDOWN, true, translateGamepad(buttonEvent.button), buttonEvent.which);
                         }
                         break;
 
@@ -480,12 +501,7 @@ int Platform::run()
                     case SDL_CONTROLLERBUTTONUP:
                         {
                             const SDL_ControllerButtonEvent& buttonEvent = evt.cbutton;
-                            Input::Key key = translateGamepad(buttonEvent.button);
-                            if (key != Input::Key::eCount)
-                            {
-                                input->postKeyPressEvent(key, Input::KeyModifiers::eNone, evt.type == SDL_CONTROLLERBUTTONDOWN);
-                                game->onKeyPress(key, Input::KeyModifiers::eNone, evt.type == SDL_CONTROLLERBUTTONDOWN);
-                            }
+                            gamepads[buttonEvent.which].updateButton(game, evt.type == SDL_CONTROLLERBUTTONDOWN, false, translateGamepad(buttonEvent.button), buttonEvent.which);
                         }
                         break;
 
