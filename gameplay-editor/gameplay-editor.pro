@@ -64,8 +64,8 @@ win32 {
     DEFINES += _WINDOWS WIN32
     DEFINES += VK_USE_PLATFORM_WIN32_KHR
     INCLUDEPATH += $$(VULKAN_SDK)/Include
-    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/gameplay/Debug/debug/ -lgameplay
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../build/gameplay/Release/release/ -lgameplay
+    CONFIG(debug, debug|release): LIBS += -L$$PWD/../build/gameplay/Debug/ -lgameplay
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../build/gameplay/Release/ -lgameplay
     CONFIG(debug, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Debug/ -lgameplay-deps
     CONFIG(release, debug|release): LIBS += -L$$PWD/../external-deps/lib/windows/x86_64/Release/ -lgameplay-deps
     LIBS += -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lodbc32 -lodbccp32 -limm32 -limagehlp -lversion -lwinmm -lxinput
