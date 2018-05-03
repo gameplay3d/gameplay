@@ -11,6 +11,8 @@ namespace gameplay
  */
 class Input
 {
+    friend class Activator;
+    
 public:
 
     static const uint32_t kGamepadsMax = 4;
@@ -193,6 +195,7 @@ public:
      */
     class Mapping : public Serializable
     {
+        friend class Activator;
         friend class Input;
 
     public:
@@ -207,7 +210,8 @@ public:
             eKey = 0,
             eMouseButton,
             eMouseAxis,
-            eGamepadAxis
+            eGamepadAxis,
+            eCount
         };
 
         /**
@@ -411,7 +415,7 @@ public:
         void setGamepadAxisIndex(uint32_t gamepadIndex);
 
     protected:
-
+        
         /**
          * @see Serializable::getClassName
          */
@@ -426,21 +430,89 @@ public:
          * @see Serializable::onDeserialize
          */
         void onDeserialize(Serializer* serializer);
+        
+        /**
+         * @see Activator::createObject
+         */
+        static std::shared_ptr<Serializable> createObject();
 
-        struct ActionData
+        struct ActionData : public Serializable
         {
-            ActionData();
+            ActionData(ActionProfile profile, Action action);
             uint32_t slotIndex;
             uint32_t gamepadIndex;
             KeyModifiers modifiers;
+            Action action;
+            ActionProfile profile;
+
+            /**
+            * @see Serializable::onSerialize
+            */
+            void onSerialize(Serializer* serializer);
+
+            /**
+            * @see Serializable::onDeserialize
+            */
+            void onDeserialize(Serializer* serializer);
         };
-        typedef std::array<ActionData, static_cast<uint32_t>(Action::eCount)> Actions;
+
+        struct KeyActionData : public ActionData
+        {
+            KeyActionData(ActionProfile profile, Action action);
+
+            /**
+            * @see Serializable::onSerialize
+            */
+            void onSerialize(Serializer* serializer);
+
+            /**
+            * @see Serializable::onDeserialize
+            */
+            void onDeserialize(Serializer* serializer);
+
+            /**
+            * @see Serializable::getClassName
+            */
+            std::string getClassName();
+
+            /**
+            * @see Activator::createObject
+            */
+            static std::shared_ptr<Serializable> createObject();
+        };
+
+        struct MouseButtonActionData : public ActionData
+        {
+            MouseButtonActionData(ActionProfile profile, Action action);
+
+            /**
+            * @see Serializable::onSerialize
+            */
+            void onSerialize(Serializer* serializer);
+
+            /**
+            * @see Serializable::onDeserialize
+            */
+            void onDeserialize(Serializer* serializer);
+
+            /**
+            * @see Serializable::getClassName
+            */
+            std::string getClassName();
+
+            /**
+            * @see Activator::createObject
+            */
+            static std::shared_ptr<Serializable> createObject();
+        };
+
+        typedef std::array<std::shared_ptr<ActionData>, static_cast<uint32_t>(Action::eCount)> Actions;
         typedef std::array<Actions, static_cast<uint32_t>(ActionProfile::eCount)> ActionProfileMap;
         const ActionProfileMap& getKeyActions() const;
         const ActionProfileMap& getMouseButtonActions() const;
+        void serialize(Serializer* serializer, const ActionProfileMap& map);
+        void deserialize(Serializer* serializer, ActionProfileMap& map);
     private:
-        void serialize(Serializer* serializer, ActionProfileMap& actionProfiles);
-        void deserialize(Serializer* serializer, ActionProfileMap& actionProfiles);
         Type _type;
         bool _inverted;
         std::string _name;
@@ -694,11 +766,21 @@ public:
     void postMousePressEvent(int mx, int my, MouseButton button, bool down);
     void postKeyCharEvent(char chr);
     void postKeyPressEvent(Key key, KeyModifiers modifiers, bool down, uint32_t gamepadIndex = kGamepadsAnyIndex);
+protected:
+    /**
+     * @see Activator::enumToString
+     */
+    static std::string enumToString(const std::string& enumName, int value);
 
+    /**
+     * @see Activator::enumParse
+     */
+    static int enumParse(const std::string& enumName, const std::string& str);
 private:
     class Mappings : public Serializable
     {
     public:
+        static std::shared_ptr<Serializable> createObject();
         bool add(const std::shared_ptr<Mapping>& action);
         bool remove(const std::shared_ptr<Mapping>& action);
         bool remove(const std::string& name);

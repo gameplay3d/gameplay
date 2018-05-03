@@ -101,10 +101,22 @@ void Activator::registerSystemTypes()
     Activator::getActivator()->registerType("gameplay::Scene", Scene::createObject);
     Activator::getActivator()->registerType("gameplay::SceneObject", SceneObject::createObject);
     Activator::getActivator()->registerType("gameplay::Camera", Camera::createObject);
+    Activator::getActivator()->registerType("gameplay::Input::Mapping::KeyActionData", Input::Mapping::KeyActionData::createObject);
+    Activator::getActivator()->registerType("gameplay::Input::Mapping::MouseButtonActionData", Input::Mapping::MouseButtonActionData::createObject);
+    Activator::getActivator()->registerType("gameplay::Input::Mapping", Input::Mapping::createObject);
+    Activator::getActivator()->registerType("gameplay::Input::Mappings", Input::Mappings::createObject);
     Activator::getActivator()->registerType("gameplay::Light", Light::createObject);
 
     // Register engine enums
     Activator::getActivator()->registerEnum("gameplay::Camera::Mode", Camera::enumToString, Camera::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::GamepadAxis", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::Key", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::KeyModifiers", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::MouseAxis", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::MouseButton", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::Mapping::Action", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::Mapping::ActionProfile", Input::enumToString, Input::enumParse);
+    Activator::getActivator()->registerEnum("gameplay::Input::Mapping::Type", Input::enumToString, Input::enumParse);
     Activator::getActivator()->registerEnum("gameplay::Light::Type", Light::enumToString, Light::enumParse);
     Activator::getActivator()->registerEnum("gameplay::Light::Mode", Light::enumToString, Light::enumParse);
     Activator::getActivator()->registerEnum("gameplay::Light::Shadows", Light::enumToString, Light::enumParse);
