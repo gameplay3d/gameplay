@@ -41,9 +41,12 @@ void PropertiesView::onSelectionChanged()
 
     QStandardItem* selectedItem = selectedItems->front();
     QVariant userData = selectedItem->data(Qt::UserRole + 1);
-    gameplay::SceneObject* selectedObject = (gameplay::SceneObject*)userData.toLongLong();
-
-    if (selectedObject != nullptr)
+    gameplay::Serializable* selectedSerializableObject = (gameplay::Serializable*)userData.toLongLong();
+    if (selectedSerializableObject && selectedSerializableObject->getClassName() != "gameplay::SceneObject")
+    {
+        selectedSerializableObject = nullptr;
+    }
+    if (gameplay::SceneObject* selectedObject = selectedSerializableObject ? static_cast<gameplay::SceneObject*>(selectedSerializableObject) : nullptr)
     {
         showProperties();
 
