@@ -96,6 +96,10 @@ void Activator::registerEnum(const std::string& enumName, EnumToStringCallback t
 
 void Activator::registerSystemTypes()
 {
+    if (!_enums.empty())
+    {
+        return;
+    }
         // Register engine types with
     Activator::getActivator()->registerType("gameplay::Game::Config", Game::Config::createObject);
     Activator::getActivator()->registerType("gameplay::Scene", Scene::createObject);
