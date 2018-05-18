@@ -1,5 +1,4 @@
 #include "ProjectWizard.h"
-#include "EditorWindow.h"
 #include <QApplication>
 #include <QCoreApplication>
 #include <QGuiApplication>
@@ -37,15 +36,12 @@ int main(int argc, char* argv[])
     // Process the application event
     app.processEvents();
 
-    // Create the editor and project wizard
-    EditorWindow editor;
+    // Create the project wizard
     ProjectWizard wizard;
 
     if (wizard.initialize())
     {
-        // Hookup the editor and show the wizard
-        editor.setProjectWizard(&wizard);
-        wizard.setEditor(&editor);
+        // Show the wizard
         wizard.show();
 
         // Finish the splash

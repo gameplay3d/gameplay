@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ProjectWizardItemDelegate.h"
+#include <memory>
 #include <QDialog>
 #include <QStyledItemDelegate>
 
@@ -38,13 +39,6 @@ public:
      * Initialize the project wizard and ui.
      */
     bool initialize();
-
-    /**
-     * Sets the editor to interface with.
-     *
-     * @param editor The editor to interface with.
-     */
-    void setEditor(EditorWindow* editor);
 
     /**
      * Reads all the projects.
@@ -98,9 +92,10 @@ signals:
     void projectOpened(const QString& path);
 
 private:
+    void resetEditor();
 
     Ui::ProjectWizard* _ui;
-    EditorWindow* _editor;
+    std::unique_ptr<EditorWindow> _editor;
     QStringList _recentProjects;
     QString _projectDirectoryRoot;
     QString _projectDirectory;

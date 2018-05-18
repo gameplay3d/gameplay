@@ -14,8 +14,7 @@
 
 
 ProjectWizard::ProjectWizard(QWidget* parent) : QDialog(parent), 
-    _ui(new Ui::ProjectWizard),
-    _editor(NULL)
+    _ui(new Ui::ProjectWizard)
 {
     _ui->setupUi(this);    
 }
@@ -65,11 +64,6 @@ bool ProjectWizard::initialize()
     readProjects();
 
     return true;
-}
-
-void ProjectWizard::setEditor(EditorWindow* editor)
-{
-    _editor = editor;
 }
 
 void ProjectWizard::readProjects()
@@ -134,12 +128,14 @@ void ProjectWizard::onNewProjectPressed()
 
 void ProjectWizard::onOpenProjectPressed()
 {
+    EditorWindow* previousEditor = _editor.get();
     QList<QListWidgetItem*> selected = _ui->listWidgetProjects->selectedItems();
     if (selected.size() == 0)
     {
         QString projectFilePath = QFileDialog::getOpenFileName(this, tr("Open Project"), ".", tr("Project Files (*.project)"));
         if (!projectFilePath.isEmpty())
         {
+            resetEditor();
             QDir projectPath = QFileInfo(projectFilePath).absoluteDir();
             _editor->show();
             emit projectOpened(projectPath.path());
@@ -151,7 +147,10 @@ void ProjectWizard::onOpenProjectPressed()
     QListWidgetItem* item = selected.at(0);
     if (!item)
         return;
-
+    if (_editor.get() == previousEditor)
+    {
+        resetEditor();
+    }
     QVariant data = item->data(Qt::UserRole);
     QString path = data.toString();
     if (!QDir(path).exists())
@@ -185,6 +184,7 @@ void ProjectWizard::onCreateProjectPressed()
 
     if (QDir().mkdir(_ui->lineEditProjectDirectory->text()))
     {
+        resetEditor();
         std::shared_ptr<Project> project = Project::create(_ui->lineEditProjectDirectory->text(),
                                                            _ui->lineEditProjectName->text());
         if (project)
@@ -243,4 +243,12 @@ void ProjectWizard::onProjectDirectoryPressed()
 
 void ProjectWizard::onProjectDirectoryTextChanged()
 {
+}
+
+void ProjectWizard::resetEditor()
+{
+    // Avoiding inplace reset, old game instance must be deleted before the new one is created.
+    _editor.reset();
+    _editor.reset(new EditorWindow());
+    _editor->setProjectWizard(this);
 }
