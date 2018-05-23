@@ -1,5 +1,6 @@
 #include "PropertiesTransform.h"
 #include "ui_PropertiesTransform.h"
+#include <QButtonGroup>
 #include <QMenu>
 
 #define PROPERTIES_TRANSFORM_HEIGHT_CLOSED 26
