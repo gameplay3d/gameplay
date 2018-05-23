@@ -1,9 +1,9 @@
 branches:
   only:
   - nextgen
-image: Visual Studio 2015
+image: Visual Studio 2017
 environment:
-  QTDIR: C:\Qt\5.10\msvc2015_64
+  QTDIR: C:\Qt\5.10.1\msvc2017_64
   VK_VERSION: 1.1.70.0
   VK_INSTALLER: 'vulkdansdk_%VK_VERSION%.exe'
   VULKAN_SDK: 'C:\VulkanSDK\%VK_VERSION%'
@@ -14,7 +14,7 @@ cache:
   - '%VK_INSTALLER%'
   - external-deps
 init:
-  - C:\"Program Files (x86)"\\\"Microsoft Visual Studio 14.0\"\VC\vcvarsall.bat amd64
+  - C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Community\VC\Auxiliary\Build\vcvarsall.bat x64
   - set PATH=%VULKAN_SDK%\Bin;%QTDIR%\bin;%PATH%
   - ps: "[Environment]::SetEnvironmentVariable(\"CONFIG_LOWER\", $env:CONFIG.ToLower())"
   - cmake --version
@@ -38,7 +38,7 @@ install:
   - qmake CONFIG+=%CONFIG_LOWER% -spec win32-msvc ..\..\..\gameplay-editor\gameplay-editor.pro
   - cd ..\..\..
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=%CONFIG% -G "Visual Studio 14 2015 Win64" ..
+  - cmake -DCMAKE_BUILD_TYPE=%CONFIG% -G "Visual Studio 15 2017 Win64" ..
 build_script:
   - msbuild GamePlay.sln /property:Configuration=%CONFIG%
   - cd gameplay\%CONFIG%

@@ -1,9 +1,9 @@
 Windows 10 - Setup
 ------------------
-- Install Windows 10 SDK (10.0.15063.xxx)    (https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)
-- Install Visual Studio 2015 + Update 3      (https://www.visualstudio.com/vs/older-downloads/)
-- Install Vulkan SDK                         (https://vulkan.lunarg.com/sdk/home)
-- Install Qt 5.10 (open-source) to C:\Qt)    (https://www.qt.io/download)
+- Install Windows 10 SDK (10.0.15063.xxx)  (https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk)
+- Install Visual Studio 2017               (https://www.visualstudio.com/downloads/)
+- Install Vulkan SDK                       (https://vulkan.lunarg.com/sdk/home)
+- Install Qt 5.10 (open-source) to C:\Qt)  (https://www.qt.io/download)
 - Clone GamePlay repo
 - Run install.bat
 
@@ -13,7 +13,7 @@ Windows 10 - Build with Qt Creator (Option A)
 - Open gameplay/gameplay.pro
 - Open gameplay-app/gameplay-app.pro
 - Open gameplay-editor/gameplay-editor.pro
-- Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 MSVC2015 64bit"
+- Expand "Configure Project" kits by expanding "Desktop Qt 5.10.1 MSVC2017 64bit"
 - Uncheck Profile and change long build paths for Debug and Release to:
 ```
 Debug = "../build/%{CurrentProject:Name}/Debug"
@@ -21,15 +21,15 @@ Release = "../build/%{CurrentProject:Name}/Release"
 ```
 - Build and Run
 
-Windows 10 - Build with CMake and Visual Studio 2015 (Option B)
+Windows 10 - Build with CMake and Visual Studio 2017 (Option B)
 ---------------------------------------------------------------
 - Install CMake                             (https://cmake.org/download/)
-- Open Visual Studio 2015
+- Open Visual Studio 2017
 - Open menu Tools->Extensions and Updates...
 - Search Online for "Qt Visual Studio Tools" and install extension.
-- Restart Visual Studio 2015
+- Restart Visual Studio 2017
 - Open menu Qt VS Tools->Qt Options
-- Add Path=C:\Qt\Qt5.10.1\msvc2015_64 and Name=msvc2015_64
+- Add Path=C:\Qt\Qt5.10.1\msvc2017_64 and Name=msvc2017_64
 - Run generate-projects.bat
 - Open build\GamePlay.sln
 - Open menu Qt VS Tools->Open Qt Project File(.pro)...
