@@ -6,6 +6,9 @@ CONFIG += c++11
 CONFIG -= qt
 CONFIG(debug, debug|release): DEFINES += _DEBUG
 
+CONFIG(debug, debug|release): TARGET = gameplay_d
+DESTDIR = $$PWD/../build/lib
+
 SOURCES += \
     src/Activator.cpp \
     src/Animation.cpp \
