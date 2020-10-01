@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/gameplay3d/GamePlay/master/gameplay/res/icon.png" width=100/>
 
-## GamePlay v3.0.0
+## GamePlay v3.0.0-amazing project
 
 GamePlay is an open-source, cross-platform, C++ game framework/engine for creating 2D/3D mobile and desktop games.
 
