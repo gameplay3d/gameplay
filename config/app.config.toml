@@ -1,0 +1,32 @@
+[window]
+title = "gameplay - editor"
+width = 1920
+height = 1080
+fullscreen = false
+hints = "NONE"
+
+[logging]
+level = "INFO"
+file = "gameplay.log"
+
+[[resource.alias]]
+name = "data"
+path = "@app.dir/../../../data"
+[[resource.alias]]
+name = "fonts"
+path = "@data/fonts"
+[[resource.alias]]
+name = "icons"
+path = "@data/icons"
+[[resource.alias]]
+name = "images"
+path = "@data/images"
+[[resource.alias]]
+name = "shaders"
+path = "@data/shaders"
+[[resource.alias]]
+name = "scenes"
+path = "@data/scenes"
+
+[input]
+gamepad_mappings_db = "@app.dir/../../../config/gamecontrollerdb.txt"
