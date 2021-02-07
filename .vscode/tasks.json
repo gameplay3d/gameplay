@@ -14,7 +14,7 @@
                 "owner": "cpp",
                 "fileLocation": [
                     "relative",
-                    "${workspaceRoot}/_compiler/vs2019"
+                    "${workspaceRoot}/_compiler/vs2019/gameplay"
                 ],
                 "pattern": {
                     "regexp": "^(.*):(\\d+): \\s+(warning|error):\\s+(.*)$",

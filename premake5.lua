@@ -74,7 +74,6 @@ workspace "gameplay"
             vulkan_sdk_dir.."/lib",
         }
         links { "freetype", "glfw3" }
-        linkoptions { "-export-dynamic" }
         filter { "system:windows" }
             libdirs {
                 deps_dir.."/freetype/bin/"..platform.."/%{cfg.buildcfg}",
@@ -87,6 +86,7 @@ workspace "gameplay"
                 deps_dir.."/glfw/bin/"..platform,
             }
             links { "vulkan", "dl", "pthread", "X11", "z"}
+            linkoptions { "-export-dynamic" }
             buildoptions { "-pthread" }
             disablewarnings { "unused-function", "unused-value", "unused-but-set-variable" }
         filter {}

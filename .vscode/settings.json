@@ -108,7 +108,9 @@
         "**/.git/subtree-cache/**": true,
         "**/node_modules/**": true,
         "**/_build/**": true,
-        "**/_compiler/**": true
+        "**/_compiler/**": true,
+        "**/_deps/**": true,
+        "**/_tools/**": true
     },
     "typescript.tsc.autoDetect": "off",
     "grunt.autoDetect": "off",
@@ -126,16 +128,11 @@
         "asciidoc"
     ],
 
-    
     // For intellisense to work you need python 3.6 available on your system:
     "python.pythonPath": "/usr/bin/python3", 
 
     // This enables python language server. Seems to work slightly better than jedi:
     "python.jediEnabled": false, 
-
-    // Python env file is generated buring build step. It points python to binary bindings files for intellisense to work.
-    // If you are building only release configuration you can switch this to "python_release.env":
-    "python.envFile": "${workspaceFolder}/_build/python_debug.env",
 
     // We use "black" as a formatter:
     "python.formatting.provider": "black",
@@ -145,4 +142,6 @@
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.languageServer": "Microsoft",
+
+    "terminal.integrated.allowChords": false
 }
