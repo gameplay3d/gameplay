@@ -75,23 +75,32 @@ if argc > 1:
 
 # generate/premake
 current_dir = os.getcwd()
-compiler_args = ""
 if sys.platform == "win32":
     compiler_args = "vs2019"
+elif sys.platform == "darwin":
+    compiler_args = "xcode4"
+else:
+    compiler_args = "gmake"
 tools_dir = os.path.join(current_dir, TOOLS_FOLDER)
-premake_proc = subprocess.Popen(f"{tools_dir}/premake/premake5 --file=premake5.lua {compiler_args}", cwd=current_dir)
+premake_proc = subprocess.Popen(f"{tools_dir}/premake/premake5 --file=premake5.lua {compiler_args}", cwd=current_dir, shell=True)
 premake_proc.wait()
 
-# compile/link
+# build
 if not generate_only:
     compiler_dir =  os.path.join(current_dir, COMPILER_FOLDER)
     if sys.platform == "win32":
         compiler_dir = os.path.join(compiler_dir, "vs2019")
         init_vsvars()
         os.chdir(compiler_dir)
-        build_cmd = f"msbuild gameplay.sln /property:Configuration=Debug"
-        subprocess.run(build_cmd)
-        build_cmd = f"msbuild gameplay.sln /property:Configuration=Release"
-        subprocess.run(build_cmd)
+        subprocess.run("msbuild gameplay.sln /property:Configuration=Debug")
+        subprocess.run("msbuild gameplay.sln /property:Configuration=Release")
+    elif sys.platform == "darwin":
+        compiler_dir = os.path.join(compiler_dir, "xcode4")
+        os.chdir(compiler_dir)
+        subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Debug build")
+        subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Release build")
     else:
-        pass
+        compiler_dir = os.path.join(compiler_dir, "gmake")
+        os.chdir(compiler_dir)
+        subprocess.run("make config=debug_x86_64", shell=True)
+        subprocess.run("make config=release_x86_64", shell=True)

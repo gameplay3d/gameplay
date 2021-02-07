@@ -41,7 +41,15 @@ struct WindowDesc
     WindowHints hints;
 };
 
-
+enum class CursorStandardShape : uint32_t
+{
+    ARROW,
+    IBEAM,
+    CROSSHAIR,
+    HAND,
+    HRESIZE,
+    VRESIZE
+};
 /**
  * Defines the windowing system for window management.
  */
@@ -105,12 +113,12 @@ public:
     Signal<Monitor*, MonitorChangeEvent> on_monitor_change;
 
     /**
-     * Creates a cursor for the specified (standard) cursor shape.
+     * Creates a cursor for the standard cursor shape.
      *
      * @param shape The (standard) cursor shape.
      * @return The cursor created.
      */
-    Cursor* create_cursor(CursorShape shape);
+    Cursor* create_cursor(CursorStandardShape shape);
 
     /**
      * Creates a cursor for an pixmap image data.

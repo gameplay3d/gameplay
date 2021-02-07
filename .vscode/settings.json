@@ -128,7 +128,7 @@
 
     
     // For intellisense to work you need python 3.6 available on your system:
-    "python.pythonPath": "${workspaceFolder}/_build/host-deps/python", 
+    "python.pythonPath": "/usr/bin/python3", 
 
     // This enables python language server. Seems to work slightly better than jedi:
     "python.jediEnabled": false, 
@@ -144,4 +144,5 @@
     // Use flake8 for linting
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
+    "python.languageServer": "Microsoft",
 }

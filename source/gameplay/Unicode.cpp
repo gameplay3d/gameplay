@@ -8,7 +8,7 @@
 
 namespace gameplay
 {
-
+#if GP_PLATFORM_WINDOWS
 class Locale
 {
 public:
@@ -107,8 +107,9 @@ void Unicode::convert_wide_string_to_cowercase_in_place(std::wstring& string)
 {
     _wcslwr_s_l(&string[0], string.size() + 1, _get_system_default_locale());
 }
+#endif
 
-inline std::string Unicode::convert_utf32_to_utf8(uint32_t codepoint)
+std::string Unicode::convert_utf32_to_utf8(uint32_t codepoint)
 {
     std::string u8str;
 #if GP_PLATFORM_WINDOWS

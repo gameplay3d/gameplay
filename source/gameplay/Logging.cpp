@@ -138,8 +138,9 @@ Logging::Level Logging::get_level() const
         return Logging::Level::LEVEL_CRITICAL;
     case spdlog::level::off:
         return Logging::Level::LEVEL_OFF;
+    default:
+        return Logging::Level::LEVEL_INFO;
     }
-    return Logging::Level::LEVEL_INFO;
 }
 
 }

@@ -1,7 +1,7 @@
 #include "Path.h"
 #include "Logging.h"
 #include "Unicode.h"
-#ifdef GP_PLATFORM_WINDOWS
+#if GP_PLATFORM_WINDOWS
 #   include <pathcch.h>
 #endif
 #include <functional>

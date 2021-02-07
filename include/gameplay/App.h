@@ -33,7 +33,7 @@ public:
 	/**
 	 * Gets the application instance.
      *
-     * @return the application instance
+     * @return The application instance
 	 */
 	static App* get_app();
 

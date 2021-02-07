@@ -14,13 +14,14 @@ Renderer::~Renderer()
 
 void Renderer::startup()
 {
-    if (!glfwVulkanSupported())
+    /*if (!glfwVulkanSupported())
     {
         printf("GLFW: Vulkan not supported\n");
         return;
     }
     uint32_t extensionsCount = 0;
     const char** extensions = glfwGetRequiredInstanceExtensions(&extensionsCount);
+    */
 }
 
 void Renderer::shutdown()

@@ -2,7 +2,6 @@
 rem
 rem setup.bat 
 rem
-
 rem Tools
 set install_path=%cd%\_tools
 set package_url=https://github.com/gameplay3d/gameplay-deps/releases/download/v4.0.0/
@@ -15,7 +14,6 @@ powershell -Command "([Net.ServicePointManager]::SecurityProtocol=\"tls12, tls11
 echo Extracting %filename%.zip... please standby...
 powershell -Command "Expand-Archive %filename%.zip -Force -DestinationPath %install_path%" 
 powershell -Command "Remove-Item %filename%.zip -Force"
-
 rem Dependencies
 set install_path=%cd%\\_deps
 set package_url=https://github.com/gameplay3d/gameplay/releases/download/v4.0.0/
@@ -27,5 +25,4 @@ powershell -Command "([Net.ServicePointManager]::SecurityProtocol=\"tls12, tls11
 echo Extracting %filename%.zip... please standby...
 powershell -Command "Expand-Archive %filename%.zip -Force -DestinationPath %install_path%" 
 powershell -Command "Remove-Item %filename%.zip -Force"
-
-rem Done.
+echo Done.

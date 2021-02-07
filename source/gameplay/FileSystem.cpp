@@ -60,6 +60,14 @@ struct File
     FileOp lastOp;
 };
 
+struct FileSystem::Impl
+{
+    std::string appExecutablePath = "";
+    std::string appDirectoryPath = "";
+    void update_cwd(const char* cwd);
+    char* cwd = nullptr;
+};
+
 typedef uint32_t WalkFlags;
 constexpr WalkFlags WALK_FLAGS_RECURSIVE = (1 << 0);
 constexpr WalkFlags WALK_FLAGS_SYMLINKS_ARE_FILES = (1 << 1);
@@ -76,19 +84,11 @@ static VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const 
 #elif GP_PLATFORM_LINUX
 static const size_t PATH_BUFFER_LEN = PATH_MAX + 1;;
 std::vector<std::string> __split_and_fix_linux_path(const std::string& path);
-static WalkAction __walk_directory_linux(const std::string& pathAbs, const std::string& parent, OnDirectoryItemFn fn , void* userPtr,
+static VisitAction __walk_directory_linux(const std::string& pathAbs, const std::string& parent, FileSystem::OnVisitDirectoryItemFn fn , void* userPtr,
                                           WalkFlags flags, std::list<std::string>* files, std::list<std::string>* directories);
 #endif
 static std::string __resolve_path(FileSystem* fileSystem, const char* relativeOrAbsolutePath, const char* base);
 static void __remove_duplicated_slashes(std::string& path);
-
-struct FileSystem::Impl
-{
-    std::string appExecutablePath = "";
-    std::string appDirectoryPath = "";
-    void update_cwd(const char* cwd);
-    char* cwd = nullptr;
-};
 
 //////////////////////////////////////////////////////////////////////////////
 // impl.
@@ -155,7 +155,7 @@ bool FileSystem::set_current_directory_path(const char* path)
     result = chdir(path);
     if (result == 0)
     {
-        _update_cwd(path);
+        _impl->update_cwd(path);
     }
     else
     {
@@ -194,8 +194,8 @@ const char* FileSystem::get_current_directory_path()
         GP_LOG_ERROR("Failed to retrieve the working directory.");
         return nullptr;
     }
-    _update_cwd(pathBuffer);
-    return _cwd;
+    _impl->update_cwd(pathBuffer);
+    return _impl->cwd;
 #endif
 }
 
@@ -421,7 +421,7 @@ time_t FileSystem::get_mod_time(const char* path)
     return std::mktime(&tm);
 #elif GP_PLATFORM_LINUX
     struct stat info;
-    stat(path.c_str(), &info);
+    stat(pathAbs.c_str(), &info);
     return info.st_mtime;
 #endif
 }
@@ -444,7 +444,7 @@ std::string FileSystem::get_canonical_path(const char* path, const char* base)
     }
 #else
     char buffer[PATH_MAX];
-    if (::realpath(path.c_str(), buffer) != nullptr)
+    if (::realpath(resolvedPath.c_str(), buffer) != nullptr)
     {
         canonicalPath = buffer;
     }
@@ -601,7 +601,7 @@ bool FileSystem::remove_directory(const char* path)
     std::list<std::string> files;
     std::list<std::string> directories;
     __walk_directory_linux(
-        path, path, nullptr, nullptr, WALK_FLAGS_RECURSIVE | WALK_FLAGS_SYMLINKS_ARE_FILES, &files, &directories);
+        path, path, nullptr, _impl, WALK_FLAGS_RECURSIVE | WALK_FLAGS_SYMLINKS_ARE_FILES, &files, &directories);
 
     for (std::string& file : files)
     {
@@ -731,6 +731,31 @@ bool FileSystem::copy(const char* src, const char* dst)
 #endif
 }
 
+#if GP_PLATFORM_LINUX
+static bool __get_file_info_linux(const char* path, FileInfo* info)
+{
+    struct stat buf;
+    if (stat(path, &buf) != 0)
+    {
+        return false;
+    }
+    info->type = !S_ISDIR(buf.st_mode) ? DirectoryItemType::FILE : DirectoryItemType::DIRECTORY;
+    info->modTime = buf.st_mtime;
+    info->createTime = buf.st_ctime;
+    info->size = size_t(buf.st_size);
+    // Use lstat to determine if it's a link
+    if (lstat(path, &buf) != 0)
+    {
+        info->symlink = false;
+    }
+    else
+    {
+        info->symlink = !!S_ISLNK(buf.st_mode);
+    }
+    return true;
+}
+#endif
+
 bool FileSystem::get_file_info(const char* path, FileInfo* info)
 {
     std::string pathAbs = __resolve_path(this, path, nullptr);
@@ -749,25 +774,7 @@ bool FileSystem::get_file_info(const char* path, FileInfo* info)
     info->symlink = !!(winInfo.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT);
     return true;
 #elif GP_PLATFORM_LINUX
-    struct stat buf;
-    if (stat(path, &buf) != 0)
-    {
-        return false;
-    }
-    info->type = !S_ISDIR(buf.st_mode) ? DirectoryItemType::eFile : DirectoryItemType::eDirectory;
-    info->modifiedTimestamp = buf.st_mtime;
-    info->createdTimestamp = buf.st_ctime;
-    info->size = size_t(buf.st_size);
-    // Use lstat to determine if it's a link
-    if (lstat(path, &buf) != 0)
-    {
-        info->isSymlink = false;
-    }
-    else
-    {
-        info->isSymlink = !!S_ISLNK(buf.st_mode);
-    }
-    return true;
+    return __get_file_info_linux(path, info);
 #endif
 }
 
@@ -1299,13 +1306,13 @@ std::vector<std::string> __split_and_fix_linux_path(const std::string& path)
     return components;
 }
 
-WalkAction __walk_directory_linux(const std::string& pathAbs,
-                                     const std::string& parent,
-                                     OnDirectoryItemFn fn,
-                                     void* userPtr,
-                                     WalkFlags flags,
-                                     std::list<std::string>* files = nullptr,
-                                     std::list<std::string>* directories = nullptr)
+VisitAction __walk_directory_linux(const std::string& pathAbs,
+                                   const std::string& parent,
+                                   FileSystem::OnVisitDirectoryItemFn fn,
+                                   void* userPtr,
+                                   WalkFlags flags,
+                                   std::list<std::string>* files = nullptr,
+                                   std::list<std::string>* directories = nullptr)
 {
     struct dirent* entry;
     DirectoryInfo info;
@@ -1325,9 +1332,9 @@ WalkAction __walk_directory_linux(const std::string& pathAbs,
             GP_LOG_ERROR("Failed to opendir() on '{}'. errno = {}", pathAbs.c_str(), errno);
             break;
         }
-        return WalkAction::CONTINUE;
+        return VisitAction::CONTINUE;
     }
-    WalkAction action = WalkAction::CONTINUE;
+    VisitAction action = VisitAction::CONTINUE;
     while ((entry = readdir(dir)) != nullptr)
     {
         std::string fileName = entry->d_name;
@@ -1371,28 +1378,28 @@ WalkAction __walk_directory_linux(const std::string& pathAbs,
                 {
                     directories->emplace_back(path);
                 }
-                action = WalkAction::CONTINIUE;
+                action = VisitAction::CONTINUE;
                 if (fn != nullptr)
                 {
                     // retrieve the directory's info.
-                    if (!get_file_info(&info, path))
+                    if (!__get_file_info_linux(path.c_str(), &info))
                     {
                         continue;
                     }
                     info.symlink = isSymlink;
 
                     // perform the callback for the directory.
-                    if ((action = fn(&info, userData)) == WalkAction::STOP)
+                    if ((action = fn(&info, userPtr)) == VisitAction::STOP)
                     {
                         break;
                     }
                 }
-                if ((flags & WALK_FLAGS_RECURSIVE) != 0 && action == WalkAction::CONTINUE)
+                if ((flags & WALK_FLAGS_RECURSIVE) != 0 && action == VisitAction::CONTINUE)
                 {
                     std::string childPathAbs = pathAbs;
                     childPathAbs.append("/");
                     childPathAbs.append(fileName);
-                    if ((action = __walk_directory_linux(childPathAbs, path, fn, userData, flags, files, directories)) == WalkAction::STOP)
+                    if ((action = __walk_directory_linux(childPathAbs, path, fn, userPtr, flags, files, directories)) == VisitAction::STOP)
                     {
                         break;
                     }
@@ -1408,13 +1415,13 @@ WalkAction __walk_directory_linux(const std::string& pathAbs,
             if (fn != nullptr)
             {
                 // retrieve the file's info.
-                if (!get_file_info(&info, path))
+                if (!__get_file_info_linux(path.c_str(), &info))
                     continue;
 
                 info.symlink = isSymlink;
 
                 // perform the callback for the file.
-                if ((action = fn(&info, userData)) != WalkAction::CONTINUE)
+                if ((action = fn(&info, userPtr)) != VisitAction::CONTINUE)
                 {
                     break;
                 }

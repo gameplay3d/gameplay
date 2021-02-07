@@ -16,16 +16,6 @@ enum class CursorMode : uint32_t
     DISABLED
 };
 
-enum class CursorShape : uint32_t
-{
-    ARROW,
-    IBEAM,
-    CROSSHAIR,
-    HAND,
-    HRESIZE,
-    VRESIZE
-};
-
 enum class Key : uint32_t
 {
     KEY_UNKNOWN,

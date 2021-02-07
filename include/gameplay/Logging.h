@@ -1,6 +1,7 @@
 #pragma once
 
 #include "App.h"
+#define SPDLOG_HEADER_ONLY
 #include <spdlog/spdlog.h>
 
 #define GP_LOG_TRACE SPDLOG_TRACE
@@ -36,7 +37,7 @@ class GP_API Logging
     friend class App;
 public:
 
-    enum class Level
+    enum class Level : uint32_t
     {
         LEVEL_TRACE,
         LEVEL_DEBUG,

@@ -330,7 +330,7 @@ Window* Windowing::create_window(const WindowDesc& desc)
 #if GP_PLATFORM_WINDOWS
     window->handle->platformWindow = glfwGetWin32Window(window->handle->glfwWindow);
  #elif GP_PLATFORM_LINUX
-    window->handle->platformWindow = glfwGetX11Window(window->handle);
+    window->handle->platformWindow = (void*)glfwGetX11Window(window->handle->glfwWindow);
     window->handle->platformDisplay = glfwGetX11Display();
 #endif
     // set fullscreen if enabled
@@ -399,7 +399,7 @@ Monitor* Windowing::get_monitor(Window* window)
     Int2 windowPos = window->get_pos();
     Int2 windowSize = window->get_size();
     int mostOverlap = 0;
-    for (int i = 0; i < _impl->monitors.size(); i++)
+    for (size_t i = 0; i < _impl->monitors.size(); i++)
     {
         Monitor* monitor = _impl->monitors[i];
         Int2 monitorPos = monitor->get_pos();
@@ -407,7 +407,7 @@ Monitor* Windowing::get_monitor(Window* window)
         Int2 windowPosSize;
         windowPosSize.x = windowPos.x + windowSize.x;
         windowPosSize.y = windowPos.y + windowSize.y;
-        int overlap = __get_rect_overlap(windowPos, windowSize, monitorPos, monitorSize);
+        int overlap = __get_rect_overlap(windowPosSize, windowSize, monitorPos, monitorSize);
         if (mostOverlap < overlap)
         {
             mostOverlap = overlap;
@@ -430,28 +430,28 @@ Monitor** Windowing::get_monitors(size_t* monitorCount)
     return _impl->monitors.data();
 }
 
-Cursor* Windowing::create_cursor(CursorShape shape)
+Cursor* Windowing::create_cursor(CursorStandardShape shape)
 {
     Cursor* cursor = nullptr;
     GLFWcursor* glfwCursor = nullptr;
     switch (shape)
     {
-    case CursorShape::ARROW:
+    case CursorStandardShape::ARROW:
         glfwCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
         break;
-    case CursorShape::IBEAM:
+    case CursorStandardShape::IBEAM:
         glfwCursor = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
         break;
-    case CursorShape::CROSSHAIR:
+    case CursorStandardShape::CROSSHAIR:
         glfwCursor = glfwCreateStandardCursor(GLFW_CROSSHAIR_CURSOR);
         break;
-    case CursorShape::HAND:
+    case CursorStandardShape::HAND:
         glfwCursor = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
         break;
-    case CursorShape::HRESIZE:
+    case CursorStandardShape::HRESIZE:
         glfwCursor = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
         break;
-    case CursorShape::VRESIZE:
+    case CursorStandardShape::VRESIZE:
         glfwCursor = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
         break;
     default:

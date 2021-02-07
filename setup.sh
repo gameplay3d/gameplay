@@ -1,28 +1,32 @@
 #!/bin/bash
 #
-# ./install.sh
+# ./setup.sh
 #
-# Download GamePlay dependencies and binaries from github releases and extracts from ZIP
-#
-# Helps prevent repo bloat due to large binary files
-#
-
-prefix=https://github.com/gameplay3d/GamePlay/releases/download/v4.0.0
-
-filename=gameplay-deps
-
 if [ "$(uname)" == "Darwin" ]; then
-    filename+=-macos
+    platform=macos
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    filename+=-linux
+    platform=linux
 else
-    filename+=-windows
+    platform=windows
 fi
-
-echo Downloading $filename.zip from $prefix...
-curl -# -LO $prefix/$filename.zip
-echo Extracting $filename.zip... please standby...
-unzip -q $filename.zip
+# _tools
+mkdir -p _tools
+package_url=https://github.com/gameplay3d/gameplay-deps/releases/download/v4.0.0
+filename=premake-5.0.0-$platform.zip
+echo Downloading $filename from $package_url...
+curl -# -LO $package_url/$filename
+echo Extracting $filename... please standby...
+unzip -q $filename -d _tools
 echo Cleaning up...
-rm $filename.zip
+rm $filename
+# _deps
+mkdir -p _deps
+package_url=https://github.com/gameplay3d/gameplay/releases/download/v4.0.0
+filename=gameplay-deps-$platform.zip
+echo Downloading $filename from $prefix...
+curl -# -LO $package_url/$filename
+echo Extracting $filename... please standby...
+unzip -q $filename -d _deps
+echo Cleaning up...
+rm $filename
 echo Done.

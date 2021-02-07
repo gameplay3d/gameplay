@@ -126,15 +126,12 @@
 #   error Unsupported compiler
 #endif
 
-#if GP_PLATFORM_WINDOWS
-#   ifdef GP_EXPORT
-#       define GP_API GP_DECLSPEC(dllexport)
-#   else
-#       define GP_API GP_DECLSPEC(dllimport)
-#   endif
+#ifdef GP_EXPORT
+#   define GP_API GP_DECLSPEC(dllexport) GP_ATTRIBUTE(visibility("default"))
 #else
-#   define GP_API
+#   define GP_API GP_DECLSPEC(dllimport)
 #endif
+
 
 #define GP_NOINLINE GP_ATTRIBUTE(noinline) GP_DECLSPEC(noinline)
 #define GP_DEPRECATED(msg) GP_ATTRIBUTE(deprecated(msg)) GP_DECLSPEC(deprecated(msg))
