@@ -89,7 +89,7 @@ workspace "gameplay"
             links { "vulkan", "dl", "pthread", "X11", "z"}
             linkoptions { "-export-dynamic" }
             buildoptions { "-pthread" }
-            disablewarnings { "unused-function", "unused-value", "unused-but-set-variable" }
+            disablewarnings { "undef", "unused-function", "unused-value", "unused-but-set-variable" }
         filter {}
         files {
             "include/gameplay/*.*", 

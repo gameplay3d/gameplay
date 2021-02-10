@@ -222,7 +222,6 @@ void Renderer::Impl::startup_vulkan()
     queueFamilyIndices.compute = get_queue_family_index(VK_QUEUE_COMPUTE_BIT);
     if (queueFamilyIndices.compute != queueFamilyIndices.graphics)
     {
-        float queuePriority(0.0f);
         VkDeviceQueueCreateInfo queueInfo{};
         queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
         queueInfo.queueFamilyIndex = queueFamilyIndices.compute;
