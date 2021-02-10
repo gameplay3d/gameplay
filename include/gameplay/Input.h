@@ -6,15 +6,7 @@
 
 namespace gameplay
 {
-
 class Window;
-
-enum class CursorMode : uint32_t
-{
-    NORMAL,
-    HIDDEN,
-    DISABLED
-};
 
 enum class Key : uint32_t
 {
@@ -204,6 +196,13 @@ enum class InputMode : uint32_t
     STICKY_MOUSE_BUTTONS, 
     LOCK_KEY_MODS,
     RAW_MOUSE_MOTION
+};
+
+enum class CursorMode : uint32_t
+{
+    NORMAL,
+    HIDDEN,
+    DISABLED
 };
 
 /**

@@ -9,14 +9,10 @@
 
 namespace gameplay
 {
-
 class Window;
 class Monitor;
 struct Cursor;
 
-/**
- * Window hints. Uses when you create a window.
- */
 typedef uint32_t WindowHints;
 constexpr WindowHints WINDOW_HINT_NONE = 0;
 constexpr WindowHints WINDOW_HINT_NO_RESIZE = 1 << 0;
@@ -27,11 +23,6 @@ constexpr WindowHints WINDOW_HINT_SCALE_TO_MONITOR = 1 << 4;
 constexpr WindowHints WINDOW_HINT_FLOATING = 1 << 5;
 constexpr WindowHints WINDOW_HINT_MAXIMIZED = 1 << 6;
 
-/**
- * The window descriptor.
- *
- * Describes how to create a window.
- */
 struct WindowDesc
 {
     const char* title;
@@ -50,6 +41,8 @@ enum class CursorStandardShape : uint32_t
     HRESIZE,
     VRESIZE
 };
+
+
 /**
  * Defines the windowing system for window management.
  */
@@ -187,7 +180,6 @@ private:
     ~Windowing();
     void startup();
     void shutdown();
-
     struct Impl;
     Impl* _impl = nullptr;
 };

@@ -10,10 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
+#include <imgui.h>
 
 namespace gameplay
 {
@@ -21,11 +18,11 @@ namespace gameplay
 struct App::Impl
 {
     bool running = false;
-    FileSystem* fileSystem = nullptr;
+    FileSystem* fs = nullptr;
     Config* config = nullptr;
     Logging* logging = nullptr;
     Windowing* windowing = nullptr;
-    Window* mainWindow = nullptr;
+    Window* window = nullptr;
     Renderer* renderer = nullptr;
     UI* ui = nullptr;
     std::unordered_map<std::string, std::string> resourceAliases;
@@ -55,14 +52,14 @@ int App::exec(int argc, char** argv)
 	_impl->running = true;
 
     // create the file system
-    _impl->fileSystem = new FileSystem();
+    _impl->fs = new FileSystem();
 
     // create and load settings
     _impl->config = new Config();
     _impl->config->load(argc, argv);
 
     // register application executable directory as a file system alias
-    _impl->resourceAliases["app.dir"] = _impl->fileSystem->get_app_directory_path();
+    _impl->resourceAliases["app.dir"] = _impl->fs->get_app_directory_path();
 
     // register file system aliases from config
     _impl->config->for_each_table("resource.alias",
@@ -97,30 +94,36 @@ int App::exec(int argc, char** argv)
 
     // create the main window
     WindowDesc windowDesc = { windowTitle.c_str(), windowWidth, windowHeight, windowFullscreen, windowHints };
-    _impl->mainWindow = _impl->windowing->create_window(windowDesc);
+    _impl->window = _impl->windowing->create_window(windowDesc);
     // adjust the window position where the frame is at 0, 0
     int top;
-    _impl->mainWindow->get_frame_size(nullptr, &top, nullptr, nullptr);
-    _impl->mainWindow->set_pos({0, top});
-
-    // startup the renderer
-    _impl->renderer = new Renderer();
-    _impl->renderer->startup();
+    _impl->window->get_frame_size(nullptr, &top, nullptr, nullptr);
+    _impl->window->set_pos({0, top});
 
     // startup the ui system
     _impl->ui = new UI();
     _impl->ui->startup();
+
+    // startup the renderer
+    _impl->renderer = new Renderer();
+    _impl->renderer->startup();
    
     // run the main window event loop until we should close
-    while (!_impl->mainWindow->should_close())
+    while (!_impl->window->should_close())
     {
         _impl->windowing->poll_events();
 
-        // new frame 
+        _impl->renderer->next_frame();
+
+        _impl->renderer->update();
+        _impl->ui->update();
+
+        _impl->renderer->render_frame();
+        _impl->renderer->present_frame();
     }
 
     // destroy main window and shutdown
-    _impl->windowing->destroy_window(_impl->mainWindow);
+    _impl->windowing->destroy_window(_impl->window);
     _impl->windowing->shutdown();
 
 	return 0;
@@ -128,7 +131,7 @@ int App::exec(int argc, char** argv)
 
 void App::exit()
 {
-    _impl->mainWindow->close();
+    _impl->window->close();
 }
 
 void App::set_time(double timeSecs)
@@ -143,7 +146,7 @@ double App::get_time() const
 
 FileSystem* App::get_file_system() const
 {
-	return _impl->fileSystem;
+	return _impl->fs;
 }
 
 Config* App::get_config() const
@@ -163,7 +166,7 @@ Windowing* App::get_windowing() const
 
 Window* App::get_main_window() const
 {
-	return _impl->mainWindow;
+	return _impl->window;
 }
 
 Renderer* App::get_renderer() const

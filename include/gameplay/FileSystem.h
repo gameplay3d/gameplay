@@ -6,7 +6,6 @@
 
 namespace gameplay
 {
-
 struct File;
 
 enum class FileMode
@@ -498,9 +497,7 @@ private:
     FileSystem();
     ~FileSystem();
     void set_app_executable_path(const char* path);
-
     struct Impl;
     Impl* _impl;
-    
 };
 }

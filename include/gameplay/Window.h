@@ -6,7 +6,6 @@
 
 namespace gameplay
 {
-
 struct WindowHandle;
 struct Cursor;
 

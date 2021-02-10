@@ -4,6 +4,8 @@
 
 namespace gameplay
 {
+struct MonitorHandle;
+
 struct VideoMode
 {
     int32_t width;
@@ -26,8 +28,6 @@ enum class MonitorChangeEvent : uint32_t
     CONNECTED,
     DISCONNECTED
 };
-
-struct MonitorHandle;
 
 
 /**

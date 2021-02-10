@@ -13,7 +13,6 @@
 
 namespace gameplay
 {
-
 /**
  * Defines the system for managing and controlling logging output.
  *

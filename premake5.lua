@@ -31,7 +31,7 @@ workspace "gameplay"
         buildoptions { "/permissive-" }
         buildoptions { "/WX" }
         warnings "Extra"
-        disablewarnings { "4100", "4127", "4189", "4201", "4251", "4530" }
+        disablewarnings { "4100", "4127", "4189", "4201", "4251", "4530", "4456", "4458", "26812" }
     filter { "system:linux" }
         platforms { "x86_64" }
         defaultplatform "x86_64"
@@ -63,6 +63,7 @@ workspace "gameplay"
             "source/gameplay",
             vulkan_sdk_dir.."/include",
             deps_dir.."/imgui", 
+            deps_dir.."/imgui/backends", 
             deps_dir.."/freetype/include",
             deps_dir.."/spdlog/include",
             deps_dir.."/cpptoml/include",
@@ -94,12 +95,9 @@ workspace "gameplay"
             "include/gameplay/*.*", 
             "source/gameplay/*.*",
              deps_dir.."/imgui/*.h", 
-             deps_dir.."/imgui/imgui.cpp",
-             deps_dir.."/imgui/imgui_demo.cpp",
-             deps_dir.."/imgui/imgui_draw.cpp",
-             deps_dir.."/imgui/imgui_tables.cpp",
-             deps_dir.."/imgui/imgui_widgets.cpp",
-             deps_dir.."/imgui/imgui_widgets.cpp",
+             deps_dir.."/imgui/*.cpp",
+             deps_dir.."/imgui/backends/imgui_impl_glfw.*",
+             deps_dir.."/imgui/backends/imgui_impl_vulkan.*",
              deps_dir.."/imgui/misc/freetype/imgui_freetype.*",
         }
         vpaths 

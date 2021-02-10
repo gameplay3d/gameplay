@@ -7,7 +7,6 @@
 
 namespace gameplay
 {
-
 /**
  * Defines a signal for an event that can be emitted.
  *
@@ -25,6 +24,7 @@ namespace gameplay
  *     std::cout << arg1 << " " << arg2 << std::endl;
  * });
  *
+ * // emit a signal event
  * signal.emit("The answer:", 42);
  */
 template <typename... Args>

@@ -1,5 +1,5 @@
 [window]
-title = "gameplay - editor"
+title = "GamePlay - Editor"
 width = 1920
 height = 1080
 fullscreen = false
@@ -10,11 +10,8 @@ level = "INFO"
 file = "gameplay.log"
 
 [[resource.alias]]
-name = "data"
-path = "@app.dir/../../../data"
-[[resource.alias]]
 name = "fonts"
-path = "@data/fonts"
+path = "@app.dir/../../../_deps/imgui/misc/fonts"
 [[resource.alias]]
 name = "icons"
 path = "@data/icons"
@@ -30,3 +27,10 @@ path = "@data/scenes"
 
 [input]
 gamepad_mappings_db = "@app.dir/../../../config/gamecontrollerdb.txt"
+
+[graphics]
+validation = false
+minImageCount = 2
+
+[ui]
+defaultFont = "@fonts/Roboto-Medium.ttf"

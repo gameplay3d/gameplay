@@ -8,12 +8,15 @@ class GP_API UI
 {
     friend class App;
 public:
-    // todo
+    // todo: manage styles, fonts, etc.
 
 private:
 	UI();
 	~UI();
 	void startup();
 	void shutdown();
+    void update();
+    struct Impl;
+    Impl* _impl = nullptr;
 };
 }

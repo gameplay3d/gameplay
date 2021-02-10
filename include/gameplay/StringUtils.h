@@ -12,7 +12,6 @@ namespace gameplay
 class GP_API StringUtils
 {
 public:
-
     /**
      * Checks if the string begins with the given prefix.
      *

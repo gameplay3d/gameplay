@@ -6,7 +6,6 @@
 
 namespace gameplay
 {
-
 /**
  * Collection of unicode conversion utilities.
  *
@@ -137,7 +136,6 @@ public:
      */
     static void convert_wide_string_to_cowercase_in_place(std::wstring& string);
 #endif
-
 };
 
 

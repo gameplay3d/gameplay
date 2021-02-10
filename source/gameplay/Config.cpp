@@ -141,7 +141,6 @@ void Config::load(int argc, char** argv)
             }
         }
     }
-
     // if we found a config file that exists
     if (configFound)
     {
@@ -159,7 +158,6 @@ void Config::load(int argc, char** argv)
     {
         _impl->root = cpptoml::make_table();
     }
-
     // apply our settings from command line arguments
     if (argc > 0)
     {
@@ -272,11 +270,102 @@ std::string Config::get_string(const char* key, const char* altValue)
     }
 }
 
-void Config::set_string(const char* key, const char* value)
+std::string Config::set_string(const char* key, const char* value)
 {
+    std::string ret = value;
     auto kt = __get_key_and_table(_impl->root, key);
-    kt.second->insert(kt.first, value);
+    if (kt.second && kt.second->contains(kt.first))
+    {
+        ret = kt.second->get_as<std::string>(kt.first).value_or(value);
+    }
+    else
+    {
+        kt.second->insert(kt.first, value);
+    }
+    return ret;
 }
+
+bool Config::get_bool(const char* key, bool altValue)
+{
+    if(strchr(key, '.'))
+    {
+        return (int)_impl->root->get_qualified_as<bool>(key).value_or(altValue);
+    }
+    else
+    {
+        return (int)_impl->root->get_as<bool>(key).value_or(altValue);
+    }
+}
+
+bool Config::set_bool(const char* key, bool value)
+{
+    bool ret = value;
+    auto kt = __get_key_and_table(_impl->root, key);
+    if (kt.second && kt.second->contains(kt.first))
+    {
+        ret = kt.second->get_as<bool>(kt.first).value_or(value);
+    }
+    else
+    {
+        kt.second->insert(kt.first, value);
+    }
+    return ret;
+}
+
+int Config::get_int(const char* key, int altValue)
+{
+    if(strchr(key, '.'))
+    {
+        return (int)_impl->root->get_qualified_as<int64_t>(key).value_or(altValue);
+    }
+    else
+    {
+        return (int)_impl->root->get_as<int64_t>(key).value_or(altValue);
+    }
+}
+
+int Config::set_int(const char* key, int value)
+{
+    int ret = value;
+    auto kt = __get_key_and_table(_impl->root, key);
+    if (kt.second && kt.second->contains(kt.first))
+    {
+        ret = (int)kt.second->get_as<int64_t>(kt.first).value_or(value);
+    }
+    else
+    {
+        kt.second->insert(kt.first, (int64_t)value);
+    }
+    return ret;
+}
+
+float Config::get_float(const char* key, float altValue)
+{
+    if(strchr(key, '.'))
+    {
+        return (float)_impl->root->get_qualified_as<double>(key).value_or((double)altValue);
+    }
+    else
+    {
+        return (float)_impl->root->get_as<double>(key).value_or((double)altValue);
+    }
+}
+
+float Config::set_float(const char* key, float value)
+{
+    float ret = value;
+    auto kt = __get_key_and_table(_impl->root, key);
+    if (kt.second && kt.second->contains(kt.first))
+    {
+        ret = (float)kt.second->get_as<double>(kt.first).value_or(value);
+    }
+    else
+    {
+        kt.second->insert(kt.first, (double)value);
+    }
+    return ret;
+}
+
 
 void Config::get_string_array(const char* key, std::string* arr, size_t arrSize)
 {
@@ -302,24 +391,6 @@ void Config::set_string_array(const char* key, const std::string* arr, size_t ar
 
 }
 
-bool Config::get_bool(const char* key, bool altValue)
-{
-    if(strchr(key, '.'))
-    {
-        return _impl->root->get_qualified_as<bool>(key).value_or(altValue);
-    }
-    else
-    {
-        return _impl->root->get_as<bool>(key).value_or(altValue);
-    }
-}
-
-void Config::set_bool(const char* key, bool value)
-{
-    auto kt = __get_key_and_table(_impl->root, key);
-    kt.second->insert(kt.first, value);
-}
-
 void Config::get_bool_array(const char* key, bool* arr, size_t arrSize)
 {
     auto values = _impl->root->get_qualified_array_of<bool>(key);
@@ -343,23 +414,6 @@ void Config::set_bool_array(const char* key, const bool* arr, size_t arrSize)
     kt.second->insert(kt.first, new_array);
 }
 
-int Config::get_int(const char* key, int altValue)
-{
-    if(strchr(key, '.'))
-    {
-        return (int)_impl->root->get_qualified_as<int64_t>(key).value_or(altValue);
-    }
-    else
-    {
-        return (int)_impl->root->get_as<int64_t>(key).value_or(altValue);
-    }
-}
-
-void Config::set_int(const char* key, int value)
-{
-    auto kt = __get_key_and_table(_impl->root, key);
-    kt.second->insert(kt.first, (int64_t)value);
-}
 
 void Config::get_int_array(const char* key, int* arr, size_t arrSize)
 {
@@ -382,24 +436,6 @@ void Config::set_int_array(const char* key, const int* arr, size_t arrSize)
     }
     auto kt = __get_key_and_table(_impl->root, key);
     kt.second->insert(kt.first, new_array);
-}
-
-float Config::get_float(const char* key, float altValue)
-{
-    if(strchr(key, '.'))
-    {
-        return (float)_impl->root->get_qualified_as<double>(key).value_or((double)altValue);
-    }
-    else
-    {
-        return (float)_impl->root->get_as<double>(key).value_or((double)altValue);
-    }
-}
-
-void Config::set_float(const char* key, float value)
-{
-    auto kt = __get_key_and_table(_impl->root, key);
-    kt.second->insert(kt.first, (double)value);
 }
 
 void Config::get_float_array(const char* key, float* arr, size_t arrSize)

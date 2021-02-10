@@ -5,7 +5,6 @@
 
 namespace gameplay
 {
-
 /**
  * Defines a timer with configurable resolution.
  */

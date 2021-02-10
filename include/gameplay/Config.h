@@ -4,7 +4,6 @@
 
 namespace gameplay
 {
-
 /**
  * Defines a way to get/set config values from the system.
  *
@@ -44,8 +43,9 @@ public:
      *
      * @param key The key for which to set the value.
      * @param value The (default) value to be set into config.
+     * @return The resolved value in config after attempting to be set
      */
-    void set_string(const char* key, const char* value);
+    std::string set_string(const char* key, const char* value);
 
     /**
      * Gets a boolean value from config using the lookup key.
@@ -62,8 +62,9 @@ public:
      *
      * @param key The key for which to set the value.
      * @param value The (default) value to be set into config.
+     * @return The resolved value in config after attempting to be set
      */
-    void set_bool(const char* key, bool value);
+    bool set_bool(const char* key, bool value);
 
     /**
      * Gets a integer value from config using the lookup key.
@@ -80,8 +81,9 @@ public:
      *
      * @param key The key for which to set the value.
      * @param value The (default) value to be set into config.
+     * @return The resolved value in config after attempting to be set
      */
-    void set_int(const char* key, int value);
+    int set_int(const char* key, int value);
 
     /**
      * Gets a floating-point value from config using the lookup key.
@@ -98,8 +100,9 @@ public:
      *
      * @param key The key for which to set the value.
      * @param value The (default) value to be set into config.
+     * @return The resolved value in config after attempting to be set
      */
-    void set_float(const char* key, float value);
+    float set_float(const char* key, float value);
 
     /**
      * Gets the size (number of elements) for the array at the specified key.

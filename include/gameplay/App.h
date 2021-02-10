@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Defines.h"
+#include "Signal.h"
 #include "Types.h"
 #include <memory>
 #include <string>
@@ -148,6 +149,22 @@ public:
      * @return true if the path can be resolved, false cannot be resolved due to missing tokens.
      */
     bool resolve_resource_path(std::string& path);
+
+    /**
+     * Signals the application has completed startup.
+     *
+     * emits:
+     * <App*> The running application.
+     */
+    Signal<App*> on_startup;
+
+     /**
+     * Signals the application has started to shutdown.
+     *
+     * emits:
+     * <App*> The running application.
+     */
+    Signal<App*> on_shutdown;
 
 private:
 	App();
