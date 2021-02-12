@@ -1,0 +1,67 @@
+{
+  "configurations": [
+    {
+      "name": "windows-x86_64",
+      "windowsSdkVersion": "10.0.18362.0",
+      "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.28.29333/bin/Hostx64/x64/cl.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "msvc-x64",
+      "includePath": 
+        ["${workspaceFolder}/**",
+        "${workspaceFolder}/include/gameplay",
+        "${VULKAN_SDK}/include",
+        "_deps/imgui", 
+        "_deps/imgui/backends", 
+        "_deps/freetype/include",
+        "_deps/spdlog/include",
+        "_deps/cpptoml/include",
+        "_deps/stb/include",
+        "_deps/glfw/include",
+        "_deps/glm/include"
+      ]
+    },
+    {
+      "name": "linux-x86_64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "clang-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/include/gameplay",
+        "${VULKAN_SDK}/include",
+        "_deps/imgui", 
+        "_deps/imgui/backends", 
+        "_deps/freetype/include",
+        "_deps/spdlog/include",
+        "_deps/cpptoml/include",
+        "_deps/stb/include",
+        "_deps/glfw/include",
+        "_deps/glm/include"
+      ]
+    },
+    {
+      "name": "macos-x86_64",
+      "macFrameworkPath": ["/System/Library/Frameworks"],
+      "compilerPath": "/usr/bin/clang",      
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "clang-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/include/gameplay",
+        "${VULKAN_SDK}/include",
+        "_deps/imgui", 
+        "_deps/imgui/backends", 
+        "_deps/freetype/include",
+        "_deps/spdlog/include",
+        "_deps/cpptoml/include",
+        "_deps/stb/include",
+        "_deps/glfw/include",
+        "_deps/glm/include"
+      ]
+    }
+  ],
+  "version": 4
+}
