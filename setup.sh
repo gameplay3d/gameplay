@@ -9,18 +9,17 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 else
     platform=windows
 fi
-# _tools
-mkdir -p _tools
+mkdir -p _deps
+# download + install: premake-<platform>.zip -> _deps
 package_url=https://github.com/gameplay3d/gameplay-deps/releases/download/v4.0.0
 filename=premake-5.0.0-$platform.zip
 echo Downloading $filename from $package_url...
 curl -# -LO $package_url/$filename
 echo Extracting $filename... please standby...
-unzip -q $filename -d _tools
+unzip -q $filename -d _deps
 echo Cleaning up...
 rm $filename
-# _deps
-mkdir -p _deps
+# download + install: gameplay-deps-<platform>.zip -> _deps
 package_url=https://github.com/gameplay3d/gameplay/releases/download/v4.0.0
 filename=gameplay-deps-$platform.zip
 echo Downloading $filename from $prefix...

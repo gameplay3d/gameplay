@@ -1,7 +1,8 @@
 ##############################################################################
-# Packaging script for building and packaging gameplay-deps-<platform>.zip 
+# build.py script
 ##############################################################################
 import os
+import argparse
 import glob
 import platform
 import subprocess
@@ -12,25 +13,25 @@ import zipfile
 from pathlib import Path
 from distutils.dir_util import copy_tree
 
+# build.py arguments
+##############################################################################
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--clean_only", help="Clean only", action="store_true")
+parser.add_argument("-g", "--generate_only", help="Generates only", action="store_true")
+parser.add_argument("-b", "--build_only", help="Builds only", action="store_true")
+parser.add_argument("-w", "--wait_keypress", help="Builds only", action="store_true")
+parser.add_argument("--configuration", help="Specify the configuration. (all,debug,release)", default="all")
+parser.add_argument("--toolchain",  help="Toolchain override.")
+args = parser.parse_args()
+
 # constants
 ##############################################################################
 
-TOOLS_FOLDER = "_tools"
-COMPILER_FOLDER = "_compiler"
 BUILD_FOLDER = "_build"
+COMPILER_FOLDER = "_compiler"
+DEPS_FOLDER = "_deps"
 
-# platform-architecture
-##############################################################################
-platform_arch = ""
-if sys.platform == "win32":
-    platform_arch = "windows-x86_64"
-elif sys.platform == "darwin":
-    platform_arch = "macos-x86_64"
-else:
-    platform_arch = "linux-x86_64"
-
-
-# function utils
+# utility functions
 ##############################################################################
 
 def clear_dir(dir_path):
@@ -64,43 +65,74 @@ def init_vsvars():
 # building
 ##############################################################################
 
-# arguments
-argc = len(sys.argv)
-generate_only = False
-arg0 = ""
-if argc > 1:
-    arg0 = sys.argv[1]
-    if arg0 == "-g":
-        generate_only = True
-
-# generate/premake
 current_dir = os.getcwd()
-if sys.platform == "win32":
-    compiler_args = "vs2019"
-elif sys.platform == "darwin":
-    compiler_args = "xcode4"
-else:
-    compiler_args = "gmake"
-tools_dir = os.path.join(current_dir, TOOLS_FOLDER)
-premake_proc = subprocess.Popen(f"{tools_dir}/premake/premake5 --file=premake5.lua {compiler_args}", cwd=current_dir, shell=True)
-premake_proc.wait()
 
-# build
-if not generate_only:
-    compiler_dir =  os.path.join(current_dir, COMPILER_FOLDER)
+# generate premake for toolchain (specified or host detected)
+if args.toolchain:
+    toolchain = args.toolchain
+else:
     if sys.platform == "win32":
+        toolchain = "vs2019"
+    elif sys.platform == "linux":
+        toolchain = "gmake"        
+    elif sys.platform == "darwin":
+        toolchain = "xcode4"
+
+# premake
+if not args.build_only and not args.clean_only:    
+    deps_dir = os.path.join(current_dir, DEPS_FOLDER)
+    premake_proc = subprocess.Popen(f"{deps_dir}/premake/premake5 --file=premake5.lua {toolchain}", cwd=current_dir, shell=True)
+    premake_proc.wait()
+
+# clean build check
+clean_build = False
+if args.clean_only and os.path.exists(os.path.join(current_dir, BUILD_FOLDER)):
+    clean_build = True
+
+# build configurations
+config_debug = False
+config_release = False
+if args.configuration == "all":
+    config_debug = True
+    config_release = True
+elif args.configuration == "debug":
+    config_debug = True
+elif args.configuration == "release":
+    config_release = True
+
+# build compiler/toolchain (skip if generate_only is specified)
+if not args.generate_only:
+    compiler_dir = os.path.join(current_dir, COMPILER_FOLDER)
+    if toolchain == "vs2019":
         compiler_dir = os.path.join(compiler_dir, "vs2019")
         init_vsvars()
         os.chdir(compiler_dir)
-        subprocess.run("msbuild gameplay.sln /property:Configuration=Debug")
-        subprocess.run("msbuild gameplay.sln /property:Configuration=Release")
-    elif sys.platform == "darwin":
-        compiler_dir = os.path.join(compiler_dir, "xcode4")
-        os.chdir(compiler_dir)
-        subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Debug build")
-        subprocess.run("xcodebuild -workspace gameplay.xcworkspace -configuration Release build")
-    else:
+        clean_build_args = ""
+        if clean_build:
+            clean_build_args=" -t:Clean"
+        if config_debug:
+            subprocess.run(f"msbuild gameplay.sln /property:Configuration=Debug{clean_build_args}")
+        if config_release:
+            subprocess.run(f"msbuild gameplay.sln /property:Configuration=Release{clean_build_args}")
+    elif toolchain == "gmake":
         compiler_dir = os.path.join(compiler_dir, "gmake")
         os.chdir(compiler_dir)
-        subprocess.run("make config=debug_x86_64", shell=True)
-        subprocess.run("make config=release_x86_64", shell=True)
+        clean_build_args = ""
+        if clean_build:
+            clean_build_args=" clean"
+        if config_debug:
+            subprocess.run(f"make config=debug_x86_64{clean_build_args}", shell=True)
+        if config_release:
+            subprocess.run(f"make config=release_x86_6 {clean_build_args}", shell=True)
+    elif toolchain == "xcode4":
+        compiler_dir = os.path.join(compiler_dir, "xcode4")
+        os.chdir(compiler_dir)
+        clean_build_args = ""
+        if clean_build:
+            clean_build_args=" clean"
+        if config_debug:
+            subprocess.run(f"xcodebuild{clean_build_args} -workspace gameplay.xcworkspace -configuration Debug build", shell=True)
+        if config_release:
+            subprocess.run(f"xcodebuild{clean_build_args} -workspace gameplay.xcworkspace -configuration Release build", shell=True)
+    else:
+        print("Error: Compiler toolchain not supported.")

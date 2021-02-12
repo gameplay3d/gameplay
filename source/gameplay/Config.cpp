@@ -11,7 +11,7 @@
 #define GP_CONFIG_SETTING "config"
 #define GP_CONFIG_EXT ".toml"
 #define GP_CONFIG_FILE_DEFAULT "app.config.toml"
-#define GP_CONFIG_DEV_DIR "../../../config"
+#define GP_CONFIG_TARGET_DIR "../../../target"
 
 namespace gameplay
 {
@@ -134,7 +134,7 @@ void Config::load(int argc, char** argv)
         _impl->configPath = Path(appExecutablePath).get_parent().join(Path(GP_CONFIG_FILE_DEFAULT)).get_absolute();
         if (!fs->exists(_impl->configPath.c_str()))
         {
-            _impl->configPath = Path(appExecutablePath).get_parent().join(Path(GP_CONFIG_DEV_DIR)).join(Path(GP_CONFIG_FILE_DEFAULT)).get_absolute();
+            _impl->configPath = Path(appExecutablePath).get_parent().join(Path(GP_CONFIG_TARGET_DIR)).join(Path(GP_CONFIG_FILE_DEFAULT)).get_absolute();
             if (!fs->exists(_impl->configPath.c_str()))
             {
                 configFound = false;

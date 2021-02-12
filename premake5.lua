@@ -4,7 +4,6 @@ workspace "gameplay"
     if _ACTION ~= nill then project_action = _ACTION end
     
     local platform = "%{cfg.system}-%{cfg.platform}"
-
     local target_dir = path.join(os.getcwd(), "_build/"..platform.."/%{cfg.buildcfg}")
     local workspace_dir = path.join(os.getcwd(), "_compiler/"..project_action)
     local deps_dir = path.join(os.getcwd(), "_deps")

@@ -4,11 +4,73 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "Build (debug)",
             "type": "shell",
-            "command": "./build.sh ",
+            "command": "./build.sh -b --configuration=debug",
             "windows": {
-                "command": ".\\build.bat"
+                "command": ".\\build.bat -b --configuration=debug"
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}/_compiler/vs2019/gameplay"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+): \\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "message": 4
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "Build (release)",
+            "type": "shell",
+            "command": "./build.sh -b --configuration=release",
+            "windows": {
+                "command": ".\\build.bat -b --configuration=release"
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}/_compiler/vs2019/gameplay"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+): \\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "message": 4
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            }
+        },
+        {
+            "label": "Clean (all)",
+            "type": "shell",
+            "command": "./build.sh -c" ,
+            "windows": {
+                "command": ".\\build.bat -c"
             },
             "problemMatcher": {
                 "owner": "cpp",
