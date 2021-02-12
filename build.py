@@ -76,6 +76,7 @@ else:
         toolchain = "xcode4"
 
 # premake
+compiler_dir = os.path.join(current_dir, COMPILER_FOLDER)
 if not args.build and not args.clean:
     deps_dir = os.path.join(current_dir, DEPS_FOLDER)
     premake_proc = subprocess.Popen(f"{deps_dir}/premake/premake5 --file=premake5.lua {toolchain}", cwd=current_dir, shell=True)
@@ -85,6 +86,8 @@ if not args.build and not args.clean:
 clean_build = False
 if args.clean:
     clean_build = True
+if clean_build and not os.path.exists(compiler_dir):
+    quit()
 
 # build configurations
 config_debug = False
@@ -100,7 +103,6 @@ elif args.configuration == "release":
 # build compiler/toolchain (skip if generate_only is specified)
 build_dir = os.path.join(current_dir, BUILD_FOLDER)
 if not args.generate:
-    compiler_dir = os.path.join(current_dir, COMPILER_FOLDER)
     if toolchain == "vs2019":
         compiler_dir = os.path.join(compiler_dir, "vs2019")
         init_vsvars()
