@@ -34,7 +34,8 @@ def clear_dir(dir_path):
         shutil.rmtree(dir_path, ignore_errors=True)
     path = Path(dir_path)
     path.mkdir(parents=True)
-    os.rmdir(dir_path)
+    if os.path.exists(dir_path):
+        os.rmdir(dir_path)
 
 def copy_files(src_dir, dst_dir, match_exp):
     clear_dir(dst_dir)
