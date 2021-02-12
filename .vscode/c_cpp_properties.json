@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "windows-x86_64",
+      "name": "Win32",
       "windowsSdkVersion": "10.0.18362.0",
       "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.28.29333/bin/Hostx64/x64/cl.exe",
       "cStandard": "c11",
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "name": "linux-x86_64",
+      "name": "Linux",
       "compilerPath": "/usr/bin/gcc",
       "cStandard": "c11",
       "cppStandard": "c++17",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "macos-x86_64",
+      "name": "Mac",
       "macFrameworkPath": ["/System/Library/Frameworks"],
       "compilerPath": "/usr/bin/clang",      
       "cStandard": "c11",
