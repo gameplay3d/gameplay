@@ -600,7 +600,7 @@ bool FileSystem::remove_directory(const char* path)
     std::list<std::string> files;
     std::list<std::string> directories;
     __walk_directory_linux(
-        path, path, nullptr, _impl, WALK_FLAGS_RECURSIVE | WALK_FLAGS_SYMLINKS_ARE_FILES, &files, &directories);
+        path, path, nullptr, _impl.get(), WALK_FLAGS_RECURSIVE | WALK_FLAGS_SYMLINKS_ARE_FILES, &files, &directories);
 
     for (std::string& file : files)
     {
