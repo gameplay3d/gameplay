@@ -118,6 +118,6 @@ public:
      */
     void* get_user_ptr() const;
 
-    MonitorHandle* handle = nullptr;
+    std::unique_ptr<MonitorHandle> handle;
 };
 }

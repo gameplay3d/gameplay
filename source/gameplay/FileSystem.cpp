@@ -62,10 +62,10 @@ struct File
 
 struct FileSystem::Impl
 {
-    std::string appExecutablePath = "";
-    std::string appDirectoryPath = "";
+    std::string appExecutablePath{""};
+    std::string appDirectoryPath{""};
+    char* cwd{nullptr};
     void update_cwd(const char* cwd);
-    char* cwd = nullptr;
 };
 
 typedef uint32_t WalkFlags;
@@ -80,7 +80,7 @@ static std::string __winapi_errorcode_to_string(DWORD errorCode);
 static time_t __filetime_to_timet(FILETIME const& ft);
 typedef VisitAction (*OnVisitDirectoryItemFnWindows)(const std::wstring& path, DirectoryInfo* info, void* userPtr);
 static VisitAction __walk_directory_windows(const std::wstring& pathAbsW, const std::wstring& parentW, OnVisitDirectoryItemFnWindows fn, void* userPtr,
-                                           WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories);
+                                            WalkFlags flags, std::list<std::wstring>* files, std::list<std::wstring>* directories);
 #elif GP_PLATFORM_LINUX
 static const size_t PATH_BUFFER_LEN = PATH_MAX + 1;;
 std::vector<std::string> __split_and_fix_linux_path(const std::string& path);
@@ -90,17 +90,16 @@ static VisitAction __walk_directory_linux(const std::string& pathAbs, const std:
 static std::string __resolve_path(FileSystem* fileSystem, const char* relativeOrAbsolutePath, const char* base);
 static void __remove_duplicated_slashes(std::string& path);
 
-//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // impl.
 
 FileSystem::FileSystem()
 {
-    _impl = new FileSystem::Impl();
+    _impl = std::make_unique<FileSystem::Impl>();
 }
 
 FileSystem::~FileSystem()
 {
-    GP_SAFE_DELETE(_impl);
 }
 
 void FileSystem::set_app_executable_path(const char* path)

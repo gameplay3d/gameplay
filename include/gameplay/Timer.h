@@ -60,13 +60,13 @@ public:
     inline T get_elapsed_time(Resolution resolution = Resolution::MILLISECONDS);
 
 private:
-    bool _running = false;
+    bool _running{false};
     std::chrono::high_resolution_clock::time_point _start;
     std::chrono::high_resolution_clock::time_point _stop;
 };
 
 
-///////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // impl
 
 double Timer::get_precision()

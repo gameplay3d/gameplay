@@ -330,3 +330,4 @@ constexpr uint64_t hash_scalar(const T& type, uint64_t hash = GP_FNV_BASIS)
 
 template <class... Args>
 void GP_UNUSED(Args&&...) {}
+

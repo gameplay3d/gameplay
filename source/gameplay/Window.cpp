@@ -18,7 +18,6 @@ Window::~Window()
     {
         glfwDestroyWindow(handle->glfwWindow);
     }
-    GP_SAFE_DELETE(handle);
 }
 
 void Window::set_title(const char* title)
@@ -53,8 +52,9 @@ Int2 Window::get_pos() const
 void Window::set_fullscreen(bool fullscreen)
 {
     if (handle->fullscreen == fullscreen)
+    {
         return;
-
+    }
     if (fullscreen)
     {
         glfwGetWindowPos(handle->glfwWindow, &handle->pos.x, &handle->pos.y);

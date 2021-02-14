@@ -25,7 +25,7 @@ constexpr WindowHints WINDOW_HINT_MAXIMIZED = 1 << 6;
 
 struct WindowDesc
 {
-    const char* title;
+    std::string title;
     int width;
     int height;
     bool fullscreen;
@@ -50,20 +50,33 @@ class GP_API Windowing
 {
     friend class App;
 public:
+
+    /**
+     * Constructor.
+     *
+     * Dont use. Instead use @see App::get_windowing().
+     */
+    Windowing();
+
+    /**
+     * Destructor.
+     */
+    ~Windowing();
+
     /**
      * Create a new platform window.
      *
      * @param desc The window descriptor.
      * @return The window created.
      */
-    Window* create_window(const WindowDesc& desc);
+    std::shared_ptr<Window> create_window(const WindowDesc& desc);
 
     /**
      * Destroy a platform window.
      *
      * @param window The window to be destroyed.
      */
-    void destroy_window(Window* window);
+    void destroy_window(std::shared_ptr<Window> window);
 
     /**
      * Parses a string containing window hints as string separated by "|"
@@ -176,12 +189,10 @@ public:
     const char* get_clipboard_string() const;
 
 private:
-    Windowing();
-    ~Windowing();
     void startup();
     void shutdown();
     struct Impl;
-    Impl* _impl = nullptr;
+    std::unique_ptr<Impl> _impl;
 };
 }
 

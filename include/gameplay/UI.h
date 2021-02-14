@@ -8,15 +8,23 @@ class GP_API UI
 {
     friend class App;
 public:
-    // todo: manage styles, fonts, etc.
+    /**
+     * Constructor.
+     *
+     * @see Windowing::create_ui() instead.
+     */
+    UI();
+
+    /**
+     * Destructor.
+     */
+	~UI();
 
 private:
-	UI();
-	~UI();
 	void startup();
 	void shutdown();
     void update();
     struct Impl;
-    Impl* _impl = nullptr;
+    std::unique_ptr<Impl> _impl;
 };
 }

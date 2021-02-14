@@ -22,26 +22,26 @@ class Windowing;
 
 struct WindowHandle
 {
-    GLFWwindow* glfwWindow = nullptr;
-    void* platformWindow = nullptr;
-    void* platformDisplay = nullptr;
-    bool fullscreen = false;
-    void* userPtr = nullptr;
-    Int2 pos = { 0, 0 };
-    Int2 size = { 0, 0 };
-    Float2 mouseScale = { 0.0f, 0.0f };
+    GLFWwindow* glfwWindow{nullptr};
+    void* platformWindow{nullptr};
+    void* platformDisplay{nullptr};
+    bool fullscreen{false};
+    void* userPtr{nullptr};
+    Int2 pos{0, 0};
+    Int2 size{0, 0};
+    Float2 mouseScale{0.0f, 0.0f};
 };
 
 struct MonitorHandle
 {
 public:
-    GLFWmonitor* glfwMonitor = nullptr;
-    void* userPtr = nullptr;
+    GLFWmonitor* glfwMonitor{nullptr};
+    void* userPtr{nullptr};
 };
 
 struct Cursor
 {
-    GLFWcursor* glfwCursor = nullptr;
+    GLFWcursor* glfwCursor{nullptr};
 };
 
 class GLFWUtils

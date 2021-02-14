@@ -70,49 +70,49 @@ public:
      *
      * @return The application file system.
      */
-    FileSystem* get_file_system() const;
+    std::shared_ptr<FileSystem> get_file_system() const;
 
     /**
      * Gets the application config system.
      *
      * @return The application config system.
      */
-    Config* get_config() const;
+    std::shared_ptr<Config> get_config() const;
 
     /**
      * Gets the application logging system.
      *
      * @return The application logging system.
      */
-    Logging* get_logging() const;
+    std::shared_ptr<Logging> get_logging() const;
 
     /**
      * Gets the application windowing system.
      *
      * @return The application windowing system.
      */
-    Windowing* get_windowing() const;
+    std::shared_ptr<Windowing> get_windowing() const;
 
     /**
-     * Gets the application main window.
+     * Gets the main applicaton window.
      *
      * @return The application main window.
      */
-    Window* get_main_window() const;
+    std::shared_ptr<Window> get_window() const;
 
     /**
      * Gets the application renderer.
      *
      * @return The applications renderer.
      */
-    Renderer* get_renderer() const;
+    std::shared_ptr<Renderer> get_renderer() const;
 
     /**
      * Gets the application user interface (UI) system.
      *
      * @return The applications user interface (UI) system.
      */
-    UI* get_ui() const;
+    std::shared_ptr<UI> get_ui() const;
 
     /**
      * sets a resource path for the specified alias.
@@ -169,6 +169,6 @@ public:
 private:
 	App();
 	struct Impl;
-    Impl* _impl = nullptr;
+    std::unique_ptr<Impl> _impl;
 };
 }

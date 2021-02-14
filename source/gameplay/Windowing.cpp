@@ -42,7 +42,7 @@ static void __on_monitor_callback(GLFWmonitor* mon, int evt)
     case GLFW_CONNECTED:
         changeEvent = MonitorChangeEvent::CONNECTED;
         monitor = new Monitor();
-        monitor->handle = new MonitorHandle();
+        monitor->handle = std::make_unique<MonitorHandle>();
         monitor->handle->glfwMonitor = mon;
         break;
     case GLFW_DISCONNECTED:
@@ -182,18 +182,17 @@ struct Windowing::Impl
 {
     bool initialized = false;
     std::vector<Monitor*> monitors;
-    std::unordered_set<Window*> windows;
+    std::unordered_set<std::shared_ptr<Window>> windows;
     std::unordered_set<Cursor*> cursors;
 };
 
 Windowing::Windowing()
 {
-    _impl = new Windowing::Impl();
+    _impl = std::make_unique<Windowing::Impl>();
 }
 
 Windowing::~Windowing()
 {
-    GP_SAFE_DELETE(_impl);
 }
 
 void Windowing::startup()
@@ -214,7 +213,7 @@ void Windowing::startup()
     for (int i = 0; i < monitorCount; i++)
     {
         Monitor* monitor = new Monitor();
-        monitor->handle = new MonitorHandle();
+        monitor->handle = std::make_unique<MonitorHandle>();
         monitor->handle->glfwMonitor = glfwMonitors[i];
         glfwSetMonitorUserPointer(monitor->handle->glfwMonitor, monitor);
     }
@@ -257,15 +256,14 @@ void Windowing::shutdown()
     // Cleanup the cursors and windows managed objects
     std::for_each(_impl->cursors.begin(), _impl->cursors.end(), [](auto& cursor){delete cursor;});
     _impl->cursors.clear();
-    std::for_each(_impl->windows.begin(), _impl->windows.end(), [](auto& window){delete window;});
     _impl->windows.clear();
 
     glfwTerminate();
 }
 
-Window* Windowing::create_window(const WindowDesc& desc)
+std::shared_ptr<Window> Windowing::create_window(const WindowDesc& desc)
 {
-    Window* window = nullptr;
+    std::shared_ptr<Window> window = nullptr;
 
     // default window hints
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -292,16 +290,16 @@ Window* Windowing::create_window(const WindowDesc& desc)
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
     }
     // create the window
-    window = new Window();
-    window->handle = new WindowHandle();
-    window->handle->glfwWindow = glfwCreateWindow(desc.width, desc.height, desc.title, nullptr, nullptr);
+    window = std::make_shared<Window>();
+    window->handle = std::make_unique<WindowHandle>();
+    window->handle->glfwWindow = glfwCreateWindow(desc.width, desc.height, desc.title.c_str(), nullptr, nullptr);
     if (!window->handle->glfwWindow)
     {
         return nullptr;
     }
 
     // store this window in the glfw user pointer
-    glfwSetWindowUserPointer(window->handle->glfwWindow, window);
+    glfwSetWindowUserPointer(window->handle->glfwWindow, window.get());
 
     // setup glfw window callbacks
     glfwSetWindowPosCallback(window->handle->glfwWindow, __on_window_pos_callback);
@@ -343,10 +341,9 @@ Window* Windowing::create_window(const WindowDesc& desc)
     return window;
 }
 
-void Windowing::destroy_window(Window* window)
+void Windowing::destroy_window(std::shared_ptr<Window> window)
 {
     _impl->windows.erase(window);
-    GP_SAFE_DELETE(window);
 }
 
 WindowHints Windowing::parse_window_hints(const char* str)

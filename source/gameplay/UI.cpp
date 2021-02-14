@@ -16,12 +16,11 @@ struct UI::Impl
 
 UI::UI()
 {
-    _impl = new UI::Impl();
+    _impl = std::make_unique<UI::Impl>();
 }
 
 UI::~UI()
 {
-    GP_SAFE_DELETE(_impl);
 }
 
 
@@ -46,8 +45,8 @@ void UI::startup()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    auto window = App::get_app()->get_main_window()->handle->glfwWindow;
-    ImGui_ImplGlfw_InitForVulkan(window, true);
+    auto window = App::get_app()->get_window();
+    ImGui_ImplGlfw_InitForVulkan(window->handle->glfwWindow, true);
 
     // load the system fonts
     auto config = App::get_app()->get_config();

@@ -11,7 +11,6 @@ Monitor::Monitor()
 
 Monitor::~Monitor()
 {
-    GP_SAFE_DELETE(handle);
 }
 
 const char* Monitor::get_name() const

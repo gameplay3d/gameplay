@@ -13,7 +13,7 @@ struct Cursor;
 /**
  * Defines a platform window.
  *
- * @see App::get_main_window() to access main window.
+ * @see App::get_window() to access main application window.
  * @see App::create_window() to create additional windows.
  */
 class GP_API Window
@@ -21,11 +21,15 @@ class GP_API Window
 public:
     /**
      * Constructor.
+     *
+     * @see Windowing::create_window() instead.
      */
     Window();
 
     /**
      * Destructor.
+     *
+     * @see Windowing::destroy_window() instead.
      */
     ~Window();
 
@@ -482,6 +486,6 @@ public:
      */
     void* get_user_ptr() const;
 
-    WindowHandle* handle = nullptr;
+    std::unique_ptr<WindowHandle> handle;
 };
 }

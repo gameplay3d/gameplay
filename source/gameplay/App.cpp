@@ -18,25 +18,24 @@ namespace gameplay
 struct App::Impl
 {
     bool running = false;
-    FileSystem* fs = nullptr;
-    Config* config = nullptr;
-    Logging* logging = nullptr;
-    Windowing* windowing = nullptr;
-    Window* window = nullptr;
-    Renderer* renderer = nullptr;
-    UI* ui = nullptr;
+    std::shared_ptr<FileSystem> fs{nullptr};
+    std::shared_ptr<Config> config{nullptr};
+    std::shared_ptr<Logging> logging{nullptr};
+    std::shared_ptr<Windowing> windowing{nullptr};
+    std::shared_ptr<Window> window{nullptr};
+    std::shared_ptr<Renderer> renderer{nullptr};
+    std::shared_ptr<UI> ui{nullptr};
     std::unordered_map<std::string, std::string> resourceAliases;
 };
 
 
 App::App()
 {
-    _impl = new App::Impl();
+    _impl = std::make_unique<App::Impl>();
 }
 
 App::~App()
 {
-    GP_SAFE_DELETE(_impl);
 }
 
 App* App::get_app()
@@ -52,10 +51,10 @@ int App::exec(int argc, char** argv)
 	_impl->running = true;
 
     // create the file system
-    _impl->fs = new FileSystem();
+    _impl->fs = std::make_shared<FileSystem>();
 
     // create and load settings
-    _impl->config = new Config();
+    _impl->config = std::make_shared<Config>();
     _impl->config->load(argc, argv);
 
     // register application executable directory as a file system alias
@@ -73,15 +72,15 @@ int App::exec(int argc, char** argv)
                 impl->resourceAliases[name] = pathStr;
             }
             return true;
-        }, (void*)_impl);
+        }, (void*)_impl.get());
 
 
     // startup the logging system
-    _impl->logging = new Logging();
+    _impl->logging = std::make_shared<Logging>();
     _impl->logging->startup();
     
     // startup the windowing system
-    _impl->windowing = new Windowing();
+    _impl->windowing = std::make_shared<Windowing>();
     _impl->windowing->startup();
 
     // load the main window from config
@@ -101,11 +100,11 @@ int App::exec(int argc, char** argv)
     _impl->window->set_pos({0, top});
 
     // startup the ui system
-    _impl->ui = new UI();
+    _impl->ui = std::make_shared<UI>();
     _impl->ui->startup();
 
     // startup the renderer
-    _impl->renderer = new Renderer();
+    _impl->renderer = std::make_shared<Renderer>();
     _impl->renderer->startup();
    
     // run the main window event loop until we should close
@@ -144,37 +143,37 @@ double App::get_time() const
     return _impl->windowing->get_time();
 }
 
-FileSystem* App::get_file_system() const
+std::shared_ptr<FileSystem> App::get_file_system() const
 {
 	return _impl->fs;
 }
 
-Config* App::get_config() const
+std::shared_ptr<Config> App::get_config() const
 {
 	return _impl->config;
 }
 
-Logging* App::get_logging() const
+std::shared_ptr<Logging> App::get_logging() const
 {
 	return _impl->logging;
 }
 
-Windowing* App::get_windowing() const
+std::shared_ptr<Windowing> App::get_windowing() const
 {
 	return _impl->windowing;
 }
 
-Window* App::get_main_window() const
+std::shared_ptr<Window> App::get_window() const
 {
 	return _impl->window;
 }
 
-Renderer* App::get_renderer() const
+std::shared_ptr<Renderer> App::get_renderer() const
 {
 	return _impl->renderer;
 }
 
-UI* App::get_ui() const
+std::shared_ptr<UI> App::get_ui() const
 {
 	return _impl->ui;
 }

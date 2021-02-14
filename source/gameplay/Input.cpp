@@ -18,49 +18,49 @@ Input::~Input()
 
 void Input::set_cursor_pos(const Double2& pos)
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     window->set_cursor_pos(pos);
 }
 
 Double2 Input::get_cursor_pos()
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     return window->get_cursor_pos();
 }
 
 void Input::set_cursor_mode(CursorMode mode)
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     window->set_cursor_mode(mode);
 }
 
 CursorMode Input::get_cursor_mode()
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     return window->get_cursor_mode();
 }
 
 void Input::set_input_mode_enabled(InputMode mode, bool enabled)
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     window->set_input_mode_enabled(mode, enabled);
 }
 
 bool Input::is_input_mode_enabled(InputMode mode)
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     return window->is_input_mode_enabled(mode);
 }
 
 ButtonAction Input::get_mouse_button_action(MouseButton button)
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     return window->get_mouse_button_action(button);
 }
 
 KeyAction Input::get_key_action(Key key)
 {
-    static Window* window = App::get_app()->get_main_window();
+    static auto window = App::get_app()->get_window();
     return window->get_key_action(key);
 }
 

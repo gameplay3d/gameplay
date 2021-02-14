@@ -8,10 +8,19 @@ class GP_API Renderer
 {
     friend class App;
 public:
+    /**
+     * Constructor.
+     * 
+     * @see App::get_renderer() instead.
+     */
+    Renderer();
+
+    /**
+     * Destructor.
+     */
+	~Renderer();
 
 private:
-	Renderer();
-	~Renderer();
 	void startup();
 	void shutdown();
     void update();
@@ -19,6 +28,6 @@ private:
     void render_frame();
     void present_frame();
     struct Impl;
-    Impl* _impl = nullptr;
+    std::unique_ptr<Impl> _impl;
 };
 }

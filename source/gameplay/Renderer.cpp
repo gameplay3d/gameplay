@@ -9,61 +9,64 @@
 #include "imgui_impl_vulkan.h"
 #include <vector>
 
+#define GP_RENDERER_VALIDATION false
+#define GP_RENDERER_MIN_IMAGE_COUNT 2
+
 namespace gameplay
 {
 
 struct RenderFrame
 {
-    VkCommandPool commandPool = VK_NULL_HANDLE;
-    VkCommandBuffer commandBuffer = VK_NULL_HANDLE;
-    VkFence fence = VK_NULL_HANDLE;
-    VkImage backbuffer = VK_NULL_HANDLE;
-    VkImageView backbufferView = VK_NULL_HANDLE;
-    VkFramebuffer framebuffer = VK_NULL_HANDLE;
-    VkSemaphore imageAcquiredSemaphore = VK_NULL_HANDLE;
-    VkSemaphore renderCompleteSemaphore = VK_NULL_HANDLE;
+    VkCommandPool commandPool{VK_NULL_HANDLE};
+    VkCommandBuffer commandBuffer{VK_NULL_HANDLE};
+    VkFence fence{VK_NULL_HANDLE};
+    VkImage backbuffer{VK_NULL_HANDLE};
+    VkImageView backbufferView{VK_NULL_HANDLE};
+    VkFramebuffer framebuffer{VK_NULL_HANDLE};
+    VkSemaphore imageAcquiredSemaphore{VK_NULL_HANDLE};
+    VkSemaphore renderCompleteSemaphore{VK_NULL_HANDLE};
 };
 
 struct Renderer::Impl
 {   
-    bool validation = false;
-    uint32_t minImageCount = 2;
-    GLFWwindow* glfwWindow = nullptr;
-    VkAllocationCallbacks* allocator = nullptr;
-    VkDebugReportCallbackEXT debugReport = nullptr; 
-    VkInstance instance = VK_NULL_HANDLE;
-    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+    bool validation{GP_RENDERER_VALIDATION};
+    uint32_t minImageCount{GP_RENDERER_MIN_IMAGE_COUNT};
+    GLFWwindow* glfwWindow{nullptr};
+    VkAllocationCallbacks* allocator{nullptr};
+    VkDebugReportCallbackEXT debugReport{nullptr}; 
+    VkInstance instance{VK_NULL_HANDLE};
+    VkPhysicalDevice physicalDevice{VK_NULL_HANDLE};
     VkPhysicalDeviceProperties physicalDeviceProperties = {};
     VkPhysicalDeviceMemoryProperties physicalDeviceMemoryProperties = {};
-    VkDevice device = VK_NULL_HANDLE;
+    VkDevice device{VK_NULL_HANDLE};
     std::vector<VkQueueFamilyProperties> queueFamilyProperties;
     struct
     {
-        uint32_t present = 0;
-        uint32_t graphics = 0;
-        uint32_t compute = 0;
-        uint32_t transfer = 0;
+        uint32_t present{0};
+        uint32_t graphics{0};
+        uint32_t compute{0};
+        uint32_t transfer{0};
     } queueFamilyIndices;
-    VkQueue queue = VK_NULL_HANDLE;
-    int surfaceWidth = 0;
-    int surfaceHeight = 0;
-    VkSurfaceKHR surface = VK_NULL_HANDLE;
+    VkQueue queue{VK_NULL_HANDLE};
+    int surfaceWidth{0};
+    int surfaceHeight{0};
+    VkSurfaceKHR surface{VK_NULL_HANDLE};
     VkSurfaceFormatKHR surfaceFormat;
     VkColorSpaceKHR colorSpace;
-    VkSwapchainKHR swapchain = VK_NULL_HANDLE;
+    VkSwapchainKHR swapchain{VK_NULL_HANDLE};
     VkPresentModeKHR presentMode;
-    VkRenderPass renderPass = VK_NULL_HANDLE;
-    VkPipeline pipeline = VK_NULL_HANDLE;
-    bool clearEnable = true;
+    VkRenderPass renderPass{VK_NULL_HANDLE};
+    VkPipeline pipeline{VK_NULL_HANDLE};
+    bool clearEnable{true};
     VkClearValue clearValue = {};
-    uint32_t frameIndex = 0;
-    uint32_t semaphoreIndex = 0;
+    uint32_t frameIndex{0};
+    uint32_t semaphoreIndex{0};
     VkFormat imageFormat;
-    uint32_t imageCount = 0;
+    uint32_t imageCount{0};
     std::vector<RenderFrame> frames;
-    VkPipelineCache pipelineCache = VK_NULL_HANDLE;
-    VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
-    bool rebuildSwapchain = false;
+    VkPipelineCache pipelineCache{VK_NULL_HANDLE};
+    VkDescriptorPool descriptorPool{VK_NULL_HANDLE};
+    bool rebuildSwapchain{false};
 
     void startup_vulkan();
     void shutdown_vulkan();
@@ -85,7 +88,7 @@ struct Renderer::Impl
 
 Renderer::Renderer()
 {
-    _impl = new Renderer::Impl();
+    _impl = std::make_unique<Renderer::Impl>();
     auto config = App::get_app()->get_config();
     _impl->validation = config->set_bool("graphics.validation", false);
     _impl->minImageCount = (uint32_t)config->set_int("graphics.minImageCount", 2);
@@ -93,7 +96,6 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-    GP_SAFE_DELETE(_impl);
 }
 
 void Renderer::startup()
@@ -325,7 +327,7 @@ void Renderer::Impl::shutdown_vulkan()
 
 void Renderer::Impl::startup_window_surface()
 {
-    glfwWindow = App::get_app()->get_main_window()->handle->glfwWindow;
+    glfwWindow = App::get_app()->get_window()->handle->glfwWindow;
 
     // create the window surface
     VK_CHECK_RESULT(glfwCreateWindowSurface(instance, glfwWindow, allocator, &surface));

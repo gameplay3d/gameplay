@@ -48,6 +48,18 @@ public:
     };
 
     /**
+     * Constructor.
+     *
+     * @see App::get_logging() instead.
+     */
+    Logging();
+
+    /**
+     * Destructor.
+     */
+    ~Logging();
+
+    /**
      * Parses the logging level from a string.
      */
     static Logging::Level parse_level(const char* str);
@@ -67,8 +79,6 @@ public:
     Level get_level() const;
 
 private:
-    Logging();
-    ~Logging();
     void startup();
     void shutdown();
 };

@@ -82,6 +82,18 @@ public:
     };
 
     /**
+     * Constructor.
+     *
+     * @see App::get_file_system() instead.
+     */
+    FileSystem();
+
+    /**
+     * Destructor.
+     */
+    ~FileSystem();
+
+    /**
      * Gets the application executable file path.
      *
      * @return The application executable file path.
@@ -494,10 +506,8 @@ public:
     void unsubscribe_to_change_events(uint32_t id);
 
 private:
-    FileSystem();
-    ~FileSystem();
     void set_app_executable_path(const char* path);
     struct Impl;
-    Impl* _impl;
+    std::unique_ptr<Impl> _impl;
 };
 }
