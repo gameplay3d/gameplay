@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Defines.h"
+#include "Input.h"
+#include "Monitor.h"
 #include "Signal.h"
 #include "Types.h"
 #include <memory>
@@ -8,13 +10,13 @@
 
 namespace gameplay
 {
-class FileSystem;
 class Config;
+class Cursor;
+class FileSystem;
 class Logging;
-class Windowing;
-class Window;
 class Renderer;
 class UI;
+class Window;
 
 
 /**
@@ -66,6 +68,83 @@ public:
     double get_time() const;
 
     /**
+     * Gets the main applicaton window.
+     *
+     * @return The application main window.
+     */
+    Window* get_window() const;
+
+    /**
+     * Gets the primary monitor.
+     *
+     * @return The primary monitor.
+     */
+    Monitor* get_primary_monitor();
+
+    /**
+     * Gets the monitor the window occupies the most of.
+     *
+     * @param window The window to check against.
+     * @return The monitor the window occupies the most of.
+     */
+    Monitor* get_monitor(Window* window);
+
+    /**
+     * Gets the monitors connected.
+     *
+     * @param monitorCount The number of monitors returned
+     * @return The monitors connected.
+     */
+    Monitor** get_monitors(size_t* monitorCount);
+
+    /**
+     * Signals that a monitor has changed and been added or removed to the system.
+     *
+     * emits:
+     * <Monitor*> The monitor being changed.
+     * <MonitorChangeEvent> The change event.
+     */
+    Signal<Monitor*, MonitorChangeEvent> on_monitor_change;
+
+    /**
+     * Creates a cursor for the standard cursor shape.
+     *
+     * @param shape The (standard) cursor shape.
+     * @return The cursor created.
+     */
+    std::shared_ptr<Cursor> create_cursor(CursorStandardShape shape);
+
+    /**
+     * Creates a cursor for an pixmap image data.
+     *
+     * @param image The pixmap image data to create the cursor from.
+     * @param hotspotPos The top-left position of the exact click hotspot.\
+     * @return The cursor created.
+     */
+    std::shared_ptr<Cursor> create_cursor(const Pixmap* image, Int2 hotspotPos);
+
+    /**
+     * Destroys a cursor.
+     *
+     * @param cursor The cursor to destroy.
+     */
+    void destroy_cursor(std::shared_ptr<Cursor> cursor);
+
+    /**
+     * Sets the system clipboard to the specified, utf-8 encoded string.
+     *
+     * @param str The utf8 encoded string, to be put into the system clipboard.
+     */
+    void set_clip_board_string(const char* str);
+
+    /**
+     * Gets the system clipboard to the specified, utf-8 encoded string.
+     *
+     * @return The utf8 encoded string, that is in the system clipboard.
+     */
+    const char* get_clipboard_string() const;
+
+    /**
      * Gets the application file system.
      *
      * @return The application file system.
@@ -85,20 +164,6 @@ public:
      * @return The application logging system.
      */
     std::shared_ptr<Logging> get_logging() const;
-
-    /**
-     * Gets the application windowing system.
-     *
-     * @return The application windowing system.
-     */
-    std::shared_ptr<Windowing> get_windowing() const;
-
-    /**
-     * Gets the main applicaton window.
-     *
-     * @return The application main window.
-     */
-    std::shared_ptr<Window> get_window() const;
 
     /**
      * Gets the application renderer.

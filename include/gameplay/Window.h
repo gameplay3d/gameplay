@@ -6,9 +6,8 @@
 
 namespace gameplay
 {
+class Cursor;
 struct WindowHandle;
-struct Cursor;
-
 
 /**
  * Defines a platform window.
@@ -18,6 +17,7 @@ struct Cursor;
  */
 class GP_API Window
 {
+    friend class App;
 public:
     /**
      * Constructor.

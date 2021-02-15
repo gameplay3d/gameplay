@@ -1,6 +1,5 @@
 #include "Monitor.h"
-#include "WindowingGLFW.h"
-
+#include "AppGLFW.h"
 
 namespace gameplay
 {
@@ -18,7 +17,7 @@ const char* Monitor::get_name() const
     return glfwGetMonitorName(handle->glfwMonitor);
 }
 
-VideoMode Monitor::get_video_mode() const
+Monitor::VideoMode Monitor::get_video_mode() const
 {
     VideoMode videoMode;
     const GLFWvidmode* vidMode = glfwGetVideoMode(handle->glfwMonitor);
@@ -52,7 +51,7 @@ Float2 Monitor::get_content_scale() const
     return scale;
 }
 
-WorkArea Monitor::get_work_area() const
+Monitor::WorkArea Monitor::get_work_area() const
 {
     WorkArea workArea;
     glfwGetMonitorWorkarea(handle->glfwMonitor, &workArea.pos.x, &workArea.pos.y, &workArea.size.x, &workArea.size.y);

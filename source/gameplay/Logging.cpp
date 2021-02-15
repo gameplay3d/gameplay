@@ -1,7 +1,7 @@
 #include "Logging.h"
+#include "Config.h"
 #include "FileSystem.h"
 #include "Path.h"
-#include "Config.h"
 #include "StringUtils.h"
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>

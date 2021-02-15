@@ -12,7 +12,7 @@ class GP_API Timer
 {
 public:
 
-    enum class Resolution
+    enum class Resolution : uint32_t
     {
         SECONDS,
         MILLISECONDS,

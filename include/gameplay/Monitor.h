@@ -1,26 +1,11 @@
 #pragma once
 
-#include "App.h"
+#include "Defines.h"
+#include "Types.h"
+
 
 namespace gameplay
 {
-struct MonitorHandle;
-
-struct VideoMode
-{
-    int32_t width;
-    int32_t height;
-    int32_t redBits;
-    int32_t greenBits;
-    int32_t blueBits;
-    int32_t refreshRate;
-};
-
-struct WorkArea
-{
-    Int2 pos;
-    Int2 size;
-};
 
 enum class MonitorChangeEvent : uint32_t
 {
@@ -29,13 +14,32 @@ enum class MonitorChangeEvent : uint32_t
     DISCONNECTED
 };
 
+struct MonitorHandle;
 
 /**
  * Defines a monitor.
  */
 class GP_API Monitor
 {
+    friend class App;
+    friend class Window;
 public:
+
+    struct VideoMode
+    {
+        int32_t width;
+        int32_t height;
+        int32_t redBits;
+        int32_t greenBits;
+        int32_t blueBits;
+        int32_t refreshRate;
+    };
+
+    struct WorkArea
+    {
+        Int2 pos;
+        Int2 size;
+    };
 
     /**
      * Constructor. 

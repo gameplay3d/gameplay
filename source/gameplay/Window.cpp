@@ -1,9 +1,8 @@
 #include "Window.h"
-#include "Windowing.h"
-#include "WindowingGLFW.h"
-#include "Monitor.h"
-#include "Input.h"
 #include "App.h"
+#include "AppGLFW.h"
+#include "Input.h"
+#include "Monitor.h"
 
 namespace gameplay
 {
@@ -59,7 +58,7 @@ void Window::set_fullscreen(bool fullscreen)
     {
         glfwGetWindowPos(handle->glfwWindow, &handle->pos.x, &handle->pos.y);
         glfwGetWindowSize(handle->glfwWindow, &handle->size.x, &handle->size.y);
-        auto monitor = App::get_app()->get_windowing()->get_monitor(this);
+        Monitor* monitor = App::get_app()->get_monitor(this);
         const GLFWvidmode* mode = glfwGetVideoMode(monitor->handle->glfwMonitor);
         glfwSetWindowMonitor(handle->glfwWindow, monitor->handle->glfwMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         glfwSetWindowSize(handle->glfwWindow, mode->width, mode->height);
@@ -67,8 +66,7 @@ void Window::set_fullscreen(bool fullscreen)
     }
     else
     {
-        glfwSetWindowMonitor(handle->glfwWindow, nullptr, handle->pos.x, handle->pos.y,
-                             handle->size.x, handle->size.y, GLFW_DONT_CARE);
+        glfwSetWindowMonitor(handle->glfwWindow, nullptr, handle->pos.x, handle->pos.y, handle->size.x, handle->size.y, GLFW_DONT_CARE);
         glfwSetWindowSize(handle->glfwWindow, handle->size.x, handle->size.y);
         handle->fullscreen = false;
     }

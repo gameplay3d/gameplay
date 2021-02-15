@@ -11,7 +11,7 @@ public:
     /**
      * Constructor.
      *
-     * @see Windowing::create_ui() instead.
+     * @see App::get_ui() instead.
      */
     UI();
 

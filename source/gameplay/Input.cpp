@@ -1,7 +1,7 @@
 #include "Input.h"
 #include "App.h"
+#include "AppGLFW.h"
 #include "Window.h"
-#include "WindowingGLFW.h"
 
 namespace gameplay
 {

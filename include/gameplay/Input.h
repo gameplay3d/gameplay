@@ -205,6 +205,16 @@ enum class CursorMode : uint32_t
     DISABLED
 };
 
+enum class CursorStandardShape : uint32_t
+{
+    ARROW,
+    IBEAM,
+    CROSSHAIR,
+    HAND,
+    HRESIZE,
+    VRESIZE
+};
+
 /**
  * Defines all static utility for polling for input on the main window.
  *
