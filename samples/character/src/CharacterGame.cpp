@@ -4,17 +4,17 @@
 CharacterGame game;
 
 // Input flags
-#define NORTH 1
-#define SOUTH 2
-#define EAST 4
+#define NORTH 2
+#define SOUTH 4
+#define EAST 6
 #define WEST 8
-#define RUNNING 16
+#define RUNNING 12
 
 // Character defines
-#define WALK_SPEED  5.0f
-#define STRAFE_SPEED 1.5f
-#define RUN_SPEED 15.0f
-#define CAMERA_FOCUS_DISTANCE 16.0f
+#define WALK_SPEED  6.0f
+#define STRAFE_SPEED 2.0f
+#define RUN_SPEED 20.0f
+#define CAMERA_FOCUS_DISTANCE 19.0f
 
 #define BUTTON_1 0
 #define BUTTON_2 1
