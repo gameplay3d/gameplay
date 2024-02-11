@@ -36,6 +36,7 @@ Transform::Transform(const Vector3& scale, const Matrix& rotation, const Vector3
     set(scale, rotation, translation);
 }
 
+//copies the Transform properties of an object such as scale, rotation, position
 Transform::Transform(const Transform& copy)
     : _matrixDirtyBits(0), _listeners(NULL)
 {
@@ -274,7 +275,7 @@ void Transform::getRightVector(Vector3* dst) const
 
 void Transform::rotate(float qx, float qy, float qz, float qw)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     Quaternion q(qx, qy, qz, qw);
@@ -284,7 +285,7 @@ void Transform::rotate(float qx, float qy, float qz, float qw)
 
 void Transform::rotate(const Quaternion& rotation)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _rotation.multiply(rotation);
@@ -293,7 +294,7 @@ void Transform::rotate(const Quaternion& rotation)
 
 void Transform::rotate(const Vector3& axis, float angle)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     Quaternion rotationQuat;
@@ -305,7 +306,7 @@ void Transform::rotate(const Vector3& axis, float angle)
 
 void Transform::rotate(const Matrix& rotation)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     Quaternion rotationQuat;
@@ -316,7 +317,7 @@ void Transform::rotate(const Matrix& rotation)
 
 void Transform::rotateX(float angle)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     Quaternion rotationQuat;
@@ -327,7 +328,7 @@ void Transform::rotateX(float angle)
 
 void Transform::rotateY(float angle)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     Quaternion rotationQuat;
@@ -338,7 +339,7 @@ void Transform::rotateY(float angle)
 
 void Transform::rotateZ(float angle)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     Quaternion rotationQuat;
@@ -349,7 +350,7 @@ void Transform::rotateZ(float angle)
 
 void Transform::scale(float scale)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.scale(scale);
@@ -358,7 +359,7 @@ void Transform::scale(float scale)
 
 void Transform::scale(float sx, float sy, float sz)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.x *= sx;
@@ -369,7 +370,7 @@ void Transform::scale(float sx, float sy, float sz)
 
 void Transform::scale(const Vector3& scale)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.x *= scale.x;
@@ -380,7 +381,7 @@ void Transform::scale(const Vector3& scale)
 
 void Transform::scaleX(float sx)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.x *= sx;
@@ -389,7 +390,7 @@ void Transform::scaleX(float sx)
 
 void Transform::scaleY(float sy)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.y *= sy;
@@ -398,7 +399,7 @@ void Transform::scaleY(float sy)
 
 void Transform::scaleZ(float sz)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.z *= sz;
@@ -407,7 +408,7 @@ void Transform::scaleZ(float sz)
 
 void Transform::set(const Vector3& scale, const Quaternion& rotation, const Vector3& translation)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(scale);
@@ -418,7 +419,7 @@ void Transform::set(const Vector3& scale, const Quaternion& rotation, const Vect
 
 void Transform::set(const Vector3& scale, const Matrix& rotation, const Vector3& translation)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(scale);
@@ -431,7 +432,7 @@ void Transform::set(const Vector3& scale, const Matrix& rotation, const Vector3&
 
 void Transform::set(const Vector3& scale, const Vector3& axis, float angle, const Vector3& translation)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(scale);
@@ -442,7 +443,7 @@ void Transform::set(const Vector3& scale, const Vector3& axis, float angle, cons
 
 void Transform::set(const Transform& transform)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(transform._scale);
@@ -453,7 +454,7 @@ void Transform::set(const Transform& transform)
 
 void Transform::setIdentity()
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(1.0f, 1.0f, 1.0f);
@@ -464,7 +465,7 @@ void Transform::setIdentity()
 
 void Transform::setScale(float scale)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(scale, scale, scale);
@@ -473,7 +474,7 @@ void Transform::setScale(float scale)
 
 void Transform::setScale(float sx, float sy, float sz)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.set(sx, sy, sz);
@@ -488,7 +489,7 @@ void Transform::setScale(const Vector3& scale)
 
 void Transform::setScaleX(float sx)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.x = sx;
@@ -497,7 +498,7 @@ void Transform::setScaleX(float sx)
 
 void Transform::setScaleY(float sy)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.y = sy;
@@ -506,7 +507,7 @@ void Transform::setScaleY(float sy)
 
 void Transform::setScaleZ(float sz)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _scale.z = sz;
@@ -515,7 +516,7 @@ void Transform::setScaleZ(float sz)
 
 void Transform::setRotation(const Quaternion& rotation)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _rotation.set(rotation);
@@ -524,7 +525,7 @@ void Transform::setRotation(const Quaternion& rotation)
 
 void Transform::setRotation(float qx, float qy, float qz, float qw)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _rotation.set(qx, qy, qz, qw);
@@ -533,7 +534,7 @@ void Transform::setRotation(float qx, float qy, float qz, float qw)
 
 void Transform::setRotation(const Matrix& rotation)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     Quaternion rotationQuat;
@@ -544,7 +545,7 @@ void Transform::setRotation(const Matrix& rotation)
 
 void Transform::setRotation(const Vector3& axis, float angle)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _rotation.set(axis, angle);
@@ -553,7 +554,7 @@ void Transform::setRotation(const Vector3& axis, float angle)
 
 void Transform::setTranslation(const Vector3& translation)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.set(translation);
@@ -562,7 +563,7 @@ void Transform::setTranslation(const Vector3& translation)
 
 void Transform::setTranslation(float tx, float ty, float tz)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.set(tx, ty, tz);
@@ -571,7 +572,7 @@ void Transform::setTranslation(float tx, float ty, float tz)
 
 void Transform::setTranslationX(float tx)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     _translation.x = tx;
@@ -580,7 +581,7 @@ void Transform::setTranslationX(float tx)
 
 void Transform::setTranslationY(float ty)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.y = ty;
@@ -589,7 +590,7 @@ void Transform::setTranslationY(float ty)
 
 void Transform::setTranslationZ(float tz)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.z = tz;
@@ -598,7 +599,7 @@ void Transform::setTranslationZ(float tz)
 
 void Transform::translate(float tx, float ty, float tz)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.x += tx;
@@ -609,7 +610,7 @@ void Transform::translate(float tx, float ty, float tz)
 
 void Transform::translate(const Vector3& translation)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.x += translation.x;
@@ -620,7 +621,7 @@ void Transform::translate(const Vector3& translation)
 
 void Transform::translateX(float tx)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.x += tx;
@@ -629,7 +630,7 @@ void Transform::translateX(float tx)
 
 void Transform::translateY(float ty)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.y += ty;
@@ -638,7 +639,7 @@ void Transform::translateY(float ty)
 
 void Transform::translateZ(float tz)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     _translation.z += tz;
@@ -647,7 +648,7 @@ void Transform::translateZ(float tz)
 
 void Transform::translateLeft(float amount)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     // Force the current transform matrix to be updated.
@@ -663,7 +664,7 @@ void Transform::translateLeft(float amount)
 
 void Transform::translateUp(float amount)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     // Force the current transform matrix to be updated.
@@ -679,7 +680,7 @@ void Transform::translateUp(float amount)
 
 void Transform::translateForward(float amount)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     // Force the current transform matrix to be updated.
@@ -695,7 +696,7 @@ void Transform::translateForward(float amount)
 
 void Transform::translateSmooth(const Vector3& target, float elapsedTime, float responseTime)
 {
-    if (isStatic())
+    if (isStatic())  //Objects that are set to static cannot be changed
         return;
 
     if (elapsedTime > 0)
@@ -1000,7 +1001,7 @@ void Transform::cloneInto(Transform* transform, NodeCloneContext &context) const
 
 void Transform::applyAnimationValueRotation(AnimationValue* value, unsigned int index, float blendWeight)
 {
-    if (isStatic())
+    if (isStatic()) //Objects that are set to static cannot be changed
         return;
 
     GP_ASSERT(value);

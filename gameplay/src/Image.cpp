@@ -131,6 +131,7 @@ Image* Image::create(unsigned int width, unsigned int height, Image::Format form
     image->_height = height;
     image->_format = format;
     image->_data = new unsigned char[dataSize];
+    //setting aside memory for image
     if (data)
         memcpy(image->_data, data, dataSize);
 
