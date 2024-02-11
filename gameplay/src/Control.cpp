@@ -244,6 +244,8 @@ const char* Control::getTypeName() const
     return "Control";
 }
 
+//Many game objects are tied to their specific ID such as buttons and textboxes.
+//This functions gets that specific gameobject ID and returns it for use and display
 const char* Control::getId() const
 {
     return _id.c_str();

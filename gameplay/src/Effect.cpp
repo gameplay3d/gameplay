@@ -226,6 +226,10 @@ static void writeShaderToErrorFile(const char* filePath, const char* source)
     }
 }
 
+/// <utilizes the openGL framework>
+/// More information about the openGL click the link below
+/// https://www.opengl.org/sdk/libs/
+/// <utilizes the openGL framework>
 Effect* Effect::createFromSource(const char* vshPath, const char* vshSource, const char* fshPath, const char* fshSource, const char* defines)
 {
     GP_ASSERT(vshSource);

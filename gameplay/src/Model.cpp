@@ -280,6 +280,7 @@ static bool drawWireframe(Mesh* mesh)
     }
 }
 
+//used to display wireframe in 3d environment
 static bool drawWireframe(MeshPart* part)
 {
     unsigned int indexCount = part->getIndexCount();
