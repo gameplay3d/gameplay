@@ -24,6 +24,7 @@ TileSet& TileSet::operator=(const TileSet& set)
     return *this;
 }
     
+//users can set a tile to an image with a specified w x h and have their set contain X rows and X columns
 TileSet* TileSet::create(const char* imagePath,
                          float tileWidth, float tileHeight,
                          unsigned int rowCount, unsigned int columnCount)
@@ -33,6 +34,7 @@ TileSet* TileSet::create(const char* imagePath,
     GP_ASSERT(rowCount > 0 && columnCount > 0);
     
     SpriteBatch* batch = SpriteBatch::create(imagePath);
+    //CLAMP texture mode means that the user's image selected will be cut off as soon as it exceeds the w x h specified
     batch->getSampler()->setWrapMode(Texture::CLAMP, Texture::CLAMP);
     batch->getSampler()->setFilterMode(Texture::Filter::NEAREST, Texture::Filter::NEAREST);
     batch->getStateBlock()->setDepthWrite(false);

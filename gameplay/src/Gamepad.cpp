@@ -54,6 +54,7 @@ Gamepad::~Gamepad()
     SAFE_RELEASE(_form);
 }
 
+//some gamepads can have more buttons or joysticks than others
 Gamepad* Gamepad::add(GamepadHandle handle, unsigned int buttonCount, unsigned int joystickCount, unsigned int triggerCount, const char* name)
 {
     Gamepad* gamepad = new Gamepad(handle, buttonCount, joystickCount, triggerCount, name);
@@ -112,6 +113,7 @@ void Gamepad::remove(Gamepad* gamepad)
 
 void Gamepad::bindGamepadControls(Container* container)
 {
+    //some games have more or less controls than others so they can add or delete controls via a vector continaer
     std::vector<Control*> controls = container->getControls();
     std::vector<Control*>::iterator itr = controls.begin();
 
@@ -207,11 +209,13 @@ Gamepad::ButtonMapping Gamepad::getButtonMappingFromString(const char* string)
     else if (strcmp(string, "L2") == 0 || strcmp(string, "BUTTON_L2") == 0)
         return BUTTON_L2;
     else if (strcmp(string, "L3") == 0 || strcmp(string, "BUTTON_L3") == 0)
+        //some joysticks can be pressed down as a buttons thus L3
         return BUTTON_L3;
     else if (strcmp(string, "R1") == 0 || strcmp(string, "BUTTON_R1") == 0)
         return BUTTON_R1;
     else if (strcmp(string, "R2") == 0 || strcmp(string, "BUTTON_R2") == 0)
         return BUTTON_R2;
+    //some joysticks can be pressed down as a buttons thus R3
     else if (strcmp(string, "R3") == 0 || strcmp(string, "BUTTON_R3") == 0)
         return BUTTON_R3;
     else if (strcmp(string, "UP") == 0 || strcmp(string, "BUTTON_UP") == 0)
@@ -295,6 +299,7 @@ unsigned int Gamepad::getJoystickCount() const
     return _joystickCount;
 }
 
+// joysticks have many values since they are circular
 void Gamepad::getJoystickValues(unsigned int joystickId, Vector2* outValue) const
 {
     if (joystickId >= _joystickCount)

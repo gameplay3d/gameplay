@@ -430,6 +430,7 @@ void Camera::pickRay(const Rectangle& viewport, float x, float y, Ray* dst) cons
     dst->set(nearPoint, direction);
 }
 
+//used to copy one camera's object properties to another cameras properties
 Camera* Camera::clone(NodeCloneContext& context)
 {
     Camera* cameraClone = NULL;

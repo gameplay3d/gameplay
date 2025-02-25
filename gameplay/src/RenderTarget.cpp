@@ -34,6 +34,7 @@ RenderTarget* RenderTarget::create(const char* id, unsigned int width, unsigned 
     }
 
     RenderTarget* rt = create(id, texture);
+    //displayes the texture
     texture->release();
 
     return rt;
