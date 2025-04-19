@@ -1,0 +1,82 @@
+import random
+import time
+import os
+
+# Dramatic print with typing effect
+def dramatic_print(text, delay=0.05):
+    for char in text:
+        print(char, end='', flush=True)
+        time.sleep(delay)
+    print()
+
+# Fake sound effect using text
+def sound_effect(effect_name):
+    sounds = {
+        "punch": "💥 *Dhishoom!*",
+        "kick": "🦵 *Thakkk!*",
+        "slap": "👋 *Chattak!*",
+        "win": "✨ *Victory Fanfare* ✨",
+        "ko": "☠️ *KNOCKOUT!* ☠️",
+    }
+    print(sounds.get(effect_name, "⚡ *Boom!*"))
+
+# Intro Scene
+os.system('cls' if os.name == 'nt' else 'clear')
+dramatic_print("🎬 Welcome to...", 0.1)
+dramatic_print("🔥🔥 Akhada-e-Fateh 🔥🔥", 0.08)
+time.sleep(1)
+dramatic_print("⚔️ Aaj ke fighters: Player 1 vs Player 2 ⚔️", 0.06)
+dramatic_print("Taaliyon ki goonj ke beech... dangal shuru hota hai!", 0.07)
+print("\n" + "="*40)
+
+player1_health = 100
+player2_health = 100
+moves = ["Punch", "Kick", "Slap", "Elbow", "Flying Knee", "Headbutt"]
+round_no = 1
+
+while player1_health > 0 and player2_health > 0:
+    print(f"\n--- ROUND {round_no} ---")
+    time.sleep(1)
+
+    move1 = random.choice(moves)
+    move2 = random.choice(moves)
+
+    damage1 = random.randint(10, 30)
+    damage2 = random.randint(10, 30)
+
+    dramatic_print(f"Player 1 ne maara {move1}!")
+    sound_effect("punch")
+    print(f"Player 2 ko laga {damage1} ka jhatka!")
+
+    dramatic_print(f"Player 2 ne diya {move2} ka jawab!")
+    sound_effect("kick")
+    print(f"Player 1 ka health ghat gaya {damage2} se!")
+
+    player2_health -= damage1
+    player1_health -= damage2
+
+    print(f"\n❤️ Player 1 Health: {max(player1_health, 0)}")
+    print(f"❤️ Player 2 Health: {max(player2_health, 0)}")
+
+    round_no += 1
+    time.sleep(2)
+
+# End Scene
+dramatic_print("\n🏁 Final Result 🏁", 0.08)
+time.sleep(1.5)
+
+if player1_health > player2_health:
+    sound_effect("win")
+    dramatic_print("Player 1 ne jeet ka jhanda gaad diya!", 0.06)
+    dramatic_print("Player 2... ", 0.5)
+    sound_effect("ko")
+    dramatic_print("Heera bete... tumse na ho paya.", 0.1)
+elif player2_health > player1_health:
+    sound_effect("win")
+    dramatic_print("Player 2 ne maar diya dhobi pachhaad!", 0.06)
+    dramatic_print("Player 1... ", 0.5)
+    sound_effect("ko")
+    dramatic_print("Heera bete... better luck next time.", 0.1)
+else:
+    dramatic_print("Dono lade shaan se... aur gire ek saath!", 0.06)
+    dramatic_print("Heera bete... dono hi gaye!", 0.1)
