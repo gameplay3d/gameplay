@@ -562,6 +562,45 @@ pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
 include_directories(${GTK2_INCLUDE_DIRS})
 add_definitions(${GTK2_CFLAGS_OTHER})
 add_definitions(-D__linux__)
+
+# Find Bullet Physics
+find_package(PkgConfig)
+if(PKG_CONFIG_FOUND)
+    pkg_check_modules(BULLET bullet)
+    pkg_check_modules(LUA lua5.3)
+endif()
+
+if(BULLET_FOUND)
+    include_directories(${BULLET_INCLUDE_DIRS})
+    link_directories(${BULLET_LIBRARY_DIRS})
+else()
+    # Fallback: look for Bullet in common system locations
+    find_path(BULLET_INCLUDE_DIR btBulletDynamicsCommon.h
+        PATHS /usr/include/bullet /usr/local/include/bullet
+    )
+    if(BULLET_INCLUDE_DIR)
+        include_directories(${BULLET_INCLUDE_DIR})
+        message(STATUS "Found Bullet Physics headers at: ${BULLET_INCLUDE_DIR}")
+    else()
+        message(FATAL_ERROR "Bullet Physics headers not found. Please install libbullet-dev")
+    endif()
+endif()
+
+if(LUA_FOUND)
+    # Lua include directories are handled as target-specific properties below
+    message(STATUS "Found Lua via pkg-config: ${LUA_INCLUDE_DIRS}")
+else()
+    # Fallback: look for Lua in common system locations
+    find_path(LUA_INCLUDE_DIR lua.hpp
+        PATHS /usr/include/lua5.3 /usr/include/lua5.2 /usr/include/lua5.1 /usr/local/include/lua5.3
+    )
+    if(LUA_INCLUDE_DIR)
+        # Lua include directories are handled as target-specific properties below
+        message(STATUS "Found Lua headers at: ${LUA_INCLUDE_DIR}")
+    else()
+        message(FATAL_ERROR "Lua headers not found. Please install liblua5.3-dev")
+    endif()
+endif()
 ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -582,6 +621,39 @@ set_target_properties(gameplay PROPERTIES
     CLEAN_DIRECT_OUTPUT 1
     VERSION ${GAMEPLAY_VERSION}
 )
+
+# Add target-specific include directories for Lua compatibility
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+if(LUA_FOUND)
+    target_include_directories(gameplay PRIVATE ${LUA_INCLUDE_DIRS})
+    # Create a lua directory in the build folder with a compatibility header
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lua")
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/lua/lua.hpp" "#include <lua5.3/lua.hpp>\n")
+    target_include_directories(gameplay PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+    # Add compatibility defines for Lua 5.3
+    target_compile_definitions(gameplay PRIVATE 
+        luaL_checkint=luaL_checkinteger
+        luaL_checklong=luaL_checkinteger
+        luaL_checkunsigned=luaL_checkinteger
+        lua_pushunsigned=lua_pushinteger
+    )
+else()
+    if(LUA_INCLUDE_DIR)
+        target_include_directories(gameplay PRIVATE ${LUA_INCLUDE_DIR})
+        # Create a lua directory in the build folder with a compatibility header
+        file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lua")
+        file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/lua/lua.hpp" "#include <lua5.3/lua.hpp>\n")
+        target_include_directories(gameplay PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+        # Add compatibility defines for Lua 5.3
+        target_compile_definitions(gameplay PRIVATE 
+            luaL_checkint=luaL_checkinteger
+            luaL_checklong=luaL_checkinteger
+            luaL_checkunsigned=luaL_checkinteger
+            lua_pushunsigned=lua_pushinteger
+        )
+    endif()
+endif()
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 source_group(lua FILES ${GAMEPLAY_LUA})
 source_group(res FILES ${GAMEPLAY_RES} ${GAMEPLAY_RES} ${GAMEPLAY_RES_SHADERS} ${GAMEPLAY_RES_UI})

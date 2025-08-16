@@ -49,7 +49,6 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     COPY_RES( ${GAME_NAME} )
     COPY_RES_EXTRA( ${GAME_NAME} ${CMAKE_SOURCE_DIR}/gameplay
-            res/logo_powered_white.png
             res/shaders/*
             res/ui/*
             )
