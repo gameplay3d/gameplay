@@ -12,7 +12,6 @@ Thumbs.db
 .settings
 /ipch
 /build
-/cmake
 /Debug
 /Release
 /api/xml

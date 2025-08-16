@@ -2,8 +2,13 @@ include(BuildHelpers.CMakeLists.txt)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/gameplay/src
-        ${CMAKE_SOURCE_DIR}/external-deps/include
 )
+
+# Add external dependencies include path if using external deps
+if(USE_EXTERNAL_DEPS)
+    include_directories(${CMAKE_SOURCE_DIR}/external-deps/include)
+    message(STATUS "Using external dependencies from external-deps for samples")
+endif()
 
 # Add system dependencies for samples
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -109,32 +114,49 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 ELSE(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_definitions(-D__linux__)
 
-    # System libraries will be found by CMake, no need for specific link directories
+    # Choose libraries based on whether external dependencies are available
+    if(USE_EXTERNAL_DEPS AND EXISTS "${CMAKE_SOURCE_DIR}/external-deps/lib")
+        message(STATUS "Using external dependencies libraries for samples")
+        link_directories(${CMAKE_SOURCE_DIR}/external-deps/lib)
+        
+        set(GAMEPLAY_LIBRARIES
+                stdc++
+                gameplay
+                gameplay-deps
+                m
+                dl
+                pthread
+                X11
+                ${GTK2_LIBRARIES}
+                )
+    else()
+        message(STATUS "Using system libraries for samples")
+        # System libraries will be found by CMake, no need for specific link directories
 
-
-    set(GAMEPLAY_LIBRARIES
-            stdc++
-            gameplay
-            BulletDynamics
-            BulletCollision
-            LinearMath
-            lua5.3
-            png
-            z
-            m
-            GL
-            GLEW
-            openal
-            vorbis
-            vorbisfile
-            rt
-            dl
-            X11
-            pthread
-            gtk-x11-2.0
-            glib-2.0
-            gobject-2.0
-            )
+        set(GAMEPLAY_LIBRARIES
+                stdc++
+                gameplay
+                BulletDynamics
+                BulletCollision
+                LinearMath
+                lua5.3
+                png
+                z
+                m
+                GL
+                GLEW
+                openal
+                vorbis
+                vorbisfile
+                rt
+                dl
+                X11
+                pthread
+                gtk-x11-2.0
+                glib-2.0
+                gobject-2.0
+                )
+    endif()
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 add_definitions(-std=c++11)

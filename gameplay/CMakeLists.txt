@@ -553,8 +553,13 @@ set(GAMEPLAY_RES_SHADERS
 
 include_directories(
     src
-    ../external-deps/include
 )
+
+# Add external dependencies include path if using external deps
+if(USE_EXTERNAL_DEPS)
+    include_directories(../external-deps/include)
+    message(STATUS "Using external dependencies from external-deps")
+endif()
 
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 find_package(PkgConfig REQUIRED)
