@@ -4,6 +4,11 @@ project(GamePlay)
 
 set(GAMEPLAY_VERSION 3.0.0)
 set(CMAKE_C_COMPILER_INIT g++)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    message(STATUS "Linux detected - disabling PIE build")
+	# to temporary fix build issue on Ubuntu (dep-libs shall be built with -fPIC to fix it permanently)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+endif()
 
 # debug
 message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
