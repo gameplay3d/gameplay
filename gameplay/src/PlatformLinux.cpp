@@ -1423,7 +1423,7 @@ void Platform::setMultiTouch(bool enabled)
 
 bool Platform::isMultiTouch()
 {
-    false;
+    return false;
 }
 
 bool Platform::hasAccelerometer()
